@@ -4,6 +4,10 @@ const bcrypt = require("bcrypt");
 const fs = require("fs");
 const session = require("express-session");
 
+//game library
+const Game = require("./backend-class/gameClass")
+const Player = require("./backend-class/playerClass")
+
 // Create the Express app
 const app = express();
 
@@ -13,13 +17,16 @@ app.use(express.static("public"));
 // Use the json middleware to parse JSON data
 app.use(express.json());
 
+const gameDictionary = {};
+const playerDictionary = {};
+
 // Use the session middleware to maintain sessions
 const chatSession = session({
     secret: "game",
     resave: false,
     saveUninitialized: false,
     rolling: true,
-    cookie: { maxAge: 300000 }
+    cookie: { maxAge: 999999999 }
 });
 app.use(chatSession);
 
@@ -28,6 +35,16 @@ function containWordCharsOnly(text) {
     return /^\w+$/.test(text);
 }
 
+function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * 
+ charactersLength));
+   }
+   return result;
+}
 // Handle the /register endpoint
 app.post("/register", (req, res) => {
     // Get the JSON data from the body
@@ -178,6 +195,7 @@ app.get("/signout", (req, res) => {
 });
 
 
+
 //
 // ***** Please insert your Lab 6 code here *****
 //
@@ -186,95 +204,52 @@ const {Server} = require("socket.io");
 const httpServer = createServer(app)
 const io = new Server(httpServer);
 
-/* 
-CONTENT FOR ONLINE USER: 
-{
-    "tony": { avatar: "Owl",    name: "Tony Lee" },
-    "may":  { avatar: "Rabbit", name: "May Wong" }
+// Prototying Function for gameplay
+app.post("/addData", (req, res) => {
+    req.session.name  = req.body.name;
+    console.log(req.session.name)
+    res.json({
+        success : true,
+        name : req.body.name
+    })
+})
+ app.post("/createGame", (req, res) => {
+     console.log(playerDictionary);
+    if(!playerDictionary[req.body.name]){
+        res.json({
+            success : false
+        })
+    }
 
-    FILL: onlineUsers['username'] = {avatar, name}
-}
-*/
+    //create the game here
+    //Assumption -> playerDictionary contains the playerClass
 
-// const onlineUsers = {}
+    // const gameId = makeid(6);
+    gameDictionary[req.body.gameId] = new Game(
+        playerDictionary[req.body.name],
+        gameId,
+        io
+    )
 
-// io.use((socket, next) => {
-//     chatSession(socket.request, {}, next);
-// })
+    console.log(`Game with ${gameId} created with player ${req.body.name}`)
+ })
 
-// io.on("connection", (socket) => {
-//     // Add a new user to the online user list
-//     if (socket.request.session.user){
-//         const {username, avatar, name} = socket.request.session.user
-//         onlineUsers[username] = {avatar, name}
-//         io.emit("add user", JSON.stringify({username, avatar, name}))
-//     }
+ app.post("/startGame", (req, res) => {
+        gameDictionary[req.body.gameId].startGame()
+        res.send("yay?")
+ })
 
-//     socket.on('disconnect', () => {
-//         if (socket.request.session.user){
-//             const {username, avatar, name} = socket.request.session.user
-//             delete onlineUsers[username]
-//             io.emit("remove user", JSON.stringify({username, avatar, name}))
-//             }
-//     })
+ io.on("connection", (socket) => {
+    console.log("connected")
 
-//     socket.on("get users", () => {
-//         // Send the online users to the browser
-//         socket.emit('users', JSON.stringify(onlineUsers))
-//     });
-
-//     socket.on("get messages", () => {
-//         socket.emit("messages",fs.readFileSync("data/chatroom.json", "utf-8"))
-//     })
-
-
-//     socket.on("post message", (content) => {
-
-
-//     if (socket.request.session.user){
-
-
-//         const data = {
-//             user: socket.request.session.user, 
-//             datetime: new Date().toISOString(),
-//             content: content
-//         }
+    playerDictionary[socket.request.session.name] = 
+    new Player( 
+        socket.request.session.name,
+        socket,
+        () => {console.log("idk")}
+        )
     
-//         const chats = JSON.parse(fs.readFileSync("data/chatroom.json"))
-    
-//         chats.push(data)
-
-    
-//         fs.writeFileSync(
-//             "data/chatroom.json", 
-//             JSON.stringify(
-//                 chats, 
-//                 null, 
-//                 ""
-//             )
-//         )
-
-//         io.emit("add message", JSON.stringify(data))
-//     }
-
-//     })
-
-//     let finishType = null
-//     socket.on('typing', () => {
-//         if (socket.request.session.user){
-//             socket.broadcast.emit('typing-notification', JSON.stringify(`${socket.request.session.user.name} is typing..`));
-
-//             if (finishType){
-//                 clearTimeout(finishType);
-//             } 
-//             finishType = setTimeout( () => {
-//                 socket.broadcast.emit('finish typing')
-//             }, 3000);
-//         }
-//     })
-
-
-// });
+ })
 
 // Use a web server to listen at port 8000
 httpServer.listen(8000, () => {
