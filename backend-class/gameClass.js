@@ -12,7 +12,11 @@ class Game{
 
     wordDictionary  = WordDictionary.getDictionary();
 
-    timeout;
+    totalTime = 30 * 1000;
+    lastTime;
+
+    gameTimeout;
+    updateTimeout;
 
     constructor(host, gameId, io){
         this.io = io;
@@ -99,22 +103,58 @@ class Game{
             value.tries = 0;
         })
 
+        totalTime = 30 * 1000
+        lastTime = new Date();
         //set timeout here
-        this.timeout = setTimeout( () => {
+        this.gameTimeout = setTimeout( () => {
             console.log("Game ends");
 
-        }, 10000000)
+        }, totalTime)
         //set event call that game start
+        this.updateTimeout = setTimeout ( () => { //idk if this will be required?
+            // just for time and score update
+
+            const now = new Date();
+            this.totalTime -= (now.getTime() - this.lastTime.getTime());
+            this.lastTime = now;
+
+            this.io.emit("update", JSON.stringify({
+                gameId: this.gameId,
+                update : this.formatResult()
+            }))
+
+        }, 500)
 
     }
 
     endGame(){
+        clearTimeout(updateTimeout);
+
         const playerData = [player1Data]
 
         playerData.forEach(value => {
             this.removeSocketListener(value.player.socket)
         })
 
+        this.io.emit("over", JSON.stringify({
+            gameId: this.gameId
+        }))
+
+    }
+
+    formatResult(){
+        const playerData = [this.player1Data]
+        const result = [];
+
+        playerData.forEach(value => {
+            result.push({
+                player : value.player,
+                currentWord : value.currentWord,
+                score : value.score
+            })
+        })
+
+        return result;
     }
 
 }

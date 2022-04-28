@@ -194,8 +194,6 @@ app.get("/signout", (req, res) => {
     res.json({ status: "success"});
 });
 
-
-
 //
 // ***** Please insert your Lab 6 code here *****
 //
