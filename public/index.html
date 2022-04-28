@@ -17,21 +17,31 @@
     
     <div id="test">
         <div>
+            <b> Login here </b>
             <input type="text" id="name"/>
             <button id="name-submit">Submit name</button>
         </div>
         <div>
+            <b> Create game here</b>
             <input type="text" id="game"/>
             <button id="game-submit">Submit game</button>
         </div>
         <div>
+            <b> Join game here</b>
+            <input type="text" id="join"/>
+            <button id="join-submit">join game</button>
+        </div>
+        <div>
+            <b> Start Game with ID here</b>
             <input type="text" id="start"/>
             <button id="start-submit">start game</button>
         </div>
         <div>
+            <b> Full setup - Steven gameId - 1</b>
             <button id="full-setup">Setup</button>"            
         </div>
         <div>
+            <b> Submit word game test</b>
             <input type="text" id="word"/>
             <button id="submit-words">Words</button>
         </div>
@@ -96,6 +106,20 @@ crossorigin="anonymous"></script>
                 console.log(value)
                 console.log(JSON.parse(value));
             })
+
+            socket.on("update", (value) => {
+                console.log('Update')
+                console.log(JSON.parse(value))
+            })
+
+            socket.on("over", (value) => {
+                console.log("GAME IS OVER")
+            })
+            
+            socket.on("room", value => {
+                console.log("room update")
+                console.log(value)
+            })
         }
 
         $('#name-submit').click( (e) => {
@@ -112,8 +136,9 @@ crossorigin="anonymous"></script>
             })
             .then( res => {
                 console.log("name sent")
-                setupSocket(socket)
                 socket = io();
+                setupSocket(socket)
+                
             })
         })
 
@@ -121,6 +146,25 @@ crossorigin="anonymous"></script>
             e.preventDefault();
             console.log("game submit")
             fetch("/createGame", {
+            method : "POST",
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body :  JSON.stringify({
+                name : $('#name').val(),
+                gameId : $('#game').val()
+            })
+            })
+            .then( res => res.json())
+            .then( value => {
+                console.log(value);
+            })
+        })
+
+        $('#join-submit').click( (e) => {
+            e.preventDefault();
+            console.log("game submit")
+            fetch("/joinGame", {
             method : "POST",
             headers: {
                 'Content-Type': 'application/json'
@@ -156,7 +200,7 @@ crossorigin="anonymous"></script>
         $("#full-setup").click( (e) => {
             e.preventDefault()
             currentName = "steven"
-            currentGameId = "12"
+            currentGameId = "1"
 
             console.log("name submit")
             fetch("/addData", {
@@ -185,21 +229,21 @@ crossorigin="anonymous"></script>
                     .then( value => {
                         console.log(value);
                 })
-                .then(res => {
-                    console.log("start submit")
-                    fetch("/startGame", {
-                    method : "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body :  JSON.stringify({
-                        gameId : currentGameId
-                    })
-                    })
-                    .then( value => {
-                        console.log(value);
-                    })
-                })              
+                // .then(res => {
+                //     console.log("start submit")
+                //     fetch("/startGame", {
+                //     method : "POST",
+                //     headers: {
+                //         'Content-Type': 'application/json'
+                //     },
+                //     body :  JSON.stringify({
+                //         gameId : currentGameId
+                //     })
+                //     })
+                //     .then( value => {
+                //         console.log(value);
+                //     })
+                // })              
             })
 
         })

@@ -238,9 +238,39 @@ app.post("/addData", (req, res) => {
     res.json({success: false})
  })
 
+ app.post("/joinGame", (req, res) => {
+
+    const {gameId, name} = req.body
+
+    if(!gameDictionary[gameId]){
+        res.json({
+            success : false,
+            reason : "No game"
+        })
+        return;
+    }
+
+    if(!playerDictionary[name]){
+        res.json({
+            success : false,
+            reason : "No person - login error"
+        })
+        return;
+    }
+
+    gameDictionary[gameId].addPlayer(playerDictionary[name]);
+
+    res.json({
+        success : true,
+    })
+
+    
+
+ })
+
  app.post("/startGame", (req, res) => {
-        gameDictionary[req.body.gameId].startGame()
-        res.send("yay?")
+    gameDictionary[req.body.gameId].startGame()
+    res.send("yay?")
  })
 
  io.use((socket, next) => {

@@ -5,14 +5,13 @@ class Game{
     // When the game start all player must be initialized
 
     gameId;
-    player1Data;
-    //player2Data;
+    playerData = [];
 
     gameState; //START, END, WAITING
 
     wordDictionary  = WordDictionary.getDictionary();
 
-    totalTime = 30 * 1000;
+    totalTime = 5 * 1000;
     lastTime;
 
     gameTimeout;
@@ -21,15 +20,8 @@ class Game{
     constructor(host, gameId, io){
         this.io = io;
         this.gameId = gameId;
-        
-        this.player1Data = {
-            player : host, //containing the player data and socket
-            currentWord : "",
-            score : 0,
-            tries : 0,
-            maxTries : 5
-        }
 
+        this.addPlayer(host);
     }
 
     initializeSocket(playerData){
@@ -41,7 +33,6 @@ class Game{
          * - receive a word
          * 
          */
-        console.log(playerData);
         playerData.player.socket.on("word-sent", (word) => {
             if(!this.wordDictionary.checkIfWordExist(word)){
                 this.io.emit("word-result", JSON.stringify({
@@ -89,29 +80,28 @@ class Game{
 
     removeSocketListener(socket){
         //When the game ends, remove the listener
-        socket.removeListener("word-sent");
+        socket.off("word-sent");
     }
 
     startGame(){
         console.log(`Game ${this.gameId} starting`)
-        const playerData = [this.player1Data]
 
-        playerData.forEach(value => {
+        this.playerData.forEach(value => {
             this.initializeSocket(value)
             value.currentWord = this.wordDictionary.getRandomWord();
             value.score = 0;
             value.tries = 0;
         })
 
-        totalTime = 30 * 1000
-        lastTime = new Date();
+        this.totalTime = 15 * 1000
+        this.lastTime = new Date();
         //set timeout here
         this.gameTimeout = setTimeout( () => {
             console.log("Game ends");
-
-        }, totalTime)
+            this.endGame();
+        }, this.totalTime)
         //set event call that game start
-        this.updateTimeout = setTimeout ( () => { //idk if this will be required?
+        this.updateTimeout = setInterval ( () => { //idk if this will be required?
             // just for time and score update
 
             const now = new Date();
@@ -128,11 +118,9 @@ class Game{
     }
 
     endGame(){
-        clearTimeout(updateTimeout);
+        clearInterval(this.updateTimeout);
 
-        const playerData = [player1Data]
-
-        playerData.forEach(value => {
+        this.playerData.forEach(value => {
             this.removeSocketListener(value.player.socket)
         })
 
@@ -142,13 +130,29 @@ class Game{
 
     }
 
+    // Helper Functions
+
+    addPlayer(player){ //adding player
+        this.playerData.push({
+            player : player, //containing the player data and socket
+            currentWord : "",
+            score : 0,
+            tries : 0,
+            maxTries : 5
+        })
+
+        console.log(`Current number of player ${this.playerData.length}`);
+        console.log(this.playerData);
+
+        this.io.emit("room", JSON.stringify(this.playerData.map(value => value.player.data)));
+    }
+
     formatResult(){
-        const playerData = [this.player1Data]
         const result = [];
 
-        playerData.forEach(value => {
+        this.playerData.forEach(value => {
             result.push({
-                player : value.player,
+                player : value.player.data,
                 currentWord : value.currentWord,
                 score : value.score
             })
