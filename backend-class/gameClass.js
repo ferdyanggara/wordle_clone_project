@@ -28,7 +28,7 @@ class Game{
 
     }
 
-    initializeSocket(socket, playerData){
+    initializeSocket(playerData){
         //This will setup the socket events required
         //during the game
 
@@ -37,12 +37,12 @@ class Game{
          * - receive a word
          * 
          */
-
-        socket.on("word-sent", (word) => {
+        console.log(playerData);
+        playerData.player.socket.on("word-sent", (word) => {
             if(!this.wordDictionary.checkIfWordExist(word)){
                 this.io.emit("word-result", JSON.stringify({
                     gameId : this.gameId,
-                    player : playerData.player,
+                    player : playerData.player.data,
                     result : false,
                     data : []
                 }))
@@ -50,19 +50,20 @@ class Game{
 
             else{
                 let result = this.wordDictionary.checkDifferences(word, playerData.currentWord)
-                this.io.emit("word-result", JSON.stringify({
+                let final = {
                     gameId : this.gameId,
-                    player : playerData.player,
+                    player : playerData.player.data,
                     result : true,
                     data : result
-                }))
+                };
+                this.io.emit("word-result", JSON.stringify(final));
 
                 //alter current player gamestate here
                 if(result.correct){
                     console.log(`Player input the right word ${word}`)
                     //player input the correct word
                     playerData.score += 1;
-                    playerdata.tries = 0;
+                    playerData.tries = 0;
                     playerData.currentWord = this.wordDictionary.getRandomWord();
                 }
 
@@ -78,8 +79,6 @@ class Game{
                 }
             }
 
-            console.log("Current player data")
-            console.log(playerData)
         })
 
     }
@@ -94,7 +93,7 @@ class Game{
         const playerData = [this.player1Data]
 
         playerData.forEach(value => {
-            this.initializeSocket(value.player.playerSocket)
+            this.initializeSocket(value)
             value.currentWord = this.wordDictionary.getRandomWord();
             value.score = 0;
             value.tries = 0;

@@ -91,6 +91,13 @@ crossorigin="anonymous"></script>
         let currentGameId;
         let socket;
 
+        const setupSocket = (socket) => {
+            socket.on('word-result', (value) => {
+                console.log(value)
+                console.log(JSON.parse(value));
+            })
+        }
+
         $('#name-submit').click( (e) => {
             e.preventDefault();
             console.log("name submit")
@@ -105,6 +112,7 @@ crossorigin="anonymous"></script>
             })
             .then( res => {
                 console.log("name sent")
+                setupSocket(socket)
                 socket = io();
             })
         })
@@ -162,6 +170,7 @@ crossorigin="anonymous"></script>
             })
             .then( res => {
                 socket = io();
+                setupSocket(socket)
                 fetch("/createGame", {
                     method : "POST",
                     headers: {
@@ -195,7 +204,12 @@ crossorigin="anonymous"></script>
 
         })
 
-        
+        $("#submit-words").click( e => {
+            e.preventDefault()
+            console.log("words clicked")
+            console.log($("#word").val())
+            socket.emit("word-sent", $("#word").val());
+        })
 
 
 

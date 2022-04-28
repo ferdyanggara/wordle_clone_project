@@ -6,17 +6,9 @@ class Player{
         if(!playerData || !playerSocket || !disconnectHandler){
             throw "Missing params. Player cannot be initialized";
         }
-        this.playerData = playerData;
-        this.playerSocket = playerSocket;
+        this.data = playerData;
+        this.socket = playerSocket;
         this.disconnectHandler = disconnectHandler;
-    }
-
-    get info(){
-        return this.playerData;
-    }
-
-    get socket(){
-        return this.playerSocket;
     }
 
 }
