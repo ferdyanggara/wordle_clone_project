@@ -206,6 +206,8 @@ const io = new Server(httpServer);
 
 // Prototying Function for gameplay
 app.post("/addData", (req, res) => {
+    console.log("enter adddata")
+    console.log(req.body.name)
     req.session.name  = req.body.name;
     console.log(req.session.name)
     res.json({
@@ -214,6 +216,7 @@ app.post("/addData", (req, res) => {
     })
 })
  app.post("/createGame", (req, res) => {
+     
      console.log(playerDictionary);
     if(!playerDictionary[req.body.name]){
         res.json({
@@ -225,19 +228,26 @@ app.post("/addData", (req, res) => {
     //Assumption -> playerDictionary contains the playerClass
 
     // const gameId = makeid(6);
+    console.log("creating game")
     gameDictionary[req.body.gameId] = new Game(
         playerDictionary[req.body.name],
-        gameId,
+        req.body.gameId,
         io
     )
 
-    console.log(`Game with ${gameId} created with player ${req.body.name}`)
+
+    console.log(`Game with ${req.body.gameId} created with player ${req.body.name}`)
+    res.json({success: false})
  })
 
  app.post("/startGame", (req, res) => {
         gameDictionary[req.body.gameId].startGame()
         res.send("yay?")
  })
+
+ io.use((socket, next) => {
+    chatSession(socket.request, {}, next);
+})
 
  io.on("connection", (socket) => {
     console.log("connected")
@@ -247,7 +257,7 @@ app.post("/addData", (req, res) => {
         socket.request.session.name,
         socket,
         () => {console.log("idk")}
-        )
+    )
     
  })
 

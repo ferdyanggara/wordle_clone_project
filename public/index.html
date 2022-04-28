@@ -15,6 +15,28 @@
 <body>
     <h1> Wordle Clone </h1>
     
+    <div id="test">
+        <div>
+            <input type="text" id="name"/>
+            <button id="name-submit">Submit name</button>
+        </div>
+        <div>
+            <input type="text" id="game"/>
+            <button id="game-submit">Submit game</button>
+        </div>
+        <div>
+            <input type="text" id="start"/>
+            <button id="start-submit">start game</button>
+        </div>
+        <div>
+            <button id="full-setup">Setup</button>"            
+        </div>
+        <div>
+            <input type="text" id="word"/>
+            <button id="submit-words">Words</button>
+        </div>
+    </div> 
+    
     <div id="game-board">
 
     </div>
@@ -61,6 +83,123 @@ src="https://code.jquery.com/jquery-3.6.0.min.js"
 integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
 crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="/socket.io/socket.io.min.js"></script>
 <script src="./scripts/logic.js" type="module"></script>
+<script>
+    $(document).ready(function (){
+        let currentName;
+        let currentGameId;
+        let socket;
+
+        $('#name-submit').click( (e) => {
+            e.preventDefault();
+            console.log("name submit")
+            fetch("/addData", {
+            method : "POST",
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body : JSON.stringify({
+                name : $('#name').val()
+            })//just name now
+            })
+            .then( res => {
+                console.log("name sent")
+                socket = io();
+            })
+        })
+
+        $('#game-submit').click( (e) => {
+            e.preventDefault();
+            console.log("game submit")
+            fetch("/createGame", {
+            method : "POST",
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body :  JSON.stringify({
+                name : $('#name').val(),
+                gameId : $('#game').val()
+            })
+            })
+            .then( res => res.json())
+            .then( value => {
+                console.log(value);
+            })
+        })
+
+        $('#start-submit').click( (e) => {
+            e.preventDefault();
+            console.log("start submit")
+            fetch("/startGame", {
+            method : "POST",
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body :  JSON.stringify({
+                gameId : $('#start').val()
+            })
+            })
+            .then( value => {
+                console.log(value);
+            })
+        })
+
+        $("#full-setup").click( (e) => {
+            e.preventDefault()
+            currentName = "steven"
+            currentGameId = "12"
+
+            console.log("name submit")
+            fetch("/addData", {
+            method : "POST",
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body : JSON.stringify({
+                name : currentName
+            })//just name now
+            })
+            .then( res => {
+                socket = io();
+                fetch("/createGame", {
+                    method : "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body :  JSON.stringify({
+                        name : currentName,
+                        gameId : currentGameId
+                    })
+                    })
+                    .then( res => res.json())
+                    .then( value => {
+                        console.log(value);
+                })
+                .then(res => {
+                    console.log("start submit")
+                    fetch("/startGame", {
+                    method : "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body :  JSON.stringify({
+                        gameId : currentGameId
+                    })
+                    })
+                    .then( value => {
+                        console.log(value);
+                    })
+                })              
+            })
+
+        })
+
+        
+
+
+
+    });
+</script>
 </body>
 </html>

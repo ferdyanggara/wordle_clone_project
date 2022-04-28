@@ -91,20 +91,20 @@ class Game{
 
     startGame(){
         console.log(`Game ${this.gameId} starting`)
-        const playerData = [player1Data]
+        const playerData = [this.player1Data]
 
         playerData.forEach(value => {
-            initializeSocket(value.player.socket)
+            this.initializeSocket(value.player.playerSocket)
             value.currentWord = this.wordDictionary.getRandomWord();
             value.score = 0;
             value.tries = 0;
         })
 
         //set timeout here
-        timeout = setTimeout( () => {
+        this.timeout = setTimeout( () => {
             console.log("Game ends");
 
-        })
+        }, 10000000)
         //set event call that game start
 
     }
@@ -113,7 +113,7 @@ class Game{
         const playerData = [player1Data]
 
         playerData.forEach(value => {
-            removeSocketListener(value.player.socket)
+            this.removeSocketListener(value.player.socket)
         })
 
     }
