@@ -56,6 +56,8 @@ const Socket = (function() {
         // socket.emit("word-sent", $("#word").val());
     };
 
+
+
     // This function disconnects the socket from the server
     const disconnect = function() {
         socket.disconnect();

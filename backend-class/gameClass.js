@@ -149,7 +149,12 @@ class Game{
         console.log(`Current number of player ${this.playerData.length}`);
         console.log(this.playerData);
 
-        this.io.emit("room", JSON.stringify(this.playerData.map(value => value.player.data)));
+        let currentOccupant = this.playerData.map(value => value.player.data)
+
+        this.io.emit("room", JSON.stringify({
+            gameId : this.gameId,
+            players : currentOccupant
+        }));
     }
 
     formatResult(){
