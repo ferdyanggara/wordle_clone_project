@@ -33,54 +33,58 @@ class Game{
          * - receive a word
          * 
          */
-        playerData.player.socket.on("word-sent", (word) => {
-            if(!this.wordDictionary.checkIfWordExist(word)){
-                this.io.emit("word-result", JSON.stringify({
-                    gameId : this.gameId,
-                    player : playerData.player.data,
-                    result : false,
-                    data : []
-                }))
-            }
-
-            else{
-                let result = this.wordDictionary.checkDifferences(word, playerData.currentWord)
-                let final = {
-                    gameId : this.gameId,
-                    player : playerData.player.data,
-                    result : true,
-                    data : result
-                };
-                this.io.emit("word-result", JSON.stringify(final));
-
-                //alter current player gamestate here
-                if(result.correct){
-                    console.log(`Player input the right word ${word}`)
-                    //player input the correct word
-                    playerData.score += 1;
-                    playerData.tries = 0;
-                    playerData.currentWord = this.wordDictionary.getRandomWord();
-                }
-
-                //failed to input the right word
-                else{
-                    console.log(`Wrong input for word ${word} against ${playerData.currentWord}`)
-                    playerData.tries += 1
-                    if(playerData.tries == playerData.maxTries){
-                        //TODO : Call io to reset this player
-                        playerData.currentWord = this.wordDictionary.getRandomWord();
-                        playerData.tries = 0;
-                    }
-                }
-            }
-
-        })
+        playerData.player.socket.on("word-sent",(word) => {
+            this.playerWordCheck(playerData, word);
+        } )
 
     }
 
     removeSocketListener(socket){
         //When the game ends, remove the listener
-        socket.off("word-sent");
+        socket.off("word-sent", this.playerWordCheck);
+    }
+
+    playerWordCheck = (playerData, word) => {
+        if(!this.wordDictionary.checkIfWordExist(word)){
+            this.io.emit("word-result", JSON.stringify({
+                gameId : this.gameId,
+                player : playerData.player.data,
+                result : false,
+                data : []
+            }))
+        }
+
+        else{
+            let result = this.wordDictionary.checkDifferences(word, playerData.currentWord)
+            let final = {
+                gameId : this.gameId,
+                player : playerData.player.data,
+                result : true,
+                data : result
+            };
+            this.io.emit("word-result", JSON.stringify(final));
+
+            //alter current player gamestate here
+            if(result.correct){
+                console.log(`Player input the right word ${word}`)
+                //player input the correct word
+                playerData.score += 1;
+                playerData.tries = 0;
+                playerData.currentWord = this.wordDictionary.getRandomWord();
+            }
+
+            //failed to input the right word
+            else{
+                console.log(`Wrong input for word ${word} against ${playerData.currentWord}`)
+                playerData.tries += 1
+                if(playerData.tries == playerData.maxTries){
+                    //TODO : Call io to reset this player
+                    playerData.currentWord = this.wordDictionary.getRandomWord();
+                    playerData.tries = 0;
+                }
+            }
+        }
+
     }
 
     startGame(){
@@ -125,7 +129,8 @@ class Game{
         })
 
         this.io.emit("over", JSON.stringify({
-            gameId: this.gameId
+            gameId : this.gameId,
+            result : this.formatResult()
         }))
 
     }

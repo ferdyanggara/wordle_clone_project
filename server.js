@@ -269,8 +269,13 @@ app.post("/addData", (req, res) => {
  })
 
  app.post("/startGame", (req, res) => {
-    gameDictionary[req.body.gameId].startGame()
-    res.send("yay?")
+     if(gameDictionary[req.body.gameId]){
+        gameDictionary[req.body.gameId].startGame()
+        res.send("yay?")
+        return;
+     }
+    
+    res.send("no?")
  })
 
  io.use((socket, next) => {
@@ -278,7 +283,7 @@ app.post("/addData", (req, res) => {
 })
 
  io.on("connection", (socket) => {
-    console.log("connected")
+    console.log(`Connected with name ${socket.request.session.name}`)
 
     playerDictionary[socket.request.session.name] = 
     new Player( 

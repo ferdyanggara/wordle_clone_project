@@ -19,6 +19,8 @@ const Socket = (function() {
             //TODO : ADD UI CALL
             //to edit the current word displayed
             //based on the username and result
+            console.log(value)
+            console.log(JSON.parse(value));
         })
 
         socket.on("update", (value) => {
@@ -34,10 +36,18 @@ const Socket = (function() {
              *      }]
              * }
             */
+             console.log('Update')
+             console.log(JSON.parse(value))
         })
 
         socket.on("over", (value) => {
             //Insert UI when game over
+            console.log("GAME IS OVER")
+        })
+
+        socket.on("room", value => {
+            console.log("room update")
+            console.log(value)
         })
 
         //TODO : Connect to UI
@@ -45,10 +55,6 @@ const Socket = (function() {
 
         // socket.emit("word-sent", $("#word").val());
     };
-
-
-
-    
 
     // This function disconnects the socket from the server
     const disconnect = function() {

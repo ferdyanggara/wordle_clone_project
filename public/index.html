@@ -17,33 +17,29 @@
     
     <div id="test">
         <div>
-            <b> Login here </b>
+            <b> Login Name </b>
             <input type="text" id="name"/>
+        </div>
+        <div>
             <button id="name-submit">Submit name</button>
         </div>
         <div>
-            <b> Create game here</b>
+            <b> Game Id</b>
             <input type="text" id="game"/>
+        </div>
+        <div>
             <button id="game-submit">Submit game</button>
-        </div>
-        <div>
-            <b> Join game here</b>
-            <input type="text" id="join"/>
-            <button id="join-submit">join game</button>
-        </div>
-        <div>
-            <b> Start Game with ID here</b>
-            <input type="text" id="start"/>
             <button id="start-submit">start game</button>
-        </div>
-        <div>
-            <b> Full setup - Steven gameId - 1</b>
-            <button id="full-setup">Setup</button>"            
+            <button id="join-submit">join game</button>
         </div>
         <div>
             <b> Submit word game test</b>
             <input type="text" id="word"/>
             <button id="submit-words">Words</button>
+        </div>
+        <div>
+            <b> Full setup - Steven gameId - 1</b>
+            <button id="full-setup">Setup</button>"            
         </div>
     </div> 
     
@@ -95,32 +91,13 @@ crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="/socket.io/socket.io.min.js"></script>
 <script src="./scripts/logic.js" type="module"></script>
+<script src="./scripts/socket.js" ></script>
 <script>
     $(document).ready(function (){
         let currentName;
         let currentGameId;
         let socket;
-
-        const setupSocket = (socket) => {
-            socket.on('word-result', (value) => {
-                console.log(value)
-                console.log(JSON.parse(value));
-            })
-
-            socket.on("update", (value) => {
-                console.log('Update')
-                console.log(JSON.parse(value))
-            })
-
-            socket.on("over", (value) => {
-                console.log("GAME IS OVER")
-            })
-            
-            socket.on("room", value => {
-                console.log("room update")
-                console.log(value)
-            })
-        }
+        
 
         $('#name-submit').click( (e) => {
             e.preventDefault();
@@ -136,8 +113,8 @@ crossorigin="anonymous"></script>
             })
             .then( res => {
                 console.log("name sent")
-                socket = io();
-                setupSocket(socket)
+                Socket.connect();
+                socket = Socket.getSocket();
                 
             })
         })
@@ -189,7 +166,7 @@ crossorigin="anonymous"></script>
                 'Content-Type': 'application/json'
               },
             body :  JSON.stringify({
-                gameId : $('#start').val()
+                gameId : $('#game').val()
             })
             })
             .then( value => {
@@ -213,8 +190,8 @@ crossorigin="anonymous"></script>
             })//just name now
             })
             .then( res => {
-                socket = io();
-                setupSocket(socket)
+                Socket.connect();
+                socket = Socket.getSocket();
                 fetch("/createGame", {
                     method : "POST",
                     headers: {
