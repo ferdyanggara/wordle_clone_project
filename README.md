@@ -18,6 +18,18 @@
 
 ## Gameplay side
 
+### Prototype UI
+##### Input
+- Login name : name to login 
+- Game ID : game Id specified
+- Submit word game test : Assuming you start a game, this input the word to send using socket.emit('word-result')
+##### Button
+- Submit Name -> login with the specified name (simulate session)
+- Submit game -> create game with specified id (can override so be careful)
+- start game -> start game with specified id
+- join game -> join game with specified id
+- Words -> send the word to the game
+- Full setup - Steven gameId - 1 -> Shortcut to login as Steven and create game with gameId 1
 ### API
 - POST /addData -> simulate user login ( Add Session to server )
 Body : `{name : <name>}`
