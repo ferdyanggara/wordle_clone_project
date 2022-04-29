@@ -257,14 +257,20 @@ app.post("/addData", (req, res) => {
         return;
     }
 
-    gameDictionary[gameId].addPlayer(playerDictionary[name]);
+    if(gameDictionary[gameId].getPlayerNum() < 2){
+        gameDictionary[gameId].addPlayer(playerDictionary[name]);
+        res.json({
+            success : true,
+        })
+        return;
+    }
 
     res.json({
-        success : true,
+        success : false,
+        reason : "full"
     })
 
     
-
  })
 
  app.post("/startGame", (req, res) => {
@@ -275,6 +281,39 @@ app.post("/addData", (req, res) => {
      }
     
     res.send("no?")
+ })
+
+ app.post("/leaveGame", (req, res) => {
+    const { gameId, name } = req.body;
+
+    if(!playerDictionary[name]){
+        res.json({
+            success : false,
+            message : "No Player exists"
+        })
+        return;
+    }
+
+    if(!gameDictionary[gameId]){
+        res.json({
+            success : false,
+            message : "No Game exists"
+        })
+        return;
+    }
+
+    console.log(`Disconnecting player ${socket.request.session.name}`)
+    console.log(`Currently on gameId ${ gameId}`)
+
+    gameDictionary[gameId].removePlayer(name);
+    if(gameDictionary[gameId].getPlayerNum() <= 0){
+        delete gameDictionary[gameId]; //clear memory
+    }
+
+    res.json({
+        success : true
+    })
+    
  })
 
  io.use((socket, next) => {
@@ -298,6 +337,9 @@ app.post("/addData", (req, res) => {
         console.log(`Currently on gameId ${ gameId}`)
         if(gameDictionary[gameId]){
             gameDictionary[gameId].removePlayer(socket.request.session.name);
+            if(gameDictionary[gameId].getPlayerNum() <= 0){
+                delete gameDictionary[gameId]; //clear memory
+            }
         }
         delete playerDictionary[socket.request.session.name];
         console.log(`Player deleted`)

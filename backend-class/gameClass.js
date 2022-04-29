@@ -122,6 +122,7 @@ class Game{
     }
 
     endGame(){
+        clearTimeout(this.gameTimeout);
         clearInterval(this.updateTimeout);
 
         Object.values(this.playerData).forEach(value => {
@@ -133,6 +134,12 @@ class Game{
             result : this.formatResult()
         }))
 
+    }
+
+    destroyRoom(){
+        this.endGame();
+        this.wordDictionary = null;
+        this.io = null;
     }
 
     // Helper Functions
@@ -168,8 +175,11 @@ class Game{
         }
         console.log(`Player ${name} leaving room`);
         this.io.emit("leave-room", `Player ${name} disconnected`);
+
+        this.removeSocketListener(this.playerData[name].player.socket);
         this.playerData[name].player.removeGameId();
         delete this.playerData[name];
+        
         console.log(this.playerData)
         return true;
     }
@@ -186,6 +196,10 @@ class Game{
         })
 
         return result;
+    }
+
+    getPlayerNum(){
+        return Object.value(this.playerData).length;
     }
 
 }
