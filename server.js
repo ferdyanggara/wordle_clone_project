@@ -278,14 +278,20 @@ app.post("/addData", (req, res) => {
 })
 
  io.on("connection", (socket) => {
-    console.log(`Connected with name ${socket.request.session.name}`)
+    console.log(`Connected with name ${JSON.stringify(socket.request.session)}`)
 
-    playerDictionary[socket.request.session.name] = 
-    new Player( 
-        socket.request.session.name,
-        socket,
-        () => {console.log("idk")}
-    )
+    // TODO: 
+
+    if (socket.request.session.name){
+        // add to gaming pool
+    }
+
+    // playerDictionary[socket.request.session.name] = 
+    // new Player( 
+    //     socket.request.session.name,
+    //     socket,
+    //     () => {console.log("idk")}
+    // )
     
  })
 
