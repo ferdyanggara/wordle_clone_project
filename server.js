@@ -31,17 +31,13 @@ function containWordCharsOnly(text) {
 // Handle the /register endpoint
 app.post("/register", (req, res) => {
     // Get the JSON data from the body
-    const { username, avatar, name, password } = req.body;
+    const { username, name, password } = req.body;
 
-    
     let msg = ""
 
     if (!username){
         msg += "username "
     }
-    if (!avatar){
-        msg += "avatar "
-    } 
     if (!name){
         msg += "name "
     }
@@ -51,7 +47,7 @@ app.post("/register", (req, res) => {
 
     msg += "is empty."
 
-    if (!username || !avatar || !name || !password){
+    if (!username || !name || !password){
         res.json({ status: "error", error: msg });
     }
     else if (!containWordCharsOnly(username)){
@@ -69,7 +65,6 @@ app.post("/register", (req, res) => {
     // G. Adding the new user account
     //
     users[username] =  {
-            avatar, 
             name, 
             password: bcrypt.hashSync(password, 10)
         }
