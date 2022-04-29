@@ -139,7 +139,6 @@ crossorigin="anonymous"></script>
 <script src="/socket.io/socket.io.min.js"></script>
 <script src="scripts/socket.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script src="/socket.io/socket.io.min.js"></script>
 <script src="./scripts/logic.js" type="module"></script>
 <script src="scripts/ui.js"></script>
 <script src="scripts/registration.js"></script>
@@ -243,6 +242,7 @@ $(document).ready(function() {
             })
             .then( res => {
                 Socket.connect();
+                console.log("socket established")
                 socket = Socket.getSocket();
                 fetch("/createGame", {
                     method : "POST",
@@ -287,18 +287,19 @@ $(document).ready(function() {
 
     // Initialize the UI
     UI.initialize();
+    SignInForm.hide();
   
-    // Validate the signin
-    Authentication.validate(
-        () => {
-            SignInForm.hide();
-            UserPanel.update(Authentication.getUser());
-            UserPanel.show();
+    // // Validate the signin
+    // Authentication.validate(
+    //     () => {
+    //         SignInForm.hide();
+    //         UserPanel.update(Authentication.getUser());
+    //         UserPanel.show();
   
-            Socket.connect();
-        },
-        () => { SignInForm.show(); }
-    );
+    //         Socket.connect();
+    //     },
+    //     () => { SignInForm.show(); }
+    // );
   });
 </script>
 </body>

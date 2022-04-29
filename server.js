@@ -167,7 +167,9 @@ app.get("/validate", (req, res) => {
     //
     // D. Sending a success response with the user account
     //
+    console.log("entering validate")
     if (user){
+        console.log(`entering ${user}`)
         res.json({status: "success", user: user})
     } else {
         res.json({ status: "error", error: "no user in session, please re login" });
@@ -197,7 +199,6 @@ const {Server} = require("socket.io");
 const httpServer = createServer(app)
 const io = new Server(httpServer);
 
-// Prototying Function for gameplay
 app.post("/addData", (req, res) => {
     console.log("enter adddata")
     console.log(req.body.name)
@@ -208,23 +209,26 @@ app.post("/addData", (req, res) => {
         name : req.body.name
     })
 })
+
  app.post("/createGame", (req, res) => {
-     
-     console.log(playerDictionary);
+    console.log("current player dict")
+    console.log(playerDictionary);
     if(!playerDictionary[req.body.name]){
         res.json({
             success : false
         })
+        return;
     }
 
     //create the game here
     //Assumption -> playerDictionary contains the playerClass
 
     // const gameId = makeid(6);
+    const {gameId} = req.body
     console.log("creating game")
-    gameDictionary[req.body.gameId] = new Game(
+    gameDictionary[gameId] = new Game(
         playerDictionary[req.body.name],
-        req.body.gameId,
+        gameId,
         io
     )
 
@@ -278,14 +282,26 @@ app.post("/addData", (req, res) => {
 })
 
  io.on("connection", (socket) => {
+    // console.log(`Connected with name ${socket.request.session.user.username}`)
     console.log(`Connected with name ${socket.request.session.name}`)
 
-    playerDictionary[socket.request.session.name] = 
+    playerDictionary[socket.request.session.name] = //temp modif for faster debug
     new Player( 
         socket.request.session.name,
         socket,
         () => {console.log("idk")}
     )
+
+    socket.on("disconnect", () => {
+        const gameId = playerDictionary[socket.request.session.name].currentGameId;
+        console.log(`Disconnecting player ${socket.request.session.name}`)
+        console.log(`Currently on gameId ${ gameId}`)
+        if(gameDictionary[gameId]){
+            gameDictionary[gameId].removePlayer(socket.request.session.name);
+        }
+        delete playerDictionary[socket.request.session.name];
+        console.log(`Player deleted`)
+    })
     
  })
 

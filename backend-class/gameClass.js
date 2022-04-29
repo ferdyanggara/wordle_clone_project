@@ -5,7 +5,7 @@ class Game{
     // When the game start all player must be initialized
 
     gameId;
-    playerData = [];
+    playerData = {};
 
     gameState; //START, END, WAITING
 
@@ -41,7 +41,7 @@ class Game{
 
     removeSocketListener(socket){
         //When the game ends, remove the listener
-        socket.off("word-sent", this.playerWordCheck);
+        socket.removeAllListeners("word-sent");
     }
 
     playerWordCheck = (playerData, word) => {
@@ -90,14 +90,14 @@ class Game{
     startGame(){
         console.log(`Game ${this.gameId} starting`)
 
-        this.playerData.forEach(value => {
+        Object.values(this.playerData).forEach(value => {
             this.initializeSocket(value)
             value.currentWord = this.wordDictionary.getRandomWord();
             value.score = 0;
             value.tries = 0;
         })
 
-        this.totalTime = 15 * 1000
+        this.totalTime = 5 * 1000
         this.lastTime = new Date();
         //set timeout here
         this.gameTimeout = setTimeout( () => {
@@ -124,7 +124,7 @@ class Game{
     endGame(){
         clearInterval(this.updateTimeout);
 
-        this.playerData.forEach(value => {
+        Object.values(this.playerData).forEach(value => {
             this.removeSocketListener(value.player.socket)
         })
 
@@ -138,18 +138,22 @@ class Game{
     // Helper Functions
 
     addPlayer(player){ //adding player
-        this.playerData.push({
+        console.log("Adding player")
+        
+        player.setGameId(this.gameId);
+
+        this.playerData[player.data] = {
             player : player, //containing the player data and socket
             currentWord : "",
             score : 0,
             tries : 0,
             maxTries : 5
-        })
+        };
 
         console.log(`Current number of player ${this.playerData.length}`);
         console.log(this.playerData);
 
-        let currentOccupant = this.playerData.map(value => value.player.data)
+        let currentOccupant = Object.values(this.playerData).map(value => value.player.data)
 
         this.io.emit("room", JSON.stringify({
             gameId : this.gameId,
@@ -157,10 +161,23 @@ class Game{
         }));
     }
 
+    removePlayer(name){
+
+        if(!this.playerData[name]){
+            return false;
+        }
+        console.log(`Player ${name} leaving room`);
+        this.io.emit("leave-room", `Player ${name} disconnected`);
+        this.playerData[name].player.removeGameId();
+        delete this.playerData[name];
+        console.log(this.playerData)
+        return true;
+    }
+
     formatResult(){
         const result = [];
 
-        this.playerData.forEach(value => {
+        Object.values(this.playerData).forEach(value => {
             result.push({
                 player : value.player.data,
                 currentWord : value.currentWord,
