@@ -33,6 +33,34 @@
 
     <h1> Wordle Clone </h1>
     
+    <div id="test">
+        <div>
+            <b> Login Name </b>
+            <input type="text" id="name"/>
+        </div>
+        <div>
+            <button id="name-submit">Submit name</button>
+        </div>
+        <div>
+            <b> Game Id</b>
+            <input type="text" id="game"/>
+        </div>
+        <div>
+            <button id="game-submit">Submit game</button>
+            <button id="start-submit">start game</button>
+            <button id="join-submit">join game</button>
+        </div>
+        <div>
+            <b> Submit word game test</b>
+            <input type="text" id="word"/>
+            <button id="submit-words">Words</button>
+        </div>
+        <div>
+            <b> Full setup - Steven gameId - 1</b>
+            <button id="full-setup">Setup</button>"            
+        </div>
+    </div> 
+    
     <div id="game-board">
 
     </div>
@@ -111,12 +139,152 @@ crossorigin="anonymous"></script>
 <script src="/socket.io/socket.io.min.js"></script>
 <script src="scripts/socket.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="/socket.io/socket.io.min.js"></script>
 <script src="./scripts/logic.js" type="module"></script>
 <script src="scripts/ui.js"></script>
 <script src="scripts/registration.js"></script>
 <script src="scripts/authentication.js"></script>
 <script>
 $(document).ready(function() {
+    let currentName;
+        let currentGameId;
+        let socket;
+        
+
+        $('#name-submit').click( (e) => {
+            e.preventDefault();
+            console.log("name submit")
+            fetch("/addData", {
+            method : "POST",
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body : JSON.stringify({
+                name : $('#name').val()
+            })//just name now
+            })
+            .then( res => {
+                console.log("name sent")
+                Socket.connect();
+                socket = Socket.getSocket();
+                
+            })
+        })
+
+        $('#game-submit').click( (e) => {
+            e.preventDefault();
+            console.log("game submit")
+            fetch("/createGame", {
+            method : "POST",
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body :  JSON.stringify({
+                name : $('#name').val(),
+                gameId : $('#game').val()
+            })
+            })
+            .then( res => res.json())
+            .then( value => {
+                console.log(value);
+            })
+        })
+
+        $('#join-submit').click( (e) => {
+            e.preventDefault();
+            console.log("game submit")
+            fetch("/joinGame", {
+            method : "POST",
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body :  JSON.stringify({
+                name : $('#name').val(),
+                gameId : $('#game').val()
+            })
+            })
+            .then( res => res.json())
+            .then( value => {
+                console.log(value);
+            })
+        })
+
+        $('#start-submit').click( (e) => {
+            e.preventDefault();
+            console.log("start submit")
+            fetch("/startGame", {
+            method : "POST",
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body :  JSON.stringify({
+                gameId : $('#game').val()
+            })
+            })
+            .then( value => {
+                console.log(value);
+            })
+        })
+
+        $("#full-setup").click( (e) => {
+            e.preventDefault()
+            currentName = "steven"
+            currentGameId = "1"
+
+            console.log("name submit")
+            fetch("/addData", {
+            method : "POST",
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body : JSON.stringify({
+                name : currentName
+            })//just name now
+            })
+            .then( res => {
+                Socket.connect();
+                socket = Socket.getSocket();
+                fetch("/createGame", {
+                    method : "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body :  JSON.stringify({
+                        name : currentName,
+                        gameId : currentGameId
+                    })
+                    })
+                    .then( res => res.json())
+                    .then( value => {
+                        console.log(value);
+                })
+                // .then(res => {
+                //     console.log("start submit")
+                //     fetch("/startGame", {
+                //     method : "POST",
+                //     headers: {
+                //         'Content-Type': 'application/json'
+                //     },
+                //     body :  JSON.stringify({
+                //         gameId : currentGameId
+                //     })
+                //     })
+                //     .then( value => {
+                //         console.log(value);
+                //     })
+                // })              
+            })
+
+        })
+
+        $("#submit-words").click( e => {
+            e.preventDefault()
+            console.log("words clicked")
+            console.log($("#word").val())
+            socket.emit("word-sent", $("#word").val());
+        })
+
+
     // Initialize the UI
     UI.initialize();
   
