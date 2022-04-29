@@ -34,14 +34,14 @@
     <h1> Wordle Clone </h1>
     
     <div id="test">
-        <div>
+        <!-- <div>
             <b> Login Name </b>
             <input type="text" id="name"/>
-        </div>
-        <div>
+        </div> -->
+        <!-- <div>
             <button id="name-submit">Submit name</button>
-        </div>
-        <div>
+        </div> -->
+        <!-- <div>
             <b> Game Id</b>
             <input type="text" id="game"/>
         </div>
@@ -49,7 +49,7 @@
             <button id="game-submit">Submit game</button>
             <button id="start-submit">start game</button>
             <button id="join-submit">join game</button>
-        </div>
+        </div> -->
         <div>
             <b> Submit word game test</b>
             <input type="text" id="word"/>
@@ -102,6 +102,42 @@
         </div>
     </div>
 
+    <div id="intro-overlay" class="overlay row">
+        <div class="content shadow row">
+                <div class="caption">Guess the WORDLE in six tries.
+                    Each guess must be a valid five-letter word. Hit the enter button to submit.
+                    After each guess, the color of the tiles will change to show how close your
+                    guess was to the word.</div>
+                <div class="spacer-grow"></div>
+                <button id="intro-close">
+                    <span class="material-icons">close</span>
+                    </button>
+        </div>
+    </div>
+
+
+
+    <div id="matchmaking-overlay" class="overlay row">
+        <div class="content shadow row">
+            <form id="matchmaking-form" class="col">
+                <div class="caption">START MATCHMAKING</div>
+                <div class="spacer-0"></div>
+                <button id='createGame'>Create Game</button>
+                <button id='quickJoin'>Quick Join</button>
+                <div>   
+                <div class="row">
+                    <!-- already under matchmaking-form -->
+                        <input id='roomId' type="number" placeholder="Game Id">
+                        <button type="submit">Join Game</button>
+                </div>
+                </form>
+                </div>
+                <div id="matchmaking-message" class="warning center"></div>
+                <div class="spacer-grow"></div>
+            </form>
+        </div>
+    </div>
+
 
     <div id="signin-overlay" class="overlay row">
         <div class="content shadow row">
@@ -131,6 +167,8 @@
             </form>
         </div>
     </div>
+    
+ 
 
 <script
 src="https://code.jquery.com/jquery-3.6.0.min.js"
@@ -150,26 +188,26 @@ $(document).ready(function() {
         let currentGameId;
         let socket;
         
-
-        $('#name-submit').click( (e) => {
-            e.preventDefault();
-            console.log("name submit")
-            fetch("/addData", {
-            method : "POST",
-            headers: {
-                'Content-Type': 'application/json'
-              },
-            body : JSON.stringify({
-                name : $('#name').val()
-            })//just name now
-            })
-            .then( res => {
-                console.log("name sent")
-                Socket.connect();
-                socket = Socket.getSocket();
+        // DELETE: NO NEED SINCE THE SESSION IS SAVED ALREADY UPON LOGIN
+        // $('#name-submit').click( (e) => {
+        //     e.preventDefault();
+        //     console.log("name submit")
+        //     fetch("/addData", {
+        //     method : "POST",
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //       },
+        //     body : JSON.stringify({
+        //         name : $('#name').val()
+        //     })//just name now
+        //     })
+        //     .then( res => {
+        //         console.log("name sent")
+        //         Socket.connect();
+        //         socket = Socket.getSocket();
                 
-            })
-        })
+        //     })
+        // })
 
         $('#game-submit').click( (e) => {
             e.preventDefault();
@@ -297,7 +335,10 @@ $(document).ready(function() {
   
             Socket.connect();
         },
-        () => { SignInForm.show(); }
+        () => { 
+            console.log('go erros so i show project introduction after restart')
+            
+            ProjectIntroduction.show(); }
     );
   });
 </script>
