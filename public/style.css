@@ -127,6 +127,7 @@ body {
     width: 100%; height: 100%;
     background: var(--overlay-background);
 }
+
 .overlay .caption {
     font-size: 120%;
     color: var(--overlay-caption-color);
