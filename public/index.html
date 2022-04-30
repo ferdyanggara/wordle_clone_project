@@ -42,6 +42,7 @@
             <button id="game-submit">Submit game</button>
             <button id="start-submit">start game</button>
             <button id="join-submit">join game</button>
+            <button id="leave-submit">leave game</button>
         </div>
         <div>
             <b> Submit word game test</b>
@@ -198,6 +199,23 @@ $(document).ready(function() {
             })
         })
 
+        $('#leave-submit').click( (e) => {
+            e.preventDefault();
+            console.log("game submit")
+            fetch("/leaveGame", {
+            method : "POST",
+            headers: {
+                'Content-Type': 'application/json'
+              },
+            body :  JSON.stringify({
+                gameId : $('#game').val()
+            })
+            })
+            .then( res => res.json())
+            .then( value => {
+                console.log(value);
+            })
+        })
 
         $("#submit-words").click( e => {
             e.preventDefault()

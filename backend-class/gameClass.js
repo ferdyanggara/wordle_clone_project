@@ -137,6 +137,7 @@ class Game{
     }
 
     destroyRoom(){
+        console.log(`Destroy room ${this.gameId}`)
         this.endGame();
         this.wordDictionary = null;
         this.io = null;

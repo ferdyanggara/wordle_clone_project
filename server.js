@@ -316,7 +316,7 @@ const io = new Server(httpServer);
         return;
     }
 
-    console.log(`Disconnecting player ${socket.request.session.name}`)
+    console.log(`Disconnecting player ${req.session.user.name}`)
     console.log(`Currently on gameId ${ gameId}`)
 
     gameDictionary[gameId].removePlayer(req.session.user.name);
