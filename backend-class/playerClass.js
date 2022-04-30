@@ -1,7 +1,7 @@
 class Player{
     //Currently very empty because
     //I dont know what to save first, or even do here
-    gameId;
+    currentGameId;
 
     constructor(playerData, playerSocket, disconnectHandler){
         if(!playerData || !playerSocket || !disconnectHandler){

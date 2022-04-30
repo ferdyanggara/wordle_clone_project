@@ -35,13 +35,6 @@
     
     <div id="test">
         <div>
-            <b> Login Name </b>
-            <input type="text" id="name"/>
-        </div>
-        <div>
-            <button id="name-submit">Submit name</button>
-        </div>
-        <div>
             <b> Game Id</b>
             <input type="text" id="game"/>
         </div>
@@ -150,26 +143,6 @@ $(document).ready(function() {
         let socket;
         
 
-        $('#name-submit').click( (e) => {
-            e.preventDefault();
-            console.log("name submit")
-            fetch("/addData", {
-            method : "POST",
-            headers: {
-                'Content-Type': 'application/json'
-              },
-            body : JSON.stringify({
-                name : $('#name').val()
-            })//just name now
-            })
-            .then( res => {
-                console.log("name sent")
-                Socket.connect();
-                socket = Socket.getSocket();
-                
-            })
-        })
-
         $('#game-submit').click( (e) => {
             e.preventDefault();
             console.log("game submit")
@@ -225,57 +198,6 @@ $(document).ready(function() {
             })
         })
 
-        $("#full-setup").click( (e) => {
-            e.preventDefault()
-            currentName = "steven"
-            currentGameId = "1"
-
-            console.log("name submit")
-            fetch("/addData", {
-            method : "POST",
-            headers: {
-                'Content-Type': 'application/json'
-              },
-            body : JSON.stringify({
-                name : currentName
-            })//just name now
-            })
-            .then( res => {
-                Socket.connect();
-                console.log("socket established")
-                socket = Socket.getSocket();
-                fetch("/createGame", {
-                    method : "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body :  JSON.stringify({
-                        name : currentName,
-                        gameId : currentGameId
-                    })
-                    })
-                    .then( res => res.json())
-                    .then( value => {
-                        console.log(value);
-                })
-                // .then(res => {
-                //     console.log("start submit")
-                //     fetch("/startGame", {
-                //     method : "POST",
-                //     headers: {
-                //         'Content-Type': 'application/json'
-                //     },
-                //     body :  JSON.stringify({
-                //         gameId : currentGameId
-                //     })
-                //     })
-                //     .then( value => {
-                //         console.log(value);
-                //     })
-                // })              
-            })
-
-        })
 
         $("#submit-words").click( e => {
             e.preventDefault()
@@ -287,19 +209,19 @@ $(document).ready(function() {
 
     // Initialize the UI
     UI.initialize();
-    SignInForm.hide();
+    // SignInForm.hide();
   
-    // // Validate the signin
-    // Authentication.validate(
-    //     () => {
-    //         SignInForm.hide();
-    //         UserPanel.update(Authentication.getUser());
-    //         UserPanel.show();
+    // Validate the signin
+    Authentication.validate(
+        () => {
+            SignInForm.hide();
+            UserPanel.update(Authentication.getUser());
+            UserPanel.show();
   
-    //         Socket.connect();
-    //     },
-    //     () => { SignInForm.show(); }
-    // );
+            Socket.connect();
+        },
+        () => { SignInForm.show(); }
+    );
   });
 </script>
 </body>

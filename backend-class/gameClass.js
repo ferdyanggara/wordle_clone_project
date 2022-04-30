@@ -199,7 +199,7 @@ class Game{
     }
 
     getPlayerNum(){
-        return Object.value(this.playerData).length;
+        return Object.values(this.playerData).length;
     }
 
 }

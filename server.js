@@ -99,6 +99,7 @@ app.post("/register", (req, res) => {
     //
     // I. Sending a success response to the browser
     //
+    console.log("yay")
     res.json({status: 'success'})
     } else {
     res.json({ status: "error", error: "username already exist" });
@@ -199,21 +200,28 @@ const {Server} = require("socket.io");
 const httpServer = createServer(app)
 const io = new Server(httpServer);
 
-app.post("/addData", (req, res) => {
-    console.log("enter adddata")
-    console.log(req.body.name)
-    req.session.name  = req.body.name;
-    console.log(req.session.name)
-    res.json({
-        success : true,
-        name : req.body.name
-    })
-})
+// app.post("/addData", (req, res) => {
+//     console.log("enter adddata")
+//     console.log(req.body.name)
+//     req.session.name  = req.body.name;
+//     console.log(req.session.name)
+//     res.json({
+//         success : true,
+//         name : req.body.name
+//     })
+// })
 
  app.post("/createGame", (req, res) => {
     console.log("current player dict")
     console.log(playerDictionary);
-    if(!playerDictionary[req.body.name]){
+    if(!req.session.user){
+        res.json({
+            success : false,
+            message : "unexpected - no session"
+        })
+    }
+
+    if(!playerDictionary[req.session.user.username]){
         res.json({
             success : false
         })
@@ -227,7 +235,7 @@ app.post("/addData", (req, res) => {
     const {gameId} = req.body
     console.log("creating game")
     gameDictionary[gameId] = new Game(
-        playerDictionary[req.body.name],
+        playerDictionary[req.session.user.username],
         gameId,
         io
     )
@@ -239,26 +247,32 @@ app.post("/addData", (req, res) => {
 
  app.post("/joinGame", (req, res) => {
 
-    const {gameId, name} = req.body
+    const {gameId} = req.body
+    if(!req.session.user){
+        res.json({
+            success : false,
+            message : "unexpected - no session"
+        })
+    }
 
     if(!gameDictionary[gameId]){
         res.json({
             success : false,
-            reason : "No game"
+            message : "No game"
         })
         return;
     }
 
-    if(!playerDictionary[name]){
+    if(!playerDictionary[req.session.user.username]){
         res.json({
             success : false,
-            reason : "No person - login error"
+            message : "No person - login error"
         })
         return;
     }
 
     if(gameDictionary[gameId].getPlayerNum() < 2){
-        gameDictionary[gameId].addPlayer(playerDictionary[name]);
+        gameDictionary[gameId].addPlayer(playerDictionary[req.session.user.username]);
         res.json({
             success : true,
         })
@@ -274,6 +288,7 @@ app.post("/addData", (req, res) => {
  })
 
  app.post("/startGame", (req, res) => {
+
      if(gameDictionary[req.body.gameId]){
         gameDictionary[req.body.gameId].startGame()
         res.send("yay?")
@@ -284,14 +299,13 @@ app.post("/addData", (req, res) => {
  })
 
  app.post("/leaveGame", (req, res) => {
-    const { gameId, name } = req.body;
+    const { gameId } = req.body;
 
-    if(!playerDictionary[name]){
+    if(!req.session.user){
         res.json({
             success : false,
-            message : "No Player exists"
+            message : "unexpected - no session"
         })
-        return;
     }
 
     if(!gameDictionary[gameId]){
@@ -305,8 +319,9 @@ app.post("/addData", (req, res) => {
     console.log(`Disconnecting player ${socket.request.session.name}`)
     console.log(`Currently on gameId ${ gameId}`)
 
-    gameDictionary[gameId].removePlayer(name);
+    gameDictionary[gameId].removePlayer(req.session.user.name);
     if(gameDictionary[gameId].getPlayerNum() <= 0){
+        gameDictionary[gameId].destroyRoom();
         delete gameDictionary[gameId]; //clear memory
     }
 
@@ -321,27 +336,28 @@ app.post("/addData", (req, res) => {
 })
 
  io.on("connection", (socket) => {
-    // console.log(`Connected with name ${socket.request.session.user.username}`)
-    console.log(`Connected with name ${socket.request.session.name}`)
+    console.log(`Connected with name ${socket.request.session.user.username}`)
+    // console.log(`Connected with name ${socket.request.session.name}`)
 
-    playerDictionary[socket.request.session.name] = //temp modif for faster debug
+    playerDictionary[socket.request.session.user.username] = //temp modif for faster debug
     new Player( 
-        socket.request.session.name,
+        socket.request.session.user.name,
         socket,
         () => {console.log("idk")}
     )
 
     socket.on("disconnect", () => {
-        const gameId = playerDictionary[socket.request.session.name].currentGameId;
-        console.log(`Disconnecting player ${socket.request.session.name}`)
+        const gameId = playerDictionary[socket.request.session.user.username].currentGameId;
+        console.log(`Disconnecting player ${socket.request.session.user.name}`)
         console.log(`Currently on gameId ${ gameId}`)
         if(gameDictionary[gameId]){
-            gameDictionary[gameId].removePlayer(socket.request.session.name);
+            gameDictionary[gameId].removePlayer(socket.request.session.user.name);
             if(gameDictionary[gameId].getPlayerNum() <= 0){
+                gameDictionary[gameId].destroyRoom();
                 delete gameDictionary[gameId]; //clear memory
             }
         }
-        delete playerDictionary[socket.request.session.name];
+        delete playerDictionary[socket.request.session.user.username];
         console.log(`Player deleted`)
     })
     
