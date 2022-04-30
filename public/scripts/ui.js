@@ -127,9 +127,9 @@ const MatchMaking = (function() {
             e.preventDefault();
   
             // Get the input fields
-            const username = $("#roomId").val().trim();
+            const gameId = $("#roomId").val().trim();
   
-            // TODO: SEND API REQUEST TO CREATE A NEW GAME
+            // TODO: SEND API REQUEST TO JOIN A GAME
             // GamePortal.joinGame(id,
             //     () => {
             //         hide();
@@ -141,6 +141,32 @@ const MatchMaking = (function() {
             //     },
             //     (error) => { $("#matchmaking-message").text(error); }
             // );
+            
+            (() => {
+                console.log("join called")
+                fetch("/joinGame", {
+                    method : "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                      },
+                    body :  JSON.stringify({
+                        gameId : gameId
+                    })
+                    })
+                    .then( res => res.json())
+                    .then( value => {
+                        if(value.success){
+                            console.log("Game successfully joined");
+                            $('#game').val(gameId);
+                            hide();
+                        }
+                        else{
+                            $("#matchmaking-message").text(value.message);
+                        }
+                    })
+            })();
+
+
         });
 
         $("#createGame").on("click", (e) => {
@@ -157,10 +183,34 @@ const MatchMaking = (function() {
             //     },
             //     (error) => { $("#matchmaking-message").text(error); }
             // );
+            
+            (() => {
+                console.log("create game called")
+                fetch("/createGame", {
+                    method : "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                      },
+                    body :  JSON.stringify({})
+                    })
+                    .then( res => res.json())
+                    .then( value => {
+                        if(value.success){
+                            console.log("Game successfully created");
+                            console.log(value)
+                            $('#game').val(value.gameId);
+                            hide();
+                        }
+                        else{
+                            $("#matchmaking-message").text(value.message);
+                        }
+                    })
+            })();
+
         })
 
         $("#quickJoin").on("click", (e) => {
-
+            
             // TESTING TO GO TO GAME
             hide();
             // TODO: SEND API REQUEST FOR QUICK JOIN  
@@ -175,6 +225,28 @@ const MatchMaking = (function() {
             //     },
             //     (error) => { $("#matchmaking-message").text(error); }
             // );
+
+            (() => {
+                console.log("quickjoin called")
+                const tempGameId = null;
+                fetch("/joinGame", {
+                    method : "GET",
+                    headers: {
+                        'Content-Type': 'application/json'
+                      }
+                    })
+                    .then( res => res.json())
+                    .then( value => {
+                        if(value.success){
+                            console.log("Game found");
+                            tempGameId = value.gameId
+                        }
+                        else{
+                            $("#matchmaking-message").text("No random game found");
+                        }
+                    })
+            })();
+
         })
 
     };

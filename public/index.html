@@ -39,11 +39,8 @@
             <input type="text" id="game"/>
         </div>
         <div>
-            <button id="game-submit">Submit game</button>
             <button id="start-submit">start game</button>
-            <button id="join-submit">join game</button>
             <button id="leave-submit">leave game</button>
-            <button id="random-submit">get random room id</button>
         </div>
         <div>
             <b> Submit word game test</b>
@@ -182,43 +179,6 @@ $(document).ready(function() {
         let currentGameId;
         let socket;
         
-        $('#game-submit').click( (e) => {
-            e.preventDefault();
-            console.log("game submit")
-            fetch("/createGame", {
-            method : "POST",
-            headers: {
-                'Content-Type': 'application/json'
-              },
-            body :  JSON.stringify({
-                name : $('#name').val(),
-                gameId : $('#game').val()
-            })
-            })
-            .then( res => res.json())
-            .then( value => {
-                console.log(value);
-            })
-        })
-
-        $('#join-submit').click( (e) => {
-            e.preventDefault();
-            console.log("game submit")
-            fetch("/joinGame", {
-            method : "POST",
-            headers: {
-                'Content-Type': 'application/json'
-              },
-            body :  JSON.stringify({
-                name : $('#name').val(),
-                gameId : $('#game').val()
-            })
-            })
-            .then( res => res.json())
-            .then( value => {
-                console.log(value);
-            })
-        })
 
         $('#start-submit').click( (e) => {
             e.preventDefault();
@@ -255,14 +215,6 @@ $(document).ready(function() {
             })
         })
 
-        $('#random-submit').click( (e) => {
-            e.preventDefault();
-            console.log("game submit")
-            fetch("/randomGame")
-            .then( res => res.json())
-            .then( res => console.log(res))
-
-        })
 
         $("#submit-words").click( e => {
             e.preventDefault()

@@ -37,7 +37,7 @@ function containWordCharsOnly(text) {
 
 function makeid(length) {
     var result           = '';
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var characters       = '0123456789';
     var charactersLength = characters.length;
     for ( var i = 0; i < length; i++ ) {
       result += characters.charAt(Math.floor(Math.random() * 
@@ -168,9 +168,7 @@ app.get("/validate", (req, res) => {
     //
     // D. Sending a success response with the user account
     //
-    console.log("entering validate")
     if (user){
-        console.log(`entering ${user}`)
         res.json({status: "success", user: user})
     } else {
         res.json({ status: "error", error: "no user in session, please re login" });
@@ -223,7 +221,8 @@ const io = new Server(httpServer);
 
     if(!playerDictionary[req.session.user.username]){
         res.json({
-            success : false
+            success : false,
+            message : "no player"
         })
         return;
     }
@@ -231,9 +230,15 @@ const io = new Server(httpServer);
     //create the game here
     //Assumption -> playerDictionary contains the playerClass
 
-    // const gameId = makeid(6);
-    const {gameId} = req.body
-    console.log("creating game")
+    let gameId;
+    while(true){
+        const temp =makeid(3);
+        if(!gameDictionary[gameId]){
+            gameId = temp;
+            break;
+        }
+    }
+    // const {gameId} = req.body
     gameDictionary[gameId] = new Game(
         playerDictionary[req.session.user.username],
         gameId,
@@ -242,7 +247,7 @@ const io = new Server(httpServer);
 
 
     console.log(`Game with ${req.body.gameId} created with player ${req.body.name}`)
-    res.json({success: false})
+    res.json({success: true, gameId : gameId})
  })
 
  app.post("/joinGame", (req, res) => {
