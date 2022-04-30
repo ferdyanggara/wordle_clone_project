@@ -194,7 +194,7 @@ class Game{
             return false;
         }
         console.log(`Player ${name} leaving room`);
-        this.io.emit("leave-room", `Player ${name} disconnected`);
+        this.io.emit("leave-game", `Player ${name} disconnected`);
 
         this.removeSocketListener(this.playerData[name].player.socket);
         this.playerData[name].player.removeGameId();
