@@ -24,7 +24,6 @@
 
         <div id="user-panel" class="row">
             <div class="field-content row shadow">
-                <span class="user-avatar"></span>
                 <span class="user-name">-</span>
             </div>
             <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
@@ -33,7 +32,7 @@
 
     <h1> Wordle Clone </h1>
     
-    <div id="test">
+    <div id="test" class="my-10">
         <!-- <div>
             <b> Login Name </b>
             <input type="text" id="name"/>
@@ -50,14 +49,14 @@
             <button id="start-submit">start game</button>
             <button id="join-submit">join game</button>
         </div> -->
-        <div>
-            <b> Submit word game test</b>
-            <input type="text" id="word"/>
+        <div class="flex">
+            <p>Submit word game test</p>
+            <input type="text" id="word" class="mx-10" />
             <button id="submit-words">Words</button>
         </div>
-        <div>
-            <b> Full setup - Steven gameId - 1</b>
-            <button id="full-setup">Setup</button>"            
+        <div class="flex">
+            <p class="mx-10"> Full setup - Steven gameId - 1</p>
+            <button id="full-setup">Setup</button>           
         </div>
     </div> 
     
@@ -111,7 +110,7 @@
                 <div class="spacer-grow"></div>
                 <button id="intro-close">
                     <span class="material-icons">close</span>
-                    </button>
+                </button>
         </div>
     </div>
 
@@ -128,12 +127,12 @@
                 <div class="row">
                     <!-- already under matchmaking-form -->
                         <input id='roomId' type="number" placeholder="Game Id">
-                        <button type="submit">Join Game</button>
+                        <button type="submit">Join</button>
                 </div>
                 </form>
                 </div>
                 <div id="matchmaking-message" class="warning center"></div>
-                <div class="spacer-grow"></div>
+                <!-- <div class="spacer-grow"></div> -->
             </form>
         </div>
     </div>
