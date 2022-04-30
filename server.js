@@ -291,7 +291,10 @@ const io = new Server(httpServer);
 
      if(gameDictionary[req.body.gameId]){
         gameDictionary[req.body.gameId].startGame()
-        res.send("yay?")
+        res.json({
+            success : true,
+
+        })
         return;
      }
     
@@ -331,6 +334,24 @@ const io = new Server(httpServer);
     
  })
 
+ app.get("/randomGame", (req, res) => {
+    let gameId = -1;
+    
+    let gameIdKeys = Object.keys(gameDictionary);
+
+    for(let i = 0; i < gameIdKeys.length; i++){
+        if(gameDictionary[gameIdKeys[i]] && gameDictionary[gameIdKeys[i]].getPlayerNum() < 2){
+            gameId = gameIdKeys[i];
+            break;
+        }
+    }
+
+    res.json({
+        success : gameId != -1 ? true : false,
+        gameId : gameId
+    })
+ })
+
  io.use((socket, next) => {
     chatSession(socket.request, {}, next);
 })
@@ -345,6 +366,9 @@ const io = new Server(httpServer);
         socket,
         () => {console.log("idk")}
     )
+
+    console.log(`Current players`);
+    console.log(Object.keys(playerDictionary));
 
     socket.on("disconnect", () => {
         const gameId = playerDictionary[socket.request.session.user.username].currentGameId;

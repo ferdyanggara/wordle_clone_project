@@ -43,6 +43,7 @@
             <button id="start-submit">start game</button>
             <button id="join-submit">join game</button>
             <button id="leave-submit">leave game</button>
+            <button id="random-submit">get random room id</button>
         </div>
         <div>
             <b> Submit word game test</b>
@@ -215,6 +216,15 @@ $(document).ready(function() {
             .then( value => {
                 console.log(value);
             })
+        })
+
+        $('#random-submit').click( (e) => {
+            e.preventDefault();
+            console.log("game submit")
+            fetch("/randomGame")
+            .then( res => res.json())
+            .then( res => console.log(res))
+
         })
 
         $("#submit-words").click( e => {
