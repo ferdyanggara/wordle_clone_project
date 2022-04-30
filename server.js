@@ -277,16 +277,19 @@ const io = new Server(httpServer);
     }
 
     if(gameDictionary[gameId].getPlayerNum() < 2){
-        gameDictionary[gameId].addPlayer(playerDictionary[req.session.user.username]);
-        res.json({
-            success : true,
+        let result = gameDictionary[gameId].addPlayer(playerDictionary[req.session.user.username]);
+        res.json(result ? {
+            result : true
+        } : {
+            result : false,
+            message : "game started"
         })
         return;
     }
 
     res.json({
         success : false,
-        reason : "full"
+        message : "room full"
     })
 
     
@@ -295,15 +298,18 @@ const io = new Server(httpServer);
  app.post("/startGame", (req, res) => {
 
      if(gameDictionary[req.body.gameId]){
-        gameDictionary[req.body.gameId].startGame()
-        res.json({
-            success : true,
-
-        })
-        return;
+        if(gameDictionary[req.body.gameId].startGame()){
+            res.json({
+                success : true,
+            })
+            return;
+        }
      }
     
-    res.send("no?")
+    res.json({
+        success : false,
+        message : "game has already started"
+    })
  })
 
  app.post("/leaveGame", (req, res) => {

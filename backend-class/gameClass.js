@@ -7,7 +7,7 @@ class Game{
     gameId;
     playerData = {};
 
-    gameState; //START, END, WAITING
+    gameState = 0; // 0 for wait, 1 for start
 
     wordDictionary  = WordDictionary.getDictionary();
 
@@ -88,7 +88,12 @@ class Game{
     }
 
     startGame(){
+        if(this.gameState){
+            return false;
+        }
         console.log(`Game ${this.gameId} starting`)
+
+        this.gameState = 1;
 
         Object.values(this.playerData).forEach(value => {
             this.initializeSocket(value)
@@ -119,9 +124,16 @@ class Game{
 
         }, 500)
 
+        this.io.emit("start-game", JSON.stringify({
+            gameId: this.gameId
+        }))
+
+        return true;
+
     }
 
     endGame(){
+        this.gameState = 0;
         clearTimeout(this.gameTimeout);
         clearInterval(this.updateTimeout);
 
@@ -146,9 +158,14 @@ class Game{
     // Helper Functions
 
     addPlayer(player){ //adding player
+        if(this.gameState == 1 || this.getPlayerNum() >= 2){
+            return false;
+        }
         console.log("Adding player")
         
         player.setGameId(this.gameId);
+
+        //TODO : Do we need to assume for same login?
 
         this.playerData[player.data] = {
             player : player, //containing the player data and socket
@@ -167,6 +184,8 @@ class Game{
             gameId : this.gameId,
             players : currentOccupant
         }));
+
+        return true;
     }
 
     removePlayer(name){
