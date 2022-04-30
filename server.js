@@ -357,6 +357,11 @@ const io = new Server(httpServer);
 })
 
  io.on("connection", (socket) => {
+    if(socket.request.session.user == undefined){
+        console.log("Unexpected error - No session before io connection");
+        return;
+    }
+
     console.log(`Connected with name ${socket.request.session.user.username}`)
     // console.log(`Connected with name ${socket.request.session.name}`)
 
