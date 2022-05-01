@@ -20,32 +20,34 @@
 
 ### Prototype UI
 ##### Input
-- Login name : name to login 
 - Game ID : game Id specified
-- Submit word game test : Assuming you start a game, this input the word to send using socket.emit('word-result')
 ##### Button
-- Submit Name -> login with the specified name (simulate session)
-- Submit game -> create game with specified id (can override so be careful)
 - start game -> start game with specified id
-- join game -> join game with specified id
+- leave game -> leave game with specified id
 - Words -> send the word to the game
-- Full setup - Steven gameId - 1 -> Shortcut to login as Steven and create game with gameId 1
 ### API
-- POST /addData -> simulate user login ( Add Session to server )
-Body : `{name : <name>}`
-
 - POST /createGame -> Create a game (Currently use own ID for easier debugging)
-Body : `{gameId : <game ID>}`
+Body : `{}` . Not required, will use session user to create the game.
 
 - POST /joinGame -> Join a game (Currently use own ID for easier debugging)
-Body : `{gameId : <gameID>}`
+Body : `{gameId : <gameID>}`. Will use session user to join the game
 
 - POST /startGame -> Start a game with Game ID
-Body : `{gameId : <gameID>}`
+Body : `{gameId : <gameID>}`. Anyone can start the game currently ( Do I need to make a host identifier? )
+
+- POST /leaveGame -> leave a game with Game ID
+Body : `{gameId : <gameID>}`.
+
+- GET /randomGame -> return one available Game ID to enter
+
+##### Return Message for API
+- If successful : `{success : true}`
+- If fail : `{success : false, message : <error message>}`
 
 ### Sockets (Frontend side)
 
-Currently, socket is still under heavy development since I don't know if we will need more sockets
+Currently, socket is still under heavy development since I don't know if we will need more sockets.
+This is the list of socket.on() need to be handled on the UI
 
 - 'word-result' 
 Returns a JSON with the gameID, player name, and the result of each word given.
@@ -102,11 +104,32 @@ Return an json update on the room
     players : [<player name>]
 }
 ```
-## REQUIRE
-- UI function for sending the word typed on the screen that accepts callback for socket.emit
-- Require a room UI
 
-##TODO - Gameplay
-- Create a static GameManager to handle all the games
-- Create a static PlayerManager to handle all the players
--  Manage disconnect event
+- 'start-game'
+Return which game starts
+```
+{
+    gameId : <game id>
+}
+```
+
+- 'leave-game'
+Return which player leave game (For debugging purposes)
+```
+`Player ${name} disconnected`
+```
+
+### Socket (Backend side)
+
+This is the list of socket.on() on the server side
+
+- 'word-sent'
+This is the socket on backend listening for the word sent from the game to check validity of the word sent
+```
+<word sent> - the word to check on the game
+```
+This socket only works when the game start. Once over, the socket event will be removed
+
+
+## REQUIRE
+- Require Gameplay UI

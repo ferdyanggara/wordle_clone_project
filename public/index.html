@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
@@ -45,7 +48,6 @@
             <input type="text" id="game"/>
         </div>
         <div>
-            <button id="game-submit">Submit game</button>
             <button id="start-submit">start game</button>
             <button id="join-submit">join game</button>
         </div> -->
@@ -58,46 +60,63 @@
             <p class="mx-10"> Full setup - Steven gameId - 1</p>
             <button id="full-setup">Setup</button>           
         </div>
+        <div class="flex">
+            <p>Instructions:</p>
+            <ol>
+                <li>Type the word with your keyboard or the provided keyboard bellow.</li>
+                <li>Press ENTER to submit the word.</li>
+            </ol>         
+        </div>
     </div> 
     
-    <div id="game-board">
+    <div class="flex" style="align-items: flex-start">
+        <div>
+            <div id="game-board">
+                <h2>Your Board</h2>
+                <!-- in logic.js -->
+            </div>
 
-    </div>
+            <div id="keyboard-cont">
+                <div class="first-row">
+                    <button class="keyboard-button">q</button>
+                    <button class="keyboard-button">w</button>
+                    <button class="keyboard-button">e</button>
+                    <button class="keyboard-button">r</button>
+                    <button class="keyboard-button">t</button>
+                    <button class="keyboard-button">y</button>
+                    <button class="keyboard-button">u</button>
+                    <button class="keyboard-button">i</button>
+                    <button class="keyboard-button">o</button>
+                    <button class="keyboard-button">p</button>
+                </div>
+                <div class="second-row">
+                    <button class="keyboard-button">a</button>
+                    <button class="keyboard-button">s</button>
+                    <button class="keyboard-button">d</button>
+                    <button class="keyboard-button">f</button>
+                    <button class="keyboard-button">g</button>
+                    <button class="keyboard-button">h</button>
+                    <button class="keyboard-button">j</button>
+                    <button class="keyboard-button">k</button>
+                    <button class="keyboard-button">l</button>
+                </div>
+                <div class="third-row">
+                    <button class="keyboard-button">Del</button>
+                    <button class="keyboard-button">z</button>
+                    <button class="keyboard-button">x</button>
+                    <button class="keyboard-button">c</button>
+                    <button class="keyboard-button">v</button>
+                    <button class="keyboard-button">b</button>
+                    <button class="keyboard-button">n</button>
+                    <button class="keyboard-button">m</button>
+                    <button class="keyboard-button">Enter</button>
+                </div>
+            </div>
+        </div>
 
-    <div id="keyboard-cont">
-        <div class="first-row">
-            <button class="keyboard-button">q</button>
-            <button class="keyboard-button">w</button>
-            <button class="keyboard-button">e</button>
-            <button class="keyboard-button">r</button>
-            <button class="keyboard-button">t</button>
-            <button class="keyboard-button">y</button>
-            <button class="keyboard-button">u</button>
-            <button class="keyboard-button">i</button>
-            <button class="keyboard-button">o</button>
-            <button class="keyboard-button">p</button>
-        </div>
-        <div class="second-row">
-            <button class="keyboard-button">a</button>
-            <button class="keyboard-button">s</button>
-            <button class="keyboard-button">d</button>
-            <button class="keyboard-button">f</button>
-            <button class="keyboard-button">g</button>
-            <button class="keyboard-button">h</button>
-            <button class="keyboard-button">j</button>
-            <button class="keyboard-button">k</button>
-            <button class="keyboard-button">l</button>
-        </div>
-        <div class="third-row">
-            <button class="keyboard-button">Del</button>
-            <button class="keyboard-button">z</button>
-            <button class="keyboard-button">x</button>
-            <button class="keyboard-button">c</button>
-            <button class="keyboard-button">v</button>
-            <button class="keyboard-button">b</button>
-            <button class="keyboard-button">n</button>
-            <button class="keyboard-button">m</button>
-            <button class="keyboard-button">Enter</button>
+        <div id="opponent-board">
+            <h2>Opponent's Board</h2>
+            <!-- in logic.js -->
         </div>
     </div>
 
@@ -176,7 +195,6 @@ crossorigin="anonymous"></script>
 <script src="/socket.io/socket.io.min.js"></script>
 <script src="scripts/socket.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script src="/socket.io/socket.io.min.js"></script>
 <script src="./scripts/logic.js" type="module"></script>
 <script src="scripts/ui.js"></script>
 <script src="scripts/registration.js"></script>
@@ -187,64 +205,6 @@ $(document).ready(function() {
         let currentGameId;
         let socket;
         
-        // DELETE: NO NEED SINCE THE SESSION IS SAVED ALREADY UPON LOGIN
-        // $('#name-submit').click( (e) => {
-        //     e.preventDefault();
-        //     console.log("name submit")
-        //     fetch("/addData", {
-        //     method : "POST",
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //       },
-        //     body : JSON.stringify({
-        //         name : $('#name').val()
-        //     })//just name now
-        //     })
-        //     .then( res => {
-        //         console.log("name sent")
-        //         Socket.connect();
-        //         socket = Socket.getSocket();
-                
-        //     })
-        // })
-
-        $('#game-submit').click( (e) => {
-            e.preventDefault();
-            console.log("game submit")
-            fetch("/createGame", {
-            method : "POST",
-            headers: {
-                'Content-Type': 'application/json'
-              },
-            body :  JSON.stringify({
-                name : $('#name').val(),
-                gameId : $('#game').val()
-            })
-            })
-            .then( res => res.json())
-            .then( value => {
-                console.log(value);
-            })
-        })
-
-        $('#join-submit').click( (e) => {
-            e.preventDefault();
-            console.log("game submit")
-            fetch("/joinGame", {
-            method : "POST",
-            headers: {
-                'Content-Type': 'application/json'
-              },
-            body :  JSON.stringify({
-                name : $('#name').val(),
-                gameId : $('#game').val()
-            })
-            })
-            .then( res => res.json())
-            .then( value => {
-                console.log(value);
-            })
-        })
 
         $('#start-submit').click( (e) => {
             e.preventDefault();
@@ -263,56 +223,24 @@ $(document).ready(function() {
             })
         })
 
-        $("#full-setup").click( (e) => {
-            e.preventDefault()
-            currentName = "steven"
-            currentGameId = "1"
-
-            console.log("name submit")
-            fetch("/addData", {
+        $('#leave-submit').click( (e) => {
+            e.preventDefault();
+            console.log("game submit")
+            fetch("/leaveGame", {
             method : "POST",
             headers: {
                 'Content-Type': 'application/json'
               },
-            body : JSON.stringify({
-                name : currentName
-            })//just name now
+            body :  JSON.stringify({
+                gameId : $('#game').val()
             })
-            .then( res => {
-                Socket.connect();
-                socket = Socket.getSocket();
-                fetch("/createGame", {
-                    method : "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body :  JSON.stringify({
-                        name : currentName,
-                        gameId : currentGameId
-                    })
-                    })
-                    .then( res => res.json())
-                    .then( value => {
-                        console.log(value);
-                })
-                // .then(res => {
-                //     console.log("start submit")
-                //     fetch("/startGame", {
-                //     method : "POST",
-                //     headers: {
-                //         'Content-Type': 'application/json'
-                //     },
-                //     body :  JSON.stringify({
-                //         gameId : currentGameId
-                //     })
-                //     })
-                //     .then( value => {
-                //         console.log(value);
-                //     })
-                // })              
             })
-
+            .then( res => res.json())
+            .then( value => {
+                console.log(value);
+            })
         })
+
 
         $("#submit-words").click( e => {
             e.preventDefault()
@@ -321,9 +249,11 @@ $(document).ready(function() {
             socket.emit("word-sent", $("#word").val());
         })
 
+        
 
     // Initialize the UI
     UI.initialize();
+    // SignInForm.hide();
   
     // Validate the signin
     Authentication.validate(

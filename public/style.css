@@ -2,10 +2,18 @@ h1 {
  text-align: center;
 }
 
-#game-board {
+div .flex {
+  margin: 5px 0;
+}
+
+#game-board, #opponent-board {
   display: flex;
   align-items: center;
   flex-direction: column;
+}
+#opponent-board {
+  transform: scale(0.7);
+  margin-left: 10vw;
 }
 
 .letter-box {
@@ -31,7 +39,7 @@ h1 {
 }
 
 #keyboard-cont {
-  margin: 1rem 0;
+  padding: 1rem 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -85,7 +93,8 @@ h1 {
     --button-background-hover: #f8b58b;
 }
 * {
-    font-family: "Abel", sans-serif;
+    font-family: 'Open Sans', sans-serif;
+    /* font-family: "Abel", sans-serif; */
     color: var(--font-color);
     box-sizing: border-box;
 }
