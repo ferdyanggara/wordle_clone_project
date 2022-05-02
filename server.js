@@ -284,10 +284,10 @@ const io = new Server(httpServer);
     if(gameDictionary[gameId].getPlayerNum() < 2){
         let result = gameDictionary[gameId].addPlayer(playerDictionary[req.session.user.username]);
         res.json(result ? {
-            result : true,
+            success : true,
             message: req.session.user.username
         } : {
-            result : false,
+            success : false,
             message : "game started"
         })
     } else {

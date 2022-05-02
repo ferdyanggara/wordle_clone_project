@@ -71,7 +71,9 @@ const GamePortal = (function() {
       })
       .then( res => res.json())
       .then( value => {
+        console.log(value);
           if(value.success){
+              console.log(value)
               $('#game').val(gameId);
               $("#matchmaking-message").text("succesfully join");
               addUserToTable(value.message,false)
