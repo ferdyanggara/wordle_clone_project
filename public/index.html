@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
@@ -24,7 +27,6 @@
 
         <div id="user-panel" class="row">
             <div class="field-content row shadow">
-                <span class="user-avatar"></span>
                 <span class="user-name">-</span>
             </div>
             <button id="signout-button" class="icon"><span class="material-icons">logout</span></button>
@@ -33,64 +35,88 @@
 
     <h1> Wordle Clone </h1>
     
-    <div id="test">
-        <div>
+    <div id="test" class="my-10">
+        <!-- <div>
+            <b> Login Name </b>
+            <input type="text" id="name"/>
+        </div> -->
+        <!-- <div>
+            <button id="name-submit">Submit name</button>
+        </div> -->
+        <!-- <div>
             <b> Game Id</b>
             <input type="text" id="game"/>
         </div>
         <div>
             <button id="start-submit">start game</button>
-            <button id="leave-submit">leave game</button>
-        </div>
-        <div>
-            <b> Submit word game test</b>
-            <input type="text" id="word"/>
+            <button id="join-submit">join game</button>
+        </div> -->
+        <div class="flex">
+            <p>Submit word game test</p>
+            <input type="text" id="word" class="mx-10" />
             <button id="submit-words">Words</button>
         </div>
-        <div>
-            <b> Full setup - Steven gameId - 1</b>
-            <button id="full-setup">Setup</button>"            
+        <div class="flex">
+            <p class="mx-10"> Full setup - Steven gameId - 1</p>
+            <button id="full-setup">Setup</button>           
+        </div>
+        <div class="flex">
+            <p>Instructions:</p>
+            <ol>
+                <li>Type the word with your keyboard or the provided keyboard bellow.</li>
+                <li>Press ENTER to submit the word.</li>
+            </ol>         
         </div>
     </div> 
     
-    <div id="game-board">
+    <div class="flex" style="align-items: flex-start">
+        <div>
+            <div id="game-board">
+                <h2>Your Board</h2>
+                <!-- in logic.js -->
+            </div>
 
-    </div>
+            <div id="keyboard-cont">
+                <div class="first-row">
+                    <button class="keyboard-button">q</button>
+                    <button class="keyboard-button">w</button>
+                    <button class="keyboard-button">e</button>
+                    <button class="keyboard-button">r</button>
+                    <button class="keyboard-button">t</button>
+                    <button class="keyboard-button">y</button>
+                    <button class="keyboard-button">u</button>
+                    <button class="keyboard-button">i</button>
+                    <button class="keyboard-button">o</button>
+                    <button class="keyboard-button">p</button>
+                </div>
+                <div class="second-row">
+                    <button class="keyboard-button">a</button>
+                    <button class="keyboard-button">s</button>
+                    <button class="keyboard-button">d</button>
+                    <button class="keyboard-button">f</button>
+                    <button class="keyboard-button">g</button>
+                    <button class="keyboard-button">h</button>
+                    <button class="keyboard-button">j</button>
+                    <button class="keyboard-button">k</button>
+                    <button class="keyboard-button">l</button>
+                </div>
+                <div class="third-row">
+                    <button class="keyboard-button">Del</button>
+                    <button class="keyboard-button">z</button>
+                    <button class="keyboard-button">x</button>
+                    <button class="keyboard-button">c</button>
+                    <button class="keyboard-button">v</button>
+                    <button class="keyboard-button">b</button>
+                    <button class="keyboard-button">n</button>
+                    <button class="keyboard-button">m</button>
+                    <button class="keyboard-button">Enter</button>
+                </div>
+            </div>
+        </div>
 
-    <div id="keyboard-cont">
-        <div class="first-row">
-            <button class="keyboard-button">q</button>
-            <button class="keyboard-button">w</button>
-            <button class="keyboard-button">e</button>
-            <button class="keyboard-button">r</button>
-            <button class="keyboard-button">t</button>
-            <button class="keyboard-button">y</button>
-            <button class="keyboard-button">u</button>
-            <button class="keyboard-button">i</button>
-            <button class="keyboard-button">o</button>
-            <button class="keyboard-button">p</button>
-        </div>
-        <div class="second-row">
-            <button class="keyboard-button">a</button>
-            <button class="keyboard-button">s</button>
-            <button class="keyboard-button">d</button>
-            <button class="keyboard-button">f</button>
-            <button class="keyboard-button">g</button>
-            <button class="keyboard-button">h</button>
-            <button class="keyboard-button">j</button>
-            <button class="keyboard-button">k</button>
-            <button class="keyboard-button">l</button>
-        </div>
-        <div class="third-row">
-            <button class="keyboard-button">Del</button>
-            <button class="keyboard-button">z</button>
-            <button class="keyboard-button">x</button>
-            <button class="keyboard-button">c</button>
-            <button class="keyboard-button">v</button>
-            <button class="keyboard-button">b</button>
-            <button class="keyboard-button">n</button>
-            <button class="keyboard-button">m</button>
-            <button class="keyboard-button">Enter</button>
+        <div id="opponent-board">
+            <h2>Opponent's Board</h2>
+            <!-- in logic.js -->
         </div>
     </div>
 
@@ -103,7 +129,7 @@
                 <div class="spacer-grow"></div>
                 <button id="intro-close">
                     <span class="material-icons">close</span>
-                    </button>
+                </button>
         </div>
     </div>
 
@@ -125,7 +151,7 @@
                 </form>
                 </div>
                 <div id="matchmaking-message" class="warning center"></div>
-                <div class="spacer-grow"></div>
+                <!-- <div class="spacer-grow"></div> -->
             </form>
         </div>
     </div>
@@ -223,6 +249,7 @@ $(document).ready(function() {
             socket.emit("word-sent", $("#word").val());
         })
 
+        
 
     // Initialize the UI
     UI.initialize();
