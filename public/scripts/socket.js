@@ -47,6 +47,8 @@ const Socket = (function() {
 
         socket.on("room", value => {
             console.log("room update")
+            // GamePortal.addUserToTable(value.players)
+            
             console.log(value)
         })
 
