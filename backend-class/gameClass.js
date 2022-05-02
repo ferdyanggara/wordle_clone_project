@@ -175,7 +175,7 @@ class Game{
             maxTries : 5
         };
 
-        console.log(`Current number of player ${this.playerData.length}`);
+        console.log(`Current number of player ${Object.keys(this.playerData).length}`);
         console.log(this.playerData);
 
         let currentOccupant = Object.values(this.playerData).map(value => value.player.data)
