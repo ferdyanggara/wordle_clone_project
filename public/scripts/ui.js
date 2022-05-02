@@ -62,6 +62,8 @@ const SignInForm = (function() {
                   hide();
                   // show the matchmaking overlay 
                   MatchMaking.show();
+                  console.log('connecting to socket')
+                  Socket.connect();
               },
               (error) => { $("#signin-message").text(error); }
           );
@@ -112,6 +114,39 @@ const SignInForm = (function() {
 })();
 
 
+const Room = (function() {
+    const initialize = function() {
+        $("#room-overlay").hide();
+  
+        $("#room-form").on("submit", (e) => {
+            // Do not submit the form
+            e.preventDefault();
+  
+            RoomPortal.startRoom(gameId,
+                () => {
+                    hide();
+                    UserPanel.update(Authentication.getUser());
+                    UserPanel.show();
+                },
+                (error) => { $("#room-message").text(error); }
+            );
+
+        });
+    };
+  
+    const show = function() {
+        $("#room-overlay").fadeIn(500);
+    };
+  
+    const hide = function() {
+        $("#room-form").get(0).reset();
+        $("#room-message").text(""); 
+        // $("#register-message").text("");
+        $("#room-overlay").fadeOut(500);
+    };
+  
+    return { initialize, show, hide };
+  })();
 const MatchMaking = (function() {
     // This function initializes the UI
     const initialize = function() {
@@ -130,122 +165,45 @@ const MatchMaking = (function() {
             const gameId = $("#roomId").val().trim();
   
             // TODO: SEND API REQUEST TO JOIN A GAME
-            // GamePortal.joinGame(id,
-            //     () => {
-            //         hide();
-            //         UserPanel.update(Authentication.getUser());
-            //         UserPanel.show();
-                    
-  
-            //         
-            //     },
-            //     (error) => { $("#matchmaking-message").text(error); }
-            // );
-            
-            (() => {
-                console.log("join called")
-                fetch("/joinGame", {
-                    method : "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                      },
-                    body :  JSON.stringify({
-                        gameId : gameId
-                    })
-                    })
-                    .then( res => res.json())
-                    .then( value => {
-                        if(value.success){
-                            console.log("Game successfully joined");
-                            $('#game').val(gameId);
-                            hide();
-                        }
-                        else{
-                            $("#matchmaking-message").text(value.message);
-                        }
-                    })
-            })();
-
+            GamePortal.joinGame(gameId,
+                () => {
+                    hide();
+                    UserPanel.update(Authentication.getUser());
+                    UserPanel.show();
+                },
+                (error) => { $("#matchmaking-message").text(error); }
+            );
 
         });
 
         $("#createGame").on("click", (e) => {
             // TODO: POST REQUEST ON CREATE RANDOM GAME (ROOM ID CAN BE CREATED ON SERVER SIDE)
                         // TODO: SEND API REQUEST TO CREATE A NEW GAME
-            // GamePortal.createGame(
-            //     () => {
-            //         hide();
-            //         UserPanel.update(Authentication.getUser());
-            //         UserPanel.show();
-                    
-  
-            //         
-            //     },
-            //     (error) => { $("#matchmaking-message").text(error); }
-            // );
+            GamePortal.createGame(
+                () => {
+                    hide();
+                    UserPanel.update(Authentication.getUser());
+                    UserPanel.show();
+                },
+                (error) => { $("#matchmaking-message").text(error); }
+            );
             
-            (() => {
-                console.log("create game called")
-                fetch("/createGame", {
-                    method : "POST",
-                    headers: {
-                        'Content-Type': 'application/json'
-                      },
-                    body :  JSON.stringify({})
-                    })
-                    .then( res => res.json())
-                    .then( value => {
-                        if(value.success){
-                            console.log("Game successfully created");
-                            console.log(value)
-                            $('#game').val(value.gameId);
-                            hide();
-                        }
-                        else{
-                            $("#matchmaking-message").text(value.message);
-                        }
-                    })
-            })();
-
         })
 
         $("#quickJoin").on("click", (e) => {
             
             // TESTING TO GO TO GAME
-            hide();
             // TODO: SEND API REQUEST FOR QUICK JOIN  
-            // GamePortal.quickJoin(
-            //     () => {
-            //         hide();
-            //         UserPanel.update(Authentication.getUser());
-            //         UserPanel.show();
-                    
-  
-            //         
-            //     },
-            //     (error) => { $("#matchmaking-message").text(error); }
-            // );
+            GamePortal.quickJoin(
+                () => {
+                    hide();
+                    UserPanel.update(Authentication.getUser());
+                    UserPanel.show();
+                },
+                (error) => { $("#matchmaking-message").text(error); }
+            );
 
-            (() => {
-                console.log("quickjoin called")
-                const tempGameId = null;
-                fetch("/joinGame", {
-                    method : "GET",
-                    headers: {
-                        'Content-Type': 'application/json'
-                      }
-                    })
-                    .then( res => res.json())
-                    .then( value => {
-                        if(value.success){
-                            console.log("Game found");
-                            tempGameId = value.gameId
-                        }
-                        else{
-                            $("#matchmaking-message").text("No random game found");
-                        }
-                    })
-            })();
+            
 
         })
 
@@ -324,7 +282,7 @@ const UI = (function() {
           .append($("<span class='user-name'>" + user.name + "</span>"));
   };
 
-  const components = [SignInForm, UserPanel, MatchMaking, ProjectIntroduction];
+  const components = [SignInForm, UserPanel, MatchMaking, ProjectIntroduction, Room];
 
 
   // This function initializes the UI
