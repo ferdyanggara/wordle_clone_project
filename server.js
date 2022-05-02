@@ -141,9 +141,9 @@ app.post("/signin", (req, res) => {
     //
     if (username in users){
         if (bcrypt.compareSync(password, users[username]['password'])){
-            const {avatar, name} = users[username]
-            req.session.user = {username, avatar, name}
-            res.json({status: 'success', user: {username, avatar, name}})
+            const {name} = users[username]
+            req.session.user = {username, name}
+            res.json({status: 'success', user: {username, name}})
         } else {
             res.json({status: 'error', error: 'password invalid'})
         }
@@ -212,20 +212,24 @@ const io = new Server(httpServer);
  app.post("/createGame", (req, res) => {
     console.log("current player dict")
     console.log(playerDictionary);
-    if(!req.session.user){
-        res.json({
-            success : false,
-            message : "unexpected - no session"
-        })
-    }
+    // if(!req.session.user){
+    //     res.json({
+    //         success : false,
+    //         message : "unexpected - no session"
+    //     })
+    // }
 
-    if(!playerDictionary[req.session.user.username]){
-        res.json({
-            success : false,
-            message : "no player"
-        })
-        return;
+    if (req.session.user){
+        if(!playerDictionary[req.session.user.username]){
+            res.json({
+                success : false,
+                message : "no player"
+            })
+            return;
+        }
     }
+    
+
 
     //create the game here
     //Assumption -> playerDictionary contains the playerClass
@@ -246,7 +250,7 @@ const io = new Server(httpServer);
     )
 
 
-    console.log(`Game with ${req.body.gameId} created with player ${req.body.name}`)
+    // console.log(`Game with ${req.body.gameId} created with player ${req.body.name}`)
     res.json({success: true, gameId : gameId})
  })
 
@@ -279,18 +283,19 @@ const io = new Server(httpServer);
     if(gameDictionary[gameId].getPlayerNum() < 2){
         let result = gameDictionary[gameId].addPlayer(playerDictionary[req.session.user.username]);
         res.json(result ? {
-            result : true
+            result : true,
+            message: req.session.user.username
         } : {
             result : false,
             message : "game started"
         })
-        return;
+    } else {
+        res.json({
+            success : false,
+            message : "room full"
+        })
     }
 
-    res.json({
-        success : false,
-        message : "room full"
-    })
 
     
  })
@@ -349,6 +354,8 @@ const io = new Server(httpServer);
     let gameId = -1;
     
     let gameIdKeys = Object.keys(gameDictionary);
+
+    console.log('gameidkeys: ', gameIdKeys)
 
     for(let i = 0; i < gameIdKeys.length; i++){
         if(gameDictionary[gameIdKeys[i]] && gameDictionary[gameIdKeys[i]].getPlayerNum() < 2){
