@@ -262,6 +262,7 @@ const io = new Server(httpServer);
             success : false,
             message : "unexpected - no session"
         })
+        return;
     }
 
     if(!gameDictionary[gameId]){
@@ -325,6 +326,7 @@ const io = new Server(httpServer);
             success : false,
             message : "unexpected - no session"
         })
+        return;
     }
 
     if(!gameDictionary[gameId]){
