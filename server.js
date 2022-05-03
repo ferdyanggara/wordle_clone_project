@@ -212,12 +212,13 @@ const io = new Server(httpServer);
  app.post("/createGame", (req, res) => {
     console.log("current player dict")
     console.log(playerDictionary);
-    // if(!req.session.user){
-    //     res.json({
-    //         success : false,
-    //         message : "unexpected - no session"
-    //     })
-    // }
+    if(!req.session.user){
+        res.json({
+            success : false,
+            message : "player has not sign in yet"
+        })
+        return;
+    }
 
     if (req.session.user){
         if(!playerDictionary[req.session.user.username]){
@@ -376,7 +377,7 @@ const io = new Server(httpServer);
 
  io.on("connection", (socket) => {
     if(socket.request.session.user == undefined){
-        console.log("Unexpected error - No session before io connection");
+        console.log("User has not sign in, please sign in!");
         return;
     }
 
