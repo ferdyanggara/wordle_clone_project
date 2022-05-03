@@ -198,6 +198,13 @@ const {Server} = require("socket.io");
 const httpServer = createServer(app)
 const io = new Server(httpServer);
 
+io.use((socket, next) => {
+    chatSession(socket.request, {}, next);
+})
+
+const GameManager = require("./backend-class/gameManagerClass")
+GameManager.setup(io);
+
 // app.post("/addData", (req, res) => {
 //     console.log("enter adddata")
 //     console.log(req.body.name)
@@ -420,45 +427,43 @@ const io = new Server(httpServer);
 
  })
 
- io.use((socket, next) => {
-    chatSession(socket.request, {}, next);
-})
 
- io.on("connection", (socket) => {
-    if(socket.request.session.user == undefined){
-        console.log("User has not sign in, please sign in!");
-        return;
-    }
 
-    console.log(`Connected with name ${socket.request.session.user.username}`)
-    // console.log(`Connected with name ${socket.request.session.name}`)
+//  io.on("connection", (socket) => {
+//     if(socket.request.session.user == undefined){
+//         console.log("User has not sign in, please sign in!");
+//         return;
+//     }
 
-    playerDictionary[socket.request.session.user.username] = //temp modif for faster debug
-    new Player( 
-        socket.request.session.user.name,
-        socket,
-        () => {console.log("idk")}
-    )
+//     console.log(`Connected with name ${socket.request.session.user.username}`)
+//     // console.log(`Connected with name ${socket.request.session.name}`)
 
-    console.log(`Current players`);
-    console.log(Object.keys(playerDictionary));
+//     playerDictionary[socket.request.session.user.username] = //temp modif for faster debug
+//     new Player( 
+//         socket.request.session.user.name,
+//         socket,
+//         () => {console.log("idk")}
+//     )
 
-    socket.on("disconnect", () => {
-        const gameId = playerDictionary[socket.request.session.user.username].currentGameId;
-        console.log(`Disconnecting player ${socket.request.session.user.name}`)
-        console.log(`Currently on gameId ${ gameId}`)
-        if(gameDictionary[gameId]){
-            gameDictionary[gameId].removePlayer(socket.request.session.user.name);
-            if(gameDictionary[gameId].getPlayerNum() <= 0){
-                gameDictionary[gameId].destroyRoom();
-                delete gameDictionary[gameId]; //clear memory
-            }
-        }
-        delete playerDictionary[socket.request.session.user.username];
-        console.log(`Player deleted`)
-    })
+//     console.log(`Current players`);
+//     console.log(Object.keys(playerDictionary));
+
+//     socket.on("disconnect", () => {
+//         const gameId = playerDictionary[socket.request.session.user.username].currentGameId;
+//         console.log(`Disconnecting player ${socket.request.session.user.name}`)
+//         console.log(`Currently on gameId ${ gameId}`)
+//         if(gameDictionary[gameId]){
+//             gameDictionary[gameId].removePlayer(socket.request.session.user.name);
+//             if(gameDictionary[gameId].getPlayerNum() <= 0){
+//                 gameDictionary[gameId].destroyRoom();
+//                 delete gameDictionary[gameId]; //clear memory
+//             }
+//         }
+//         delete playerDictionary[socket.request.session.user.username];
+//         console.log(`Player deleted`)
+//     })
     
- })
+//  })
 
 // Use a web server to listen at port 8000
 httpServer.listen(8000, () => {

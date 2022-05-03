@@ -8,10 +8,10 @@ class GameManager{
 
     #io;
 
-    #instance = null;
+    static #instance = null;
 
     constructor(io){
-        if(!(io instanceof Socket)){
+        if(!(io)){
             throw "no socket";
         }
         this.#io = io;
@@ -30,7 +30,7 @@ class GameManager{
             this.addPlayer(socket.request.session.user, socket);
 
             console.log(`Current players`);
-            console.log(Object.keys(playerDictionary));
+            console.log(Object.keys(this.#playerDictionary));
 
             socket.on("disconnect", () => {
                 const gameId = this.#playerDictionary[socket.request.session.user.username].currentGameId;
@@ -52,14 +52,14 @@ class GameManager{
         })
     }
 
-    setup(io){
+    static setup(io){
         if(this.#instance == null){
             this.#instance = new GameManager(io);
         }
         return this.#instance;
     }
 
-    getInstance(){
+    static getInstance(){
         if(this.#instance == null){
             throw "Not yet init!";
         }
