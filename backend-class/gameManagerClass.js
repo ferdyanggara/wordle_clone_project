@@ -160,7 +160,7 @@ class GameManager{
         }
 
         if(this.#gameDictionary[gameId].addPlayer(
-            this.#gameDictionary[user.username]
+            this.#playerDictionary[user.username]
         )){
             return {
                 success : true
@@ -232,7 +232,7 @@ class GameManager{
             return;
         }
 
-        if(!this.#gameDictionary[gameId].getPlayerNum >= 1){
+        if(this.#gameDictionary[gameId].getPlayerNum() >= 1){
             console.log(`Game ${gameId} still has players!`)
             return;
         }
@@ -264,7 +264,7 @@ class GameManager{
         }
 
         if(this.#gameDictionary[gameId].removePlayer(user.name)){
-            this.#gameDictionary.deleteGame();
+            this.deleteGame(gameId);
             return {
                 success : true
             }

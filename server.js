@@ -197,273 +197,33 @@ const {createServer} = require('http');
 const {Server} = require("socket.io");
 const httpServer = createServer(app)
 const io = new Server(httpServer);
+//What a terrible integration
+const GameManager = require("./backend-class/gameManagerClass")
 
 io.use((socket, next) => {
     chatSession(socket.request, {}, next);
 })
-
-const GameManager = require("./backend-class/gameManagerClass")
 GameManager.setup(io);
-
-// app.post("/addData", (req, res) => {
-//     console.log("enter adddata")
-//     console.log(req.body.name)
-//     req.session.name  = req.body.name;
-//     console.log(req.session.name)
-//     res.json({
-//         success : true,
-//         name : req.body.name
-//     })
-// })
-
- app.post("/createGame", (req, res) => {
-    console.log("current player dict")
-    console.log(playerDictionary);
-    if(!req.session.user){
-        res.json({
-            success : false,
-            message : "player has not sign in yet"
-        })
-        return;
-    }
-
-    if (req.session.user){
-        if(!playerDictionary[req.session.user.username]){
-            res.json({
-                success : false,
-                message : "no player"
-            })
-            return;
-        }
-    }
-    
+const {
+    createGameFunction,
+    joinGameFunction,
+    startGameFunction,
+    randomGameFunction,
+    leaveGameFunction
+} = require("./controller/gameManagerController");
 
 
-    //create the game here
-    //Assumption -> playerDictionary contains the playerClass
+ app.post("/createGame", createGameFunction);
 
-    let gameId;
-    while(true){
-        const temp =makeid(3);
-        if(!gameDictionary[gameId]){
-            gameId = temp;
-            break;
-        }
-    }
-    // const {gameId} = req.body
-    gameDictionary[gameId] = new Game(
-        playerDictionary[req.session.user.username],
-        gameId,
-        io
-    )
+ app.post("/joinGame", joinGameFunction);
+
+ app.post("/startGame", startGameFunction);
+
+ app.post("/leaveGame", leaveGameFunction);
+
+ app.get("/randomGame", randomGameFunction);
 
 
-    // console.log(`Game with ${req.body.gameId} created with player ${req.body.name}`)
-    res.json({success: true, gameId : gameId})
- })
-
- app.post("/joinGame", (req, res) => {
-
-    const {gameId} = req.body
-    if(!req.session.user){
-        res.json({
-            success : false,
-            message : "unexpected - no session"
-        })
-        return;
-    }
-
-    if(!gameDictionary[gameId]){
-        res.json({
-            success : false,
-            message : "No game"
-        })
-        return;
-    }
-
-    if(!playerDictionary[req.session.user.username]){
-        res.json({
-            success : false,
-            message : "No person - login error"
-        })
-        return;
-    }
-
-    if(gameDictionary[gameId].getPlayerNum() < 2){
-        let result = gameDictionary[gameId].addPlayer(playerDictionary[req.session.user.username]);
-        res.json(result ? {
-            success : true,
-            message: req.session.user.username
-        } : {
-            success : false,
-            message : "game started"
-        })
-    } else {
-        res.json({
-            success : false,
-            message : "room full"
-        })
-    }
-
-
-    
- })
-
- app.post("/startGame", (req, res) => {
-
-     if(gameDictionary[req.body.gameId]){
-        if(gameDictionary[req.body.gameId].startGame()){
-            res.json({
-                success : true,
-            })
-            return;
-        }
-     }
-    
-    res.json({
-        success : false,
-        message : "game has already started"
-    })
- })
-
- app.post("/leaveGame", (req, res) => {
-    const { gameId } = req.body;
-
-    if(!req.session.user){
-        res.json({
-            success : false,
-            message : "unexpected - no session"
-        })
-        return;
-    }
-
-    if(!gameDictionary[gameId]){
-        res.json({
-            success : false,
-            message : "No Game exists"
-        })
-        return;
-    }
-
-    console.log(`Disconnecting player ${req.session.user.name}`)
-    console.log(`Currently on gameId ${ gameId}`)
-
-    gameDictionary[gameId].removePlayer(req.session.user.name);
-    if(gameDictionary[gameId].getPlayerNum() <= 0){
-        gameDictionary[gameId].destroyRoom();
-        delete gameDictionary[gameId]; //clear memory
-    }
-
-    res.json({
-        success : true
-    })
-    
- })
-
- app.get("/randomGame", (req, res) => {
-    let gameId = -1;
-    
-    let gameIdKeys = Object.keys(gameDictionary);
-
-    console.log('gameidkeys: ', gameIdKeys)
-
-    for(let i = 0; i < gameIdKeys.length; i++){
-        if(gameDictionary[gameIdKeys[i]] && gameDictionary[gameIdKeys[i]].getPlayerNum() < 2){
-            gameId = gameIdKeys[i];
-            break;
-        }
-    }
-
-    if(gameId == -1){
-        res.json({
-            success : gameId != -1 ? true : false,
-            gameId : gameId
-        })
-        return;
-    }
-    
-    //TEMPORARY AUTOJOIN SOLN : Pure copy paste from joinGame
-
-    if(!req.session.user){
-        res.json({
-            success : false,
-            message : "unexpected - no session"
-        })
-        return;
-    }
-
-    if(!gameDictionary[gameId]){
-        res.json({
-            success : false,
-            message : "No game"
-        })
-        return;
-    }
-
-    if(!playerDictionary[req.session.user.username]){
-        res.json({
-            success : false,
-            message : "No person - login error"
-        })
-        return;
-    }
-
-    if(gameDictionary[gameId].getPlayerNum() < 2){
-        let result = gameDictionary[gameId].addPlayer(playerDictionary[req.session.user.username]);
-        res.json(result ? {
-            success : true,
-            message: req.session.user.username,
-            gameId : gameId
-        } : {
-            success : false,
-            message : "game started"
-        })
-    } else {
-        res.json({
-            success : false,
-            message : "room full"
-        })
-    }
-
- })
-
-
-
-//  io.on("connection", (socket) => {
-//     if(socket.request.session.user == undefined){
-//         console.log("User has not sign in, please sign in!");
-//         return;
-//     }
-
-//     console.log(`Connected with name ${socket.request.session.user.username}`)
-//     // console.log(`Connected with name ${socket.request.session.name}`)
-
-//     playerDictionary[socket.request.session.user.username] = //temp modif for faster debug
-//     new Player( 
-//         socket.request.session.user.name,
-//         socket,
-//         () => {console.log("idk")}
-//     )
-
-//     console.log(`Current players`);
-//     console.log(Object.keys(playerDictionary));
-
-//     socket.on("disconnect", () => {
-//         const gameId = playerDictionary[socket.request.session.user.username].currentGameId;
-//         console.log(`Disconnecting player ${socket.request.session.user.name}`)
-//         console.log(`Currently on gameId ${ gameId}`)
-//         if(gameDictionary[gameId]){
-//             gameDictionary[gameId].removePlayer(socket.request.session.user.name);
-//             if(gameDictionary[gameId].getPlayerNum() <= 0){
-//                 gameDictionary[gameId].destroyRoom();
-//                 delete gameDictionary[gameId]; //clear memory
-//             }
-//         }
-//         delete playerDictionary[socket.request.session.user.username];
-//         console.log(`Player deleted`)
-//     })
-    
-//  })
 
 // Use a web server to listen at port 8000
 httpServer.listen(8000, () => {
