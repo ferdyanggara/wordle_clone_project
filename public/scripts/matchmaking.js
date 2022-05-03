@@ -74,7 +74,7 @@ const GamePortal = (function() {
           if(value.success){
               $('#game').val(gameId);
               $("#matchmaking-message").text("succesfully join");
-              addUserToTable(value.message,false)
+              // addUserToTable(value.message,false)
               console.log('hide matchmaking')
               MatchMaking.hide();
               Room.show();
