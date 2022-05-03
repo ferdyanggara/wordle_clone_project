@@ -180,10 +180,15 @@ class Game{
 
         let currentOccupant = Object.values(this.playerData).map(value => value.player.data)
 
-        this.io.emit("room", JSON.stringify({
+        player.socket.broadcast.emit("room", JSON.stringify({
             gameId : this.gameId,
             players : currentOccupant
-        }));
+        }))
+
+        // this.io.emit("room", JSON.stringify({
+        //     gameId : this.gameId,
+        //     players : currentOccupant
+        // }));
 
         return true;
     }

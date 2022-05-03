@@ -366,10 +366,57 @@ const io = new Server(httpServer);
         }
     }
 
-    res.json({
-        success : gameId != -1 ? true : false,
-        gameId : gameId
-    })
+    if(gameId == -1){
+        res.json({
+            success : gameId != -1 ? true : false,
+            gameId : gameId
+        })
+        return;
+    }
+    
+    //TEMPORARY AUTOJOIN SOLN : Pure copy paste from joinGame
+
+    if(!req.session.user){
+        res.json({
+            success : false,
+            message : "unexpected - no session"
+        })
+        return;
+    }
+
+    if(!gameDictionary[gameId]){
+        res.json({
+            success : false,
+            message : "No game"
+        })
+        return;
+    }
+
+    if(!playerDictionary[req.session.user.username]){
+        res.json({
+            success : false,
+            message : "No person - login error"
+        })
+        return;
+    }
+
+    if(gameDictionary[gameId].getPlayerNum() < 2){
+        let result = gameDictionary[gameId].addPlayer(playerDictionary[req.session.user.username]);
+        res.json(result ? {
+            success : true,
+            message: req.session.user.username,
+            gameId : gameId
+        } : {
+            success : false,
+            message : "game started"
+        })
+    } else {
+        res.json({
+            success : false,
+            message : "room full"
+        })
+    }
+
  })
 
  io.use((socket, next) => {
