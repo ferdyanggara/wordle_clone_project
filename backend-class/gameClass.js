@@ -199,7 +199,14 @@ class Game{
             return false;
         }
         console.log(`Player ${name} leaving room`);
-        this.io.emit("leave-game", `Player ${name} disconnected`);
+
+        let currentOccupant = Object.values(this.playerData).map(value => value.player.data)
+
+        this.playerData[name].player.socket.broadcast.emit("room", JSON.stringify({
+            gameId : this.gameId,
+            players : currentOccupant
+        }))
+        // this.io.emit("leave-game", `Player ${name} disconnected`);
 
         this.removeSocketListener(this.playerData[name].player.socket);
         this.playerData[name].player.removeGameId();
