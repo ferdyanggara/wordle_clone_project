@@ -21,7 +21,10 @@ const GamePortal = (function() {
         .then( value => {
             if(value.success){
                 console.log("Game found with: ", value.gameId);
-                tempGameId = value.gameId
+                // ADDED TO randomJoin CHANGES
+                $('#game').val(value.gameId);
+                addUserToTable(Authentication.getUser().username, false);
+                // END CHANGES
                 $("#matchmaking-message").text("join game with room id: ", tempGameId);
                 MatchMaking.hide();
                 Room.show();

@@ -237,8 +237,8 @@ const io = new Server(httpServer);
 
     let gameId;
     while(true){
-        const temp =makeid(3);
-        if(!gameDictionary[gameId]){
+        const temp = makeid(3);
+        if(!gameDictionary[temp]){
             gameId = temp;
             break;
         }
@@ -311,12 +311,20 @@ const io = new Server(httpServer);
             })
             return;
         }
-     }
-    
+        else {
+            res.json({
+                success : false,
+                message : "game has already started"
+            })
+        }
+    }
+
     res.json({
         success : false,
-        message : "game has already started"
+        message : "No game found"
     })
+    
+    
  })
 
  app.post("/leaveGame", (req, res) => {
@@ -369,8 +377,8 @@ const io = new Server(httpServer);
 
     if(gameId == -1){
         res.json({
-            success : gameId != -1 ? true : false,
-            gameId : gameId
+            success : false,
+            message : "no game found!"
         })
         return;
     }
