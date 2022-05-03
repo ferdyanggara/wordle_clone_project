@@ -47,9 +47,14 @@ const Socket = (function() {
 
         socket.on("room", value => {
             console.log("room update")
-            // GamePortal.addUserToTable(value.players)
-            
-            console.log(value)
+            const host = Authentication.getUser().username;
+            player = JSON.parse(value).players;
+            for (let i = 0; i < player.length; i++) {
+                if (player[i] != host){
+                    console.log('player i: ', player[i], 'host: ', host, 'player i == host', player[i] == host)
+                    GamePortal.addUserToTable(player[i])
+                }
+            }
         })
 
         //TODO : Connect to UI
