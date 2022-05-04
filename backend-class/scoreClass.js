@@ -6,7 +6,7 @@ class ScoreDictionary{
 
     static #instance = null;
 
-    // base data should be { name : string, score : _ }
+    // base data should be { player : string, score : _ }
     constructor(){
         this.#highScore = JSON.parse(fs.readFileSync("../data/score.json"));
     }
@@ -23,11 +23,11 @@ class ScoreDictionary{
             return;
         }
         if(this.#highScore[scoreData.score] == undefined){
-            this.#highScore[scoreData.score] = [scoreData.name]
+            this.#highScore[scoreData.score] = [scoreData.player]
         }
         else{
-            if(scoreData.name in this.#highScore[scoreData.score]){
-                this.#highScore.push(scoreData.name)
+            if(scoreData.player in this.#highScore[scoreData.score]){
+                this.#highScore.push(scoreData.player)
             }
         }   
         fs.writeFileSync("../data/score.json", JSON.stringify(this.#highScore));
@@ -46,7 +46,7 @@ class ScoreDictionary{
         for(let i = 0 ; i < (topKey.length > n ? n : topKey.length) ; i++){
             result.push({
                 score : topKey[i],
-                name : this.#highScore[topKey[i]]
+                player : this.#highScore[topKey[i]]
             });
         }
         return result;
@@ -54,23 +54,5 @@ class ScoreDictionary{
 }
 
 const temp = ScoreDictionary.getInstance();
-
-temp.addScoreData({
-    name :"test1",
-    score : 2
-})
-temp.addScoreData({
-    name :"test2",
-    score : 2
-})
-temp.addScoreData({
-    name :"test3",
-    score : 3
-})
-temp.addScoreData({
-    name :"test4",
-    score : 4
-})
-console.log(temp.getTopN(2));
 
 module.exports = ScoreDictionary;

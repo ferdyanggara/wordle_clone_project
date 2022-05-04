@@ -1,4 +1,5 @@
 const WordDictionary = require("./wordClass")
+const ScoreDictionary = require("./scoreClass")
 
 class Game{
     // This class handle the whole setup and gamestate itself
@@ -10,6 +11,7 @@ class Game{
     gameState = 0; // 0 for wait, 1 for start
 
     wordDictionary  = WordDictionary.getDictionary();
+    scoreDictionary = ScoreDictionary.getInstance();
 
     totalTime = 5 * 1000;
     lastTime;
@@ -140,11 +142,19 @@ class Game{
         Object.values(this.playerData).forEach(value => {
             this.removeSocketListener(value.player.socket)
         })
+d
+        const result = this.formatResult();
 
         this.io.emit("over", JSON.stringify({
             gameId : this.gameId,
             result : this.formatResult()
         }))
+
+        result.forEach(value => {
+            this.scoreDictionary.addScoreData(value);
+        })
+
+        
 
     }
 
