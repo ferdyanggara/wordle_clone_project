@@ -10,35 +10,85 @@ console.log(rightGuessString)
 
 function initBoard() {
     // Player board
-    let board = document.getElementById("game-board");  
+    let board = document.getElementById("game-board"); 
 
     for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
-        let row = document.createElement("div")
-        row.className = "letter-row"
+        let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        var svgNS = svg.namespaceURI;
+        svg.setAttribute('width', 275);
+        svg.setAttribute('height', 57);
+        svg.setAttribute('class', 'letter-row');
         
         for (let j = 0; j < 5; j++) {
-            let box = document.createElement("div")
-            box.className = "letter-box"
-            row.appendChild(box)
+            let g = document.createElementNS(svgNS,'g');
+            g.setAttribute('class', 'letter-box');
+
+            let rect = document.createElementNS(svgNS,'rect');
+            rect.setAttribute('x', 50*j + 5*j + 1);
+            rect.setAttribute('y', i + 1);
+            rect.setAttribute('width', 50);
+            rect.setAttribute('height', 50);
+            rect.setAttribute('fill','white');
+            rect.setAttribute('stroke', 'grey');
+            rect.setAttribute('stroke-width', 1);
+            rect.setAttribute('rx', 2);
+            rect.setAttribute('ry', 2);
+            g.append(rect)
+
+            let text = document.createElementNS(svgNS,'text');
+            text.setAttribute('x', 13 + 50*j + 5*j + 1);
+            text.setAttribute('y', 40 + i);
+            text.setAttribute('font-size', 40);
+            text.setAttribute('fill', 'black')
+            text.textContent = "";
+            g.append(text)
+
+            svg.appendChild(g);
+            // rect.className = "letter-box"
         }
 
-        board.appendChild(row);
+        board.appendChild(svg);
     }
 
     // Opponent board
     let opp_board = document.getElementById("opponent-board");
 
     for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
-        let row = document.createElement("div")
-        row.className = "letter-row"
+        let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        var svgNS = svg.namespaceURI;
+        svg.setAttribute('width', 275);
+        svg.setAttribute('height', 57);
+        svg.setAttribute('class', 'letter-row');
         
         for (let j = 0; j < 5; j++) {
-            let box = document.createElement("div")
-            box.className = "letter-box"
-            row.appendChild(box)
-        }
+            let g = document.createElementNS(svgNS,'g');
+            g.setAttribute('class', 'letter-box');
 
-        opp_board.appendChild(row);
+            let rect = document.createElementNS(svgNS,'rect');
+            rect.setAttribute('x', 50*j + 5*j + 1);
+            rect.setAttribute('y', i + 1);
+            rect.setAttribute('width', 50);
+            rect.setAttribute('height', 50);
+            rect.setAttribute('fill','white');
+            rect.setAttribute('stroke', 'grey');
+            rect.setAttribute('stroke-width', 1);
+            rect.setAttribute('rx', 2);
+            rect.setAttribute('ry', 2);
+            g.append(rect)
+
+            // <text x="62" y="48" font-size="40" fill="black">A</text>
+            let text = document.createElementNS(svgNS,'text');
+            text.setAttribute('x', 13 + 50*j + 5*j);
+            text.setAttribute('y', 40 + i);
+            text.setAttribute('font-size', 40);
+            text.setAttribute('fill', 'black');
+            // text.textContent = "";
+            g.append(text)
+
+            svg.appendChild(g);
+            // rect.className = "letter-box"
+        }
+        opp_board.appendChild(svg);
     }
 }
 
@@ -62,7 +112,7 @@ function shadeKeyBoard(letter, color) {
 
 function deleteLetter () {
     let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining]
-    let box = row.children[nextLetter - 1]
+    let box = row.children[nextLetter - 1].children[1];
     box.textContent = ""
     box.classList.remove("filled-box")
     currentGuess.pop()
@@ -91,7 +141,7 @@ function checkGuess () {
     
     for (let i = 0; i < 5; i++) {
         let letterColor = ''
-        let box = row.children[i]
+        let box = row.children[i].children[0];
         let letter = currentGuess[i]
         
         let letterPosition = rightGuess.indexOf(currentGuess[i])
@@ -118,7 +168,8 @@ function checkGuess () {
             //flip box
             animateCSS(box, 'flipInX')
             //shade box
-            box.style.backgroundColor = letterColor
+            // box.style.backgroundColor = letterColor
+            box.setAttribute('fill', letterColor)
             shadeKeyBoard(letter, letterColor)
         }, delay)
     }
@@ -145,13 +196,18 @@ function insertLetter (pressedKey) {
     }
     pressedKey = pressedKey.toLowerCase()
 
+    // let row = document.querySelector("svg.letter-row")[6 - guessesRemaining];
     let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining]
-    let box = row.children[nextLetter]
-    animateCSS(box, "pulse")
-    box.textContent = pressedKey
-    box.classList.add("filled-box")
-    currentGuess.push(pressedKey)
-    nextLetter += 1
+
+    let box = row.children[nextLetter].children[1];
+    // console.log(box);
+    // box.textContent = pressedKey;
+
+    animateCSS(box, "pulse");
+    box.textContent = pressedKey;
+    box.classList.add("filled-box");
+    currentGuess.push(pressedKey);
+    nextLetter += 1;
 }
 
 const animateCSS = (element, animation, prefix = 'animate__') =>
