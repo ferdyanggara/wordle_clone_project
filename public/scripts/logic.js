@@ -112,8 +112,8 @@ function shadeKeyBoard(letter, color) {
 
 function deleteLetter () {
     let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining]
-    let box = row.children[nextLetter - 1]
-    // box.textContent = ""
+    let box = row.children[nextLetter - 1].children[1];
+    box.textContent = ""
     box.classList.remove("filled-box")
     currentGuess.pop()
     nextLetter -= 1
@@ -141,7 +141,7 @@ function checkGuess () {
     
     for (let i = 0; i < 5; i++) {
         let letterColor = ''
-        let box = row.children[i]
+        let box = row.children[i].children[0];
         let letter = currentGuess[i]
         
         let letterPosition = rightGuess.indexOf(currentGuess[i])
@@ -168,7 +168,8 @@ function checkGuess () {
             //flip box
             animateCSS(box, 'flipInX')
             //shade box
-            box.style.backgroundColor = letterColor
+            // box.style.backgroundColor = letterColor
+            box.setAttribute('fill', letterColor)
             shadeKeyBoard(letter, letterColor)
         }, delay)
     }
@@ -199,7 +200,7 @@ function insertLetter (pressedKey) {
     let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining]
 
     let box = row.children[nextLetter].children[1];
-    console.log(box);
+    // console.log(box);
     // box.textContent = pressedKey;
 
     animateCSS(box, "pulse");
