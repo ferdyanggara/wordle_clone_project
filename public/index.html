@@ -15,6 +15,22 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
   />
+  <style>
+    #game-over {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        border: 1px solid gray;
+        width: 100%;
+        height: 100%;
+        background: rgba(1, 1, 1, 0.8);
+    }
+
+    #game-over table {
+        font-size: 120%;
+        color: white, 
+    }
+  </style>
 </head>
 <body>
 
@@ -52,6 +68,7 @@
             <p>Submit word game test</p>
             <input type="text" id="word" class="mx-10" />
             <button id="submit-words">Words</button>
+            <button id="show-game-over">show game ovver</button>
         </div>
         <div class="flex">
             <p class="mx-10"> Full setup - Steven gameId - 1</p>
@@ -184,6 +201,21 @@
     </div>
 
 
+    <div id="game-over" style="display: none">
+        <table>
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    
+
     <div id="signin-overlay" class="overlay row">
         <div class="content shadow row">
             <form id="signin-form" class="col">
@@ -227,6 +259,7 @@ crossorigin="anonymous"></script>
 <script src="scripts/registration.js"></script>
 <script src="scripts/authentication.js"></script>
 <script src="scripts/matchmaking.js"></script>
+<script src="scripts/room.js"></script>
 <script>
 $(document).ready(function() {
     let currentName;
@@ -243,6 +276,11 @@ $(document).ready(function() {
             console.log($("#word").val())
             socket.emit("word-sent", $("#word").val());
         })
+
+        $("#show-game-over").on("click", () => {
+            $("#game-over").show();
+        })
+
 
         
 
