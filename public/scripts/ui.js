@@ -121,7 +121,9 @@ const Room = (function() {
         $("#room-form").on("submit", (e) => {
             // Do not submit the form
             e.preventDefault();
-  
+
+            const gameId = $("#roomId").val().trim();
+
             RoomPortal.startRoom(gameId,
                 () => {
                     hide();

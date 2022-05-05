@@ -8,7 +8,7 @@ class ScoreDictionary{
 
     // base data should be { player : string, score : _ }
     constructor(){
-        this.#highScore = JSON.parse(fs.readFileSync("../data/score.json"));
+        this.#highScore = JSON.parse(fs.readFileSync("./data/score.json"));
     }
 
     static getInstance(){
@@ -30,7 +30,7 @@ class ScoreDictionary{
                 this.#highScore.push(scoreData.player)
             }
         }   
-        fs.writeFileSync("../data/score.json", JSON.stringify(this.#highScore));
+        fs.writeFileSync("./data/score.json", JSON.stringify(this.#highScore));
     }
 
     getTopN(n){

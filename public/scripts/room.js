@@ -3,8 +3,6 @@
 const RoomPortal = (function() {
 
   const startRoom = () => {
-    $('#start-submit').click( (e) => {
-      e.preventDefault();
       console.log("start submit")
       fetch("/startGame", {
       method : "POST",
@@ -16,16 +14,14 @@ const RoomPortal = (function() {
       })
       })
       .then( value => {
-          console.log(value);
+          console.log(value.message)
+          Room.hide(); 
       })
-    })
   }
 
 
   const leaveRoom = () => {
-    $('#leave-submit').click( (e) => {
-      e.preventDefault();
-      console.log("game submit")
+      console.log("leave request submitted")
       fetch("/leaveGame", {
       method : "POST",
       headers: {
@@ -37,9 +33,13 @@ const RoomPortal = (function() {
       })
       .then( res => res.json())
       .then( value => {
-          console.log(value);
+         // UPDATE UI
+        let leavedUser = Authentication.getUser().username
+        specificUser = $(`#${leavedUser}`);
+        specificUser.remove()
       })
-    })
+
+   
   }
 
 
