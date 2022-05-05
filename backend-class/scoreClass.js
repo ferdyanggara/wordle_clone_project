@@ -8,7 +8,7 @@ class ScoreDictionary{
 
     // base data should be { player : string, score : _ }
     constructor(){
-        this.#highScore = JSON.parse(fs.readFileSync("../data/score.json"));
+        this.#highScore = JSON.parse(fs.readFileSync("./data/score.json"));
     }
 
     static getInstance(){
