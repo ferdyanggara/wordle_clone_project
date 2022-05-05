@@ -237,8 +237,8 @@ const io = new Server(httpServer);
 
     let gameId;
     while(true){
-        const temp =makeid(3);
-        if(!gameDictionary[gameId]){
+        const temp = makeid(3);
+        if(!gameDictionary[temp]){
             gameId = temp;
             break;
         }
@@ -314,12 +314,20 @@ const io = new Server(httpServer);
             })
             return;
         }
-     }
-    
+        else {
+            res.json({
+                success : false,
+                message : "game has already started"
+            })
+        }
+    }
+
     res.json({
         success : false,
-        message : "game has already started"
+        message : "No game found"
     })
+    
+    
  })
 
  app.post("/leaveGame", (req, res) => {
@@ -370,10 +378,57 @@ const io = new Server(httpServer);
         }
     }
 
-    res.json({
-        success : gameId != -1 ? true : false,
-        gameId : gameId
-    })
+    if(gameId == -1){
+        res.json({
+            success : false,
+            message : "no game found!"
+        })
+        return;
+    }
+    
+    //TEMPORARY AUTOJOIN SOLN : Pure copy paste from joinGame
+
+    if(!req.session.user){
+        res.json({
+            success : false,
+            message : "unexpected - no session"
+        })
+        return;
+    }
+
+    if(!gameDictionary[gameId]){
+        res.json({
+            success : false,
+            message : "No game"
+        })
+        return;
+    }
+
+    if(!playerDictionary[req.session.user.username]){
+        res.json({
+            success : false,
+            message : "No person - login error"
+        })
+        return;
+    }
+
+    if(gameDictionary[gameId].getPlayerNum() < 2){
+        let result = gameDictionary[gameId].addPlayer(playerDictionary[req.session.user.username]);
+        res.json(result ? {
+            success : true,
+            message: req.session.user.username,
+            gameId : gameId
+        } : {
+            success : false,
+            message : "game started"
+        })
+    } else {
+        res.json({
+            success : false,
+            message : "room full"
+        })
+    }
+
  })
 
  io.use((socket, next) => {

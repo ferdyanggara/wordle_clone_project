@@ -1,4 +1,5 @@
 const WordDictionary = require("./wordClass")
+const ScoreDictionary = require("./scoreClass")
 
 class Game{
     // This class handle the whole setup and gamestate itself
@@ -10,6 +11,7 @@ class Game{
     gameState = 0; // 0 for wait, 1 for start
 
     wordDictionary  = WordDictionary.getDictionary();
+    scoreDictionary = ScoreDictionary.getInstance();
 
     totalTime = 5 * 1000;
     lastTime;
@@ -140,11 +142,19 @@ class Game{
         Object.values(this.playerData).forEach(value => {
             this.removeSocketListener(value.player.socket)
         })
+d
+        const result = this.formatResult();
 
         this.io.emit("over", JSON.stringify({
             gameId : this.gameId,
             result : this.formatResult()
         }))
+
+        result.forEach(value => {
+            this.scoreDictionary.addScoreData(value);
+        })
+
+        
 
     }
 
@@ -180,10 +190,15 @@ class Game{
 
         let currentOccupant = Object.values(this.playerData).map(value => value.player.data)
 
-        this.io.emit("room", JSON.stringify({
+        player.socket.broadcast.emit("room", JSON.stringify({
             gameId : this.gameId,
             players : currentOccupant
-        }));
+        }))
+
+        // this.io.emit("room", JSON.stringify({
+        //     gameId : this.gameId,
+        //     players : currentOccupant
+        // }));
 
         return true;
     }
@@ -194,7 +209,14 @@ class Game{
             return false;
         }
         console.log(`Player ${name} leaving room`);
-        this.io.emit("leave-game", `Player ${name} disconnected`);
+
+        let currentOccupant = Object.values(this.playerData).map(value => value.player.data)
+
+        this.playerData[name].player.socket.broadcast.emit("room", JSON.stringify({
+            gameId : this.gameId,
+            players : currentOccupant
+        }))
+        // this.io.emit("leave-game", `Player ${name} disconnected`);
 
         this.removeSocketListener(this.playerData[name].player.socket);
         this.playerData[name].player.removeGameId();
