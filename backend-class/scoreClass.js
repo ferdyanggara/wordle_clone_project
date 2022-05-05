@@ -30,7 +30,7 @@ class ScoreDictionary{
                 this.#highScore.push(scoreData.player)
             }
         }   
-        fs.writeFileSync("../data/score.json", JSON.stringify(this.#highScore));
+        fs.writeFileSync("./data/score.json", JSON.stringify(this.#highScore));
     }
 
     getTopN(n){

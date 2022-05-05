@@ -142,7 +142,7 @@ class Game{
         Object.values(this.playerData).forEach(value => {
             this.removeSocketListener(value.player.socket)
         })
-d
+
         const result = this.formatResult();
 
         this.io.emit("over", JSON.stringify({
