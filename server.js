@@ -251,7 +251,7 @@ const io = new Server(httpServer);
     )
 
 
-    // console.log(`Game with ${req.body.gameId} created with player ${req.body.name}`)
+    // console.log(`Game with ${gameId} created with player ${req.body.name}`)
     res.json({success: true, gameId : gameId})
  })
 
@@ -304,10 +304,13 @@ const io = new Server(httpServer);
 
  app.post("/startGame", (req, res) => {
 
-     if(gameDictionary[req.body.gameId]){
-        if(gameDictionary[req.body.gameId].startGame()){
+    const gameId = req.body.gameId
+
+     if(gameDictionary[gameId]){
+        if(gameDictionary[gameId].startGame()){
             res.json({
                 success : true,
+                message: 'game is starting...'
             })
             return;
         }
