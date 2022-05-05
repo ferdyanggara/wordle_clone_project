@@ -76,6 +76,7 @@ const GamePortal = (function() {
               // console.log(value)
               $('#game').val(gameId);
               $("#matchmaking-message").text("succesfully join");
+              // TODO: AFTER IMPLEMENT SOCKET.BROADCAST
               // addUserToTable(value.message,false)
               console.log('hide matchmaking')
               MatchMaking.hide();
@@ -90,9 +91,10 @@ const GamePortal = (function() {
 
 // TODO: STILL NOT SURE WHETHER WE ARE GOING TO MAKE MULTIPLE ROOM, SINCE 1 ROOM ALAS multiplayer will suffice. 
   const addUserToTable = (name, host) => {
+    console.log('name: ', name)
       isHost = host ? "host" : "guest";
-        markup = "<tr><td>" 
-            + name + " (" + isHost +") </td><td><button id='leave-submit'>leave</button></td></tr>";
+        markup = "<tr id="+ name + "><td>" 
+            + name + " (" + isHost +") </td><td><button id='leave-submit' onclick='RoomPortal.leaveRoom()'>leave</button></td></tr>";
         tableBody = $("table tbody");
         tableBody.append(markup);
   }
