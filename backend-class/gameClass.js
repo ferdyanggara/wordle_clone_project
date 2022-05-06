@@ -138,6 +138,9 @@ class Game{
     }
 
     endGame(){
+        if(this.gameState == 0){
+            return; //still matchmaking, nothing happened
+        }
         this.gameState = 0;
         clearTimeout(this.gameTimeout);
         clearInterval(this.updateTimeout);

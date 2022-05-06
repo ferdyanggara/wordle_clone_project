@@ -40,6 +40,22 @@ const Socket = (function() {
             //  console.log(JSON.parse(value))
         })
 
+        socket.on("start-game", (value) => {
+            //TODO : Event to start game
+            // When emitted by the backend, it help indicate that game starts
+            // Logically, close the matchmaking room
+            /**
+             * {
+             *  gameId : string
+             * }
+             */
+
+            const {gameId} = JSON.parse(value);
+            if(gameId == $("#game").val()){
+                Room.hide();
+            }
+        } )
+
         socket.on("reset", (value) => {
             //TODO (If this is required to indicate which UI to reset)
             // Cases : Finish all chances / get the right words 
