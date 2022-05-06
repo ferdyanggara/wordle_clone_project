@@ -36,8 +36,21 @@ const Socket = (function() {
              *      }]
              * }
             */
-             console.log('Update')
-             console.log(JSON.parse(value))
+            //  console.log('Update')
+            //  console.log(JSON.parse(value))
+        })
+
+        socket.on("reset", (value) => {
+            //TODO (If this is required to indicate which UI to reset)
+            // Cases : Finish all chances / get the right words 
+            /**
+             * {
+             *  gameId : string,
+             *  player : string <player name>
+             * }
+             */
+            console.log("Resetting")
+            console.log(JSON.parse(value))
         })
 
         socket.on("over", (value) => {
