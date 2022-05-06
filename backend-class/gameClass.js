@@ -13,7 +13,7 @@ class Game{
     wordDictionary  = WordDictionary.getDictionary();
     scoreDictionary = ScoreDictionary.getInstance();
 
-    totalTime = 5 * 1000;
+    totalTime = 9999 * 1000;
     lastTime;
 
     gameTimeout;
@@ -80,7 +80,10 @@ class Game{
                 console.log(`Wrong input for word ${word} against ${playerData.currentWord}`)
                 playerData.tries += 1
                 if(playerData.tries == playerData.maxTries){
-                    //TODO : Call io to reset this player
+                    this.io.emit("reset", JSON.stringify({ //idk i need to tell to reset or they will reset by itself
+                        gameId : this.gameId,
+                        player : playerData.player.data
+                    }))
                     playerData.currentWord = this.wordDictionary.getRandomWord();
                     playerData.tries = 0;
                 }
