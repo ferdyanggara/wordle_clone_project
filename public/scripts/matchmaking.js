@@ -74,7 +74,7 @@ const GamePortal = (function() {
       })
       .then( res => res.json())
       .then( value => {
-        // console.log(value);
+        console.log(value);
           if(value.success){
               // console.log(value)
               $('#game').val(gameId);

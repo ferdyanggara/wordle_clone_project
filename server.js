@@ -199,11 +199,6 @@ const httpServer = createServer(app)
 const io = new Server(httpServer);
 //What a terrible integration
 const GameManager = require("./backend-class/gameManagerClass")
-
-io.use((socket, next) => {
-    chatSession(socket.request, {}, next);
-})
-GameManager.setup(io);
 const {
     createGameFunction,
     joinGameFunction,
@@ -213,15 +208,24 @@ const {
 } = require("./controller/gameManagerController");
 
 
- app.post("/createGame", createGameFunction);
+app.post("/createGame", createGameFunction);
 
- app.post("/joinGame", joinGameFunction);
+app.post("/joinGame", joinGameFunction);
 
- app.post("/startGame", startGameFunction);
+app.post("/startGame", startGameFunction);
 
- app.post("/leaveGame", leaveGameFunction);
+app.post("/leaveGame", leaveGameFunction);
 
- app.get("/randomGame", randomGameFunction);
+app.get("/randomGame", randomGameFunction);
+
+GameManager.setup(io);
+io.use((socket, next) => {
+    chatSession(socket.request, {}, next);
+})
+
+
+
+
 
 
 

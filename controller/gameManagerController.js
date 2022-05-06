@@ -1,6 +1,6 @@
 const GameManager = require("../backend-class/gameManagerClass");
 
-let gameManager = GameManager.getInstance(); 
+let gameManager = null; 
 // CAREFUL - NEED PROPER IMPORT PROCEDURE
 // ILL ADD CHECKING IN THE FUTURE JUST IN CASE
 // I HAVE NO CLUE ON IMPROVING THIS CONTROLLER SETUP
@@ -11,15 +11,15 @@ let gameManager = GameManager.getInstance();
 
 const instantiate = () => {
     if(gameManager == null){
-        GameManager.getInstance(); 
+        gameManager = GameManager.getInstance(); 
     }
 }
 
 const createGameFunction = (req, res) => {
     instantiate();
-
+console.log("creating game")
     const result = gameManager.createGame(req.session.user);
-
+console.log(result)
     res.json(result);
 
 }
@@ -35,9 +35,10 @@ const joinGameFunction = (req, res) => {
 
 const startGameFunction = (req, res) => {
     instantiate();
+    console.log("game starting?")
 
     const result = gameManager.startGame(req.session.user, req.body.gameId);
-
+    console.log(result)
     res.json(result);
 
 }

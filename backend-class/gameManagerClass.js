@@ -185,7 +185,7 @@ class GameManager{
                 }
             }
 
-        if(this.#gameDictionary[gameId]){
+        if(!this.#gameDictionary[gameId]){
             return {
                 success : false,
                 message : "No game found"

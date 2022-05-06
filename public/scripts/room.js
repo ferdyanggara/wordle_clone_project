@@ -14,7 +14,7 @@ const RoomPortal = (function() {
       })
       })
       .then( value => {
-          console.log(value.message)
+          console.log(value)
           Room.hide(); 
       })
   }
