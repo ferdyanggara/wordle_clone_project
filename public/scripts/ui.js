@@ -1,3 +1,4 @@
+import { reset } from "nodemon";
 
 const ProjectIntroduction = (function() {
     // This function initializes the UI
@@ -371,30 +372,8 @@ const GameUI = (function() {
         // full setup game data
 
         // reset all boards including player and enemy
-        for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
-            let myRow = document.getElementsByClassName("my-letter-row")[i]
-            let oppRow = document.getElementsByClassName("opp-letter-row")[i]
-            for (let j = 0; j < 5; j++) {
-                let delay = 250 * i
-                // clear My Board =============================================
-                let box = myRow.children[j].children[1];
-                box.textContent = "";
-               
-                setTimeout(()=> {
-                    box.classList.remove("filled-box");
-                    row.children[j].children[0].setAttribute('fill', "white");
-                }, delay)
-
-                // clear Enemy Board ==========================================
-                box = oppRow.children[j].children[1];
-                box.textContent = "";
-
-                setTimeout(()=> {
-                    box.classList.remove("filled-box");
-                    row.children[j].children[0].setAttribute('fill', "white");
-                }, delay)
-            }
-        }
+        resetBoard(playerName);
+        resetBoard(enemyName);
 
         // reset my keyboard
         $("#keyboard-button").css("background-color", "rgb(242, 133, 93)");
@@ -536,9 +515,43 @@ const GameUI = (function() {
         }
     }
 
-    const resetBoard = () => {
+    const resetBoard = (player) => {
         // insert function to reset the board based on the player name
         // basically clearBoard()
+        if(player == playerName){
+            for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
+                let myRow = document.getElementsByClassName("my-letter-row")[i]
+                for (let j = 0; j < 5; j++) {
+                    let delay = 250 * i
+                    // clear My Board =============================================
+                    let box = myRow.children[j].children[1];
+                    box.textContent = "";
+                   
+                    setTimeout(()=> {
+                        box.classList.remove("filled-box");
+                        row.children[j].children[0].setAttribute('fill', "white");
+                    }, delay)
+                }
+            }
+        }
+        else if (player == enemyName){
+            for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
+                let oppRow = document.getElementsByClassName("opp-letter-row")[i]
+                for (let j = 0; j < 5; j++) {
+                    let delay = 250 * i
+    
+                    // clear Enemy Board ==========================================
+                    box = oppRow.children[j].children[1];
+                    box.textContent = "";
+    
+                    setTimeout(()=> {
+                        box.classList.remove("filled-box");
+                        row.children[j].children[0].setAttribute('fill', "white");
+                    }, delay)
+                }
+            }
+        }
+        
     }
 
     const endGame = () => {
