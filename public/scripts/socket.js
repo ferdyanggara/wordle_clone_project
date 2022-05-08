@@ -82,6 +82,7 @@ const Socket = (function() {
                 })
                 console.log(`GameId ${currentGameId} - ${currentPlayer} vs ${currentOpponent}`)
                 Room.hide();
+                GameUI.startGame(currentGameId, currentPlayer, currentOpponent);
             }
         } )
 

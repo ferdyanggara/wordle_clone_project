@@ -1,4 +1,4 @@
-import { reset } from "nodemon";
+
 
 const ProjectIntroduction = (function() {
     // This function initializes the UI
@@ -274,16 +274,19 @@ const UserPanel = (function() {
 })();
 
 const GameUI = (function() {
-    const MAXGUESS = 6;
+    const NUMBER_OF_GUESSES = 6;
     const LETTERLIMIT = 5;
     let guessesRemaining = 6;
 
     let gameId = "";
     let playerName = "";
-    let enemyName = ""
+    let enemyName = "";
+
+    let socket = null;
 
     const initialize = () => {
         // init player game board
+        console.log()
         let board = document.getElementById("game-board"); 
         for (let i = 0; i < 6; i++) {
             let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -372,8 +375,8 @@ const GameUI = (function() {
         // full setup game data
 
         // reset all boards including player and enemy
-        resetBoard(playerName);
-        resetBoard(enemyName);
+        // resetBoard(playerName);
+        // resetBoard(enemyName);
 
         // reset my keyboard
         $("#keyboard-button").css("background-color", "rgb(242, 133, 93)");
@@ -381,18 +384,20 @@ const GameUI = (function() {
         // keyboard
         document.addEventListener("keyup", (e) => {
             let pressedKey = String(e.key)
-            if (pressedKey === "Backspace" && nextLetter !== 0) {
+            //ad banyak missing variable disini with weird reference
+            if (pressedKey === "Backspace" && typedWord.length !== 0) {
                 if(typedWord.length > 0) {
-                    typedWord.pop();
-                    let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining]
+                    
+                    let row = document.getElementsByClassName("my-letter-row")[6 - guessesRemaining]
                     let box = row.children[typedWord.length - 1].children[1];
                     box.textContent = ""
                     box.classList.remove("filled-box")
-                    currentGuess.pop()
-                    nextLetter -= 1
+                    typedWord.pop();
+                    //adjusted the process here
                 }
             }
             if (pressedKey === "Enter") {
+                console.log("sending words")
                 if(typedWord.length == 5){
                     let word = "";
                     // get the current typed word here
@@ -400,7 +405,12 @@ const GameUI = (function() {
                         word += typedWord[i];
                     }
                     guessesRemaining--;
-                    return word;
+                    if(socket == null){
+                        socket = Socket.getSocket();
+                    }
+                    console.log(socket)
+                    console.log("entering here?")
+                    socket.emit("word-sent", word);
                 }
             }
         
@@ -411,7 +421,7 @@ const GameUI = (function() {
                 if(typedWord.length < 5){
                     typedWord.push(pressedKey.toLocaleLowerCase());
 
-                    let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining];
+                    let row = document.getElementsByClassName("my-letter-row")[6 - guessesRemaining];
                     let box = row.children[typedWord.length-1].children[1];
                     // animateCSS(box, "pulse");
                     box.textContent = pressedKey;
@@ -435,6 +445,7 @@ const GameUI = (function() {
         
             document.dispatchEvent(new KeyboardEvent("keyup", {'key': key}))
         })
+        console.log("Board start game");
     }
 
     const updateBoard = (id, player, word, nthGuess) => {
@@ -559,7 +570,7 @@ const GameUI = (function() {
         
     }
     
-    return { initialize };
+    return { initialize, startGame, updateBoard, resetBoard };
 })();
 
 
@@ -572,7 +583,7 @@ const UI = (function() {
           .append($("<span class='user-name'>" + user.name + "</span>"));
   };
 
-  const components = [SignInForm, UserPanel, MatchMaking, ProjectIntroduction, Room];
+  const components = [SignInForm, UserPanel, MatchMaking, ProjectIntroduction, Room, GameUI];
 
 
   // This function initializes the UI
