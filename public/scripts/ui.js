@@ -450,7 +450,8 @@ const GameUI = (function() {
 
     const updateBoard = (id, player, word, nthGuess) => {
         const letterLimit = 5;
-        if(nthGuess > MAXGUESS) {
+        //what is maxguess?
+        if(nthGuess > 6) {
             return;
         }
 
@@ -468,9 +469,14 @@ const GameUI = (function() {
         }
 
         // INPUT LETTER
+        // console.log("entering updating UI")
+        // console.log(`Current : ${gameId} Received : ${id}`)
+        //what does the word here means?
         if (id == gameId && word != null) {
             // UPDATE MY BOARD
+            console.log(`Current : ${player} Received : ${playerName}`)
             if (player == playerName){
+                console.log(word);
                 let row = document.getElementById("game-board").children[nthGuess-1];
 
                 // Fill an empty row with "word"
@@ -496,13 +502,19 @@ const GameUI = (function() {
                     }, delay)
                 }
 
+                // Update for clear typedWord so u can type after send
+                typedWord = [];
+
+
             }
             // UPDATE ENEMY BOARD
             else if (player == enemyName){
+                // let row = document.getElementById("opponent-board").children[nthGuess-1];
                 let row = document.getElementById("opponent-board").children[nthGuess-1];
-                
+                console.log(row)
                 // Fill an empty row with "word"
                 for (let i = 0; i < letterLimit; ++i) {
+                    // it seems that the textContext doesnt work
                     row.children[i].children[1].textContext = word[i].letter;
                 }
 

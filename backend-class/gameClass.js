@@ -62,7 +62,8 @@ class Game{
                 gameId : this.gameId,
                 player : playerData.player.data,
                 result : true,
-                data : result
+                data : result,
+                tries : playerData.tries + 1
             };
             this.io.emit("word-result", JSON.stringify(final));
 
