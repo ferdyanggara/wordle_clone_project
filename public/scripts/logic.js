@@ -58,11 +58,11 @@ function initBoard() {
         var svgNS = svg.namespaceURI;
         svg.setAttribute('width', 275);
         svg.setAttribute('height', 57);
-        svg.setAttribute('class', 'letter-row');
+        svg.setAttribute('class', 'opp-letter-row');
         
         for (let j = 0; j < 5; j++) {
             let g = document.createElementNS(svgNS,'g');
-            g.setAttribute('class', 'letter-box');
+            g.setAttribute('class', 'opp-letter-box');
 
             let rect = document.createElementNS(svgNS,'rect');
             rect.setAttribute('x', 50*j + 5*j + 1);
@@ -90,6 +90,43 @@ function initBoard() {
         }
         opp_board.appendChild(svg);
     }
+}
+
+function clearBoard() {
+    for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
+        let row = document.getElementsByClassName("letter-row")[i]
+        for (let j = 0; j < 5; j++) {
+            let box = row.children[j].children[1];
+            box.textContent = "";
+           
+            let delay = 250 * i
+            setTimeout(()=> {
+                box.classList.remove("filled-box");
+                row.children[j].children[0].setAttribute('fill', "white");
+            }, delay)
+        }
+    }
+}
+
+function clearOppBoard() {
+    for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
+        let row = document.getElementsByClassName("opp-letter-row")[i]
+        for (let j = 0; j < 5; j++) {
+            let box = row.children[j].children[1];
+            box.textContent = "";
+           
+            let delay = 250 * i
+            setTimeout(()=> {
+                box.classList.remove("filled-box");
+                row.children[j].children[0].setAttribute('fill', "white");
+            }, delay)
+        }
+    }
+}
+
+function resetKeyboard() {
+    document.getElementsByClassName("keyboard-button").style.backgroundColor = "background-color: rgb(242, 133, 93);";
+
 }
 
 function shadeKeyBoard(letter, color) {
@@ -184,6 +221,8 @@ function checkGuess () {
         nextLetter = 0;
 
         if (guessesRemaining === 0) {
+            clearBoard()
+            resetKeyboard()
             toastr.error("You've run out of guesses! Game over!")
             toastr.info(`The right word was: "${rightGuessString}"`)
         }
