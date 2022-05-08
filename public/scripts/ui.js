@@ -35,8 +35,6 @@ const ProjectIntroduction = (function() {
   
     return { initialize, show, hide };
   })();
-  
-
 
 const SignInForm = (function() {
   // This function initializes the UI
@@ -149,6 +147,7 @@ const Room = (function() {
   
     return { initialize, show, hide };
   })();
+  
 const MatchMaking = (function() {
     // This function initializes the UI
     const initialize = function() {
@@ -273,6 +272,163 @@ const UserPanel = (function() {
     return { initialize, show, hide, update };
 })();
 
+const GameUI = (function() {
+    const MAXGUESS = 6;
+
+    let gameId = "";
+    let playerName = "";
+    let enemyName = ""
+
+    const initialize = () => {
+        // init player game board
+        let board = document.getElementById("game-board"); 
+        for (let i = 0; i < 6; i++) {
+            let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            var svgNS = svg.namespaceURI;
+            svg.setAttribute('width', 275);
+            svg.setAttribute('height', 57);
+            svg.setAttribute('class', 'my-letter-row');
+            
+            for (let j = 0; j < 5; j++) {
+                let g = document.createElementNS(svgNS,'g');
+                g.setAttribute('class', 'my-letter-box');
+
+                let rect = document.createElementNS(svgNS,'rect');
+                rect.setAttribute('x', 50*j + 5*j + 1);
+                rect.setAttribute('y', i + 1);
+                rect.setAttribute('width', 50);
+                rect.setAttribute('height', 50);
+                rect.setAttribute('fill','white');
+                rect.setAttribute('stroke', 'grey');
+                rect.setAttribute('stroke-width', 1);
+                rect.setAttribute('rx', 2);
+                rect.setAttribute('ry', 2);
+                g.append(rect)
+
+                let text = document.createElementNS(svgNS,'text');
+                text.setAttribute('x', 13 + 50*j + 5*j + 1);
+                text.setAttribute('y', 40 + i);
+                text.setAttribute('font-size', 40);
+                text.setAttribute('fill', 'black')
+                text.textContent = "";
+                g.append(text)
+
+                svg.appendChild(g);
+                // rect.className = "letter-box"
+            }
+            board.appendChild(svg);
+        }
+
+        // init enemy game board
+        let opp_board = document.getElementById("opponent-board");
+        for (let i = 0; i < 6; i++) {
+            let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+            var svgNS = svg.namespaceURI;
+            svg.setAttribute('width', 275);
+            svg.setAttribute('height', 57);
+            svg.setAttribute('class', 'opp-letter-row');
+            
+            for (let j = 0; j < 5; j++) {
+                let g = document.createElementNS(svgNS,'g');
+                g.setAttribute('class', 'opp-letter-box');
+
+                let rect = document.createElementNS(svgNS,'rect');
+                rect.setAttribute('x', 50*j + 5*j + 1);
+                rect.setAttribute('y', i + 1);
+                rect.setAttribute('width', 50);
+                rect.setAttribute('height', 50);
+                rect.setAttribute('fill','white');
+                rect.setAttribute('stroke', 'grey');
+                rect.setAttribute('stroke-width', 1);
+                rect.setAttribute('rx', 2);
+                rect.setAttribute('ry', 2);
+                g.append(rect)
+
+                // <text x="62" y="48" font-size="40" fill="black">A</text>
+                let text = document.createElementNS(svgNS,'text');
+                text.setAttribute('x', 13 + 50*j + 5*j);
+                text.setAttribute('y', 40 + i);
+                text.setAttribute('font-size', 40);
+                text.setAttribute('fill', 'black');
+                // text.textContent = "";
+                g.append(text)
+
+                svg.appendChild(g);
+                // rect.className = "letter-box"
+            }
+            opp_board.appendChild(svg);
+        }
+        
+    }
+
+    const startGame = (gameData, playerData, enemyData) => {
+        gameId = gameData;
+        playerName = playerData;
+        enemyName = enemyData;
+        // full setup game data
+
+        // reset all boards including player and enemy
+        for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
+            let myRow = document.getElementsByClassName("my-letter-row")[i]
+            let oppRow = document.getElementsByClassName("opp-letter-row")[i]
+            for (let j = 0; j < 5; j++) {
+                let delay = 250 * i
+                // clear My Board =============================================
+                let box = myRow.children[j].children[1];
+                box.textContent = "";
+               
+                setTimeout(()=> {
+                    box.classList.remove("filled-box");
+                    row.children[j].children[0].setAttribute('fill', "white");
+                }, delay)
+
+                // clear Enemy Board ==========================================
+                box = oppRow.children[j].children[1];
+                box.textContent = "";
+
+                setTimeout(()=> {
+                    box.classList.remove("filled-box");
+                    row.children[j].children[0].setAttribute('fill', "white");
+                }, delay)
+            }
+        }
+
+        // reset my keyboard
+        $("#keyboard-button").css("background-color", "rgb(242, 133, 93)");
+    }
+
+    const updateBoard = (id, player, word, nthGuess) => {
+        const letterLimit = 5;
+        if(nthGuess > 6) {
+            return;
+        }
+
+        if (id == gameId) {
+            // UPDATE MY BOARD
+            if (player == playerName){
+                let row = document.getElementById("game-board").children[nthGuess-1];
+                // Fill an empty row with "word"
+                for (let i = 0; i < letterLimit; ++i) {
+                    row.children[i].children[1].textContext = word[i];
+                }
+            }
+            // UPDATE ENEMY BOARD
+            else if (player == enemyName){
+                let row = document.getElementById("opponent-board").children[nthGuess-1];
+                // Fill an empty row with "word"
+                for (let i = 0; i < letterLimit; ++i) {
+                    row.children[i].children[1].textContext = word[i];
+                }
+            }
+        }
+    }
+
+    const endGame = () => {
+        
+    }
+    
+    return { initialize };
+})();
 
 
 const UI = (function() {
@@ -297,3 +453,4 @@ const UI = (function() {
 
   return { getUserDisplay, initialize };
 })();
+

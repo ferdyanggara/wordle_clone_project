@@ -59,9 +59,9 @@ Returns a JSON with the gameID, player name, and the result of each word given.
     data : {
         correct : bool,
         data : [
-        letter : char,
-        position : int (index),
-        status : string
+            letter : char,
+            position : int (index),
+            status : string <"found", "wrong", "correct">
         ]
     }
 }

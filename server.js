@@ -229,8 +229,6 @@ const io = new Server(httpServer);
             return;
         }
     }
-    
-
 
     //create the game here
     //Assumption -> playerDictionary contains the playerClass

@@ -126,7 +126,6 @@ function clearOppBoard() {
 
 function resetKeyboard() {
     document.getElementsByClassName("keyboard-button").style.backgroundColor = "background-color: rgb(242, 133, 93);";
-
 }
 
 function shadeKeyBoard(letter, color) {
@@ -174,7 +173,6 @@ function checkGuess () {
         toastr.error("Word not in list!")
         return
     }
-
     
     for (let i = 0; i < 5; i++) {
         let letterColor = ''
