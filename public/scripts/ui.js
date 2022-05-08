@@ -405,6 +405,12 @@ const GameUI = (function() {
             if (pressedKey === "Backspace" && nextLetter !== 0) {
                 if(typedWord.length > 0) {
                     typedWord.pop();
+                    let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining]
+                    let box = row.children[typedWord.length - 1].children[1];
+                    box.textContent = ""
+                    box.classList.remove("filled-box")
+                    currentGuess.pop()
+                    nextLetter -= 1
                 }
             }
             if (pressedKey === "Enter") {
