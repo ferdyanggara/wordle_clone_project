@@ -275,6 +275,7 @@ const UserPanel = (function() {
 const GameUI = (function() {
     const MAXGUESS = 6;
     const LETTERLIMIT = 5;
+    let guessesRemaining = 6;
 
     let gameId = "";
     let playerName = "";
@@ -413,6 +414,7 @@ const GameUI = (function() {
                     for (let i = 0; i < 5; ++i) {
                         word += typedWord[i];
                     }
+                    guessesRemaining--;
                     return word;
                 }
             }
@@ -421,8 +423,16 @@ const GameUI = (function() {
             if (!found || found.length > 1) {
                 return
             } else {
-                // insert insertLetter() functionality here
-                typedWord.push(pressedKey.toLocaleLowerCase());
+                if(typedWord.length < 5){
+                    typedWord.push(pressedKey.toLocaleLowerCase());
+
+                    let row = document.getElementsByClassName("letter-row")[6 - guessesRemaining];
+                    let box = row.children[typedWord.length-1].children[1];
+                    // animateCSS(box, "pulse");
+                    box.textContent = pressedKey;
+                    box.classList.add("filled-box");
+                }
+                // insert insertLetter() functionality here                
             }
         })
         
@@ -468,10 +478,10 @@ const GameUI = (function() {
                 let row = document.getElementById("game-board").children[nthGuess-1];
 
                 // Fill an empty row with "word"
-                for (let i = 0; i < letterLimit; ++i) {
-                    let box = row.children[i].children[1]
-                    box.textContext = word[i].letter;
-                }
+                // for (let i = 0; i < letterLimit; ++i) {
+                //     let box = row.children[i].children[1]
+                //     box.textContext = word[i].letter;
+                // }
 
                 // Change color box
                 for (let i = 0; i < letterLimit; ++i) {
