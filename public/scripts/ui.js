@@ -403,10 +403,12 @@ const GameUI = (function() {
             }
             let pressedKey = String(e.key)
             if (pressedKey === "Backspace" && nextLetter !== 0) {
+                // insert deleteLetter() functionality here
                 // deleteLetter()
                 return
             }
             if (pressedKey === "Enter") {
+                // get the current typed word here
                 // checkGuess()
                 return
             }
@@ -415,6 +417,7 @@ const GameUI = (function() {
             if (!found || found.length > 1) {
                 return
             } else {
+                // insert insertLetter() functionality here
                 // insertLetter(pressedKey)
             }
         })
@@ -518,7 +521,13 @@ const GameUI = (function() {
         }
     }
 
+    const resetBoard = () => {
+        // insert function to reset the board based on the player name
+        // basically clearBoard()
+    }
+
     const endGame = () => {
+        // remove the keyup event/ disable typing
         
     }
     
