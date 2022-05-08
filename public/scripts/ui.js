@@ -398,9 +398,6 @@ const GameUI = (function() {
 
         // keyboard
         document.addEventListener("keyup", (e) => {
-            if (guessesRemaining === 0) {
-                return
-            }
             let pressedKey = String(e.key)
             if (pressedKey === "Backspace" && nextLetter !== 0) {
                 // deleteLetter()
@@ -442,21 +439,16 @@ const GameUI = (function() {
         }
 
         const shadeKeyBoard = (letter, color) => {
-            for (const elem of document.getElementsByClassName("keyboard-button")) {
-                if (elem.textContent === letter) {
-                    let oldColor = elem.style.backgroundColor
-                    if (oldColor === 'green') {
-                        return
-                    } 
-        
-                    if (oldColor === 'yellow' && color !== 'green') {
-                        return
-                    }
-        
-                    elem.style.backgroundColor = color
-                    break
-                }
+            let className = "." + letter + "-key"
+            let oldColor = $(className).css("background-color");
+            if (oldColor === 'green') {
+                return
+            } 
+
+            if (oldColor === 'yellow' && color !== 'green') {
+                return
             }
+            $(className).css("background-color", color);
         }
 
         // INPUT LETTER
