@@ -124,13 +124,15 @@ class Game{
 
             this.io.emit("update", JSON.stringify({
                 gameId: this.gameId,
+                time : this.totalTime,
                 update : this.formatResult()
             }))
 
         }, 500)
 
         this.io.emit("start-game", JSON.stringify({
-            gameId: this.gameId
+            gameId: this.gameId,
+            start : this.formatResult()
         }))
 
         return true;
