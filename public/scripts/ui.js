@@ -437,7 +437,7 @@ const GameUI = (function() {
 
     const updateBoard = (id, player, word, nthGuess) => {
         const letterLimit = 5;
-        if(nthGuess > 6) {
+        if(nthGuess > MAXGUESS) {
             return;
         }
 
