@@ -71,21 +71,25 @@
             <button id="show-game-over">show game ovver</button>
         </div>
         <div class="flex">
-            <p class="mx-10"> Full setup - Steven gameId - 1</p>
-            <button id="full-setup">Setup</button>           
-        </div>
-        <div class="flex">
             <p>Instructions:</p>
             <ol>
                 <li>Type the word with your keyboard or the provided keyboard bellow.</li>
                 <li>Press ENTER to submit the word.</li>
             </ol>         
         </div>
+        <div class="flex">
+            <p>Time:</p>
+            <p id="global-time"></p>       
+        </div>
     </div> 
     
     <div class="flex" style="align-items: flex-start">
         <div>
             <h2>Your Board</h2>
+            <div>
+                <h4>Score: </h4>
+                <h4 id="user-score"></h4>
+            </div>
             <div id="game-board">
                 <!-- in logic.js -->
                 <!-- <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400">
@@ -135,7 +139,10 @@
 
         <div id="opponent-board">
             <h2>Opponent's Board</h2>
-            <!-- in logic.js -->
+            <div>
+                <h4>Score: </h4>
+                <h4 id="opp-score"></h4>
+            </div>
         </div>
     </div>
 
@@ -214,7 +221,7 @@
                     <th>Action</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="game-over-result">
             </tbody>
         </table>
     </div>
@@ -267,7 +274,7 @@ crossorigin="anonymous"></script>
 <script src="scripts/room.js"></script>
 <script>
 $(document).ready(function() {
-    let currentName;
+        let currentName;
         let currentGameId;
         let socket;
         

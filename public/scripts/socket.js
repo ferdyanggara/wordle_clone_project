@@ -2,6 +2,11 @@ const Socket = (function() {
     // This stores the current Socket.IO socket
     let socket = null;
 
+    //gamestate data since I am too lazy to create another
+    let currentGameId;
+    let currentPlayer;
+    let currentOpponent;
+
     // This function gets the socket from the module
     const getSocket = function() {
         return socket;
@@ -38,6 +43,20 @@ const Socket = (function() {
             */
             //  console.log('Update')
             //  console.log(JSON.parse(value))
+            const {gameId, time, update} = JSON.parse(value);
+           
+            if(currentGameId == gameId){
+                $("#global-time").text(Math.round(parseInt(time)/1000));
+
+                update.forEach(value => {
+                    if(value.player == $("#user-panel .user-name").text()){
+                        $("#user-score").text(value.score)
+                    }
+                    else{
+                        $("#opp-score").text(value.score)
+                    }
+                })
+            }
         })
 
         socket.on("start-game", (value) => {
@@ -49,9 +68,19 @@ const Socket = (function() {
              *  gameId : string
              * }
              */
-
-            const {gameId} = JSON.parse(value);
+            console.log(value)
+            const {gameId, start} = JSON.parse(value);
             if(gameId == $("#game").val()){
+                currentGameId = gameId;
+                start.forEach(value => {
+                    if(value.player == $("#user-panel .user-name").text()){
+                        currentPlayer = value.player;
+                    }
+                    else{
+                        currentOpponent = value.player;
+                    }
+                })
+                console.log(`GameId ${currentGameId} - ${currentPlayer} vs ${currentOpponent}`)
                 Room.hide();
             }
         } )
@@ -70,8 +99,39 @@ const Socket = (function() {
         })
 
         socket.on("over", (value) => {
-            //Insert UI when game over
-            console.log("GAME IS OVER")
+            /**
+             * 
+             * {
+            gameId : <game id>
+            result : [{
+                player : <player name>,
+                currentWord : string,
+                score : int
+            }]
+            }
+             */
+            //currently there is no fix area for the gameId so yes 
+
+            const {gameId, result} = JSON.parse(value);
+            const currentGameId = $('#global-game-id').text(); //idk where to find global room number
+
+            if( gameId == currentGameId ){
+                console.log("entered")
+                $("#game-over").show();
+                const gameOverTable = $("#game-over-result");
+                gameOverTable.empty();
+
+                result.forEach(value => {
+                    gameOverTable.append(`<tr>
+                    <th>${value.player}</th>
+                    <th>${value.score}</th>
+                    </tr>`)
+                });
+
+            }
+            //temp hide
+            $("#game-over").hide();
+            console.log("GAME IS OVER");
         })
 
         socket.on("room", value => {

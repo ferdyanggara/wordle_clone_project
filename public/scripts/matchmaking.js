@@ -23,6 +23,7 @@ const GamePortal = (function() {
                 console.log("Game found with: ", value.gameId);
                 // ADDED TO randomJoin CHANGES
                 $('#game').val(value.gameId);
+                $('#global-game-id').text(value.gameId);
                 addUserToTable(Authentication.getUser().username, false);
                 // END CHANGES
                 $("#matchmaking-message").text("join game with room id: ", tempGameId);
@@ -51,6 +52,7 @@ const GamePortal = (function() {
                 console.log("Game successfully created");
                 console.log(value)
                 $('#game').val(value.gameId);
+                $('#global-game-id').text(value.gameId);
                 MatchMaking.hide();
                 addUserToTable(Authentication.getUser().username, true)
                 Room.show();
@@ -78,6 +80,7 @@ const GamePortal = (function() {
           if(value.success){
               // console.log(value)
               $('#game').val(gameId);
+              $('#global-game-id').text(gameId);
               $("#matchmaking-message").text("succesfully join");
               // TODO: AFTER IMPLEMENT SOCKET.BROADCAST
               // addUserToTable(value.message,false)
