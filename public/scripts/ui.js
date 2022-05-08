@@ -274,6 +274,7 @@ const UserPanel = (function() {
 
 const GameUI = (function() {
     const MAXGUESS = 6;
+    const LETTERLIMIT = 5;
 
     let gameId = "";
     let playerName = "";
@@ -365,6 +366,7 @@ const GameUI = (function() {
         gameId = gameData;
         playerName = playerData;
         enemyName = enemyData;
+        let typedWord = [];
         // full setup game data
 
         // reset all boards including player and enemy
@@ -400,14 +402,19 @@ const GameUI = (function() {
         document.addEventListener("keyup", (e) => {
             let pressedKey = String(e.key)
             if (pressedKey === "Backspace" && nextLetter !== 0) {
-                // insert deleteLetter() functionality here
-                // deleteLetter()
-                return
+                if(typedWord.length > 0) {
+                    typedWord.pop();
+                }
             }
             if (pressedKey === "Enter") {
-                // get the current typed word here
-                // checkGuess()
-                return
+                if(typedWord.length == 5){
+                    let word = "";
+                    // get the current typed word here
+                    for (let i = 0; i < 5; ++i) {
+                        word += typedWord[i];
+                    }
+                    return word;
+                }
             }
         
             let found = pressedKey.match(/[a-z]/gi)
@@ -415,7 +422,7 @@ const GameUI = (function() {
                 return
             } else {
                 // insert insertLetter() functionality here
-                // insertLetter(pressedKey)
+                typedWord.push(pressedKey.toLocaleLowerCase());
             }
         })
         
