@@ -395,6 +395,44 @@ const GameUI = (function() {
 
         // reset my keyboard
         $("#keyboard-button").css("background-color", "rgb(242, 133, 93)");
+
+        // keyboard
+        document.addEventListener("keyup", (e) => {
+            if (guessesRemaining === 0) {
+                return
+            }
+            let pressedKey = String(e.key)
+            if (pressedKey === "Backspace" && nextLetter !== 0) {
+                // deleteLetter()
+                return
+            }
+            if (pressedKey === "Enter") {
+                // checkGuess()
+                return
+            }
+        
+            let found = pressedKey.match(/[a-z]/gi)
+            if (!found || found.length > 1) {
+                return
+            } else {
+                // insertLetter(pressedKey)
+            }
+        })
+        
+        document.getElementById("keyboard-cont").addEventListener("click", (e) => {
+            const target = e.target
+            
+            if (!target.classList.contains("keyboard-button")) {
+                return
+            }
+            let key = target.textContent
+        
+            if (key === "Del") {
+                key = "Backspace"
+            } 
+        
+            document.dispatchEvent(new KeyboardEvent("keyup", {'key': key}))
+        })
     }
 
     const updateBoard = (id, player, word, nthGuess) => {
@@ -403,21 +441,78 @@ const GameUI = (function() {
             return;
         }
 
-        if (id == gameId) {
+        const shadeKeyBoard = (letter, color) => {
+            for (const elem of document.getElementsByClassName("keyboard-button")) {
+                if (elem.textContent === letter) {
+                    let oldColor = elem.style.backgroundColor
+                    if (oldColor === 'green') {
+                        return
+                    } 
+        
+                    if (oldColor === 'yellow' && color !== 'green') {
+                        return
+                    }
+        
+                    elem.style.backgroundColor = color
+                    break
+                }
+            }
+        }
+
+        // INPUT LETTER
+        if (id == gameId && word != null) {
             // UPDATE MY BOARD
             if (player == playerName){
                 let row = document.getElementById("game-board").children[nthGuess-1];
+
                 // Fill an empty row with "word"
                 for (let i = 0; i < letterLimit; ++i) {
-                    row.children[i].children[1].textContext = word[i];
+                    let box = row.children[i].children[1]
+                    box.textContext = word[i].letter;
                 }
+
+                // Change color box
+                for (let i = 0; i < letterLimit; ++i) {
+                    let letterColor = "gray";
+                    if(word[i].status == "found") {
+                        letterColor = "yellow";
+                    }
+                    else if (word[i].status == "correct") {
+                        letterColor = "green";
+                    }
+                    let delay = 250 * i
+                    setTimeout(()=> {
+                        // animateCSS(box, 'flipInX')
+                        row.children[i].children[0].setAttribute('fill', letterColor)
+                        shadeKeyBoard(word[i].letter, letterColor)
+                    }, delay)
+                }
+
             }
             // UPDATE ENEMY BOARD
             else if (player == enemyName){
                 let row = document.getElementById("opponent-board").children[nthGuess-1];
+                
                 // Fill an empty row with "word"
                 for (let i = 0; i < letterLimit; ++i) {
-                    row.children[i].children[1].textContext = word[i];
+                    row.children[i].children[1].textContext = word[i].letter;
+                }
+
+                // Change color box
+                for (let i = 0; i < letterLimit; ++i) {
+                    let letterColor = "gray";
+                    if(word[i].status == "found") {
+                        letterColor = "yellow";
+                    }
+                    else if (word[i].status == "correct") {
+                        letterColor = "green";
+                    }
+                    let delay = 250 * i
+                    setTimeout(()=> {
+                        // animateCSS(box, 'flipInX')
+                        row.children[i].children[0].setAttribute('fill', letterColor)
+                        shadeKeyBoard(word[i].letter, letterColor)
+                    }, delay)
                 }
             }
         }
