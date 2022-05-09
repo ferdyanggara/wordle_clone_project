@@ -279,6 +279,10 @@ const GameUI = (function() {
     let isType = true;
     let socket = null;
 
+    const correctSE = new Audio("../sound/correct.mp3");
+    const gameOver = new Audio("../sound/gameOver.mp3");
+    const bgm = new Audio("../sound/bgm.mp3");
+
     const initialize = () => {
         // init player game board
         console.log()
@@ -419,10 +423,21 @@ const GameUI = (function() {
         playerName = playerData;
         enemyName = enemyData;
         // full setup game data
+        if (typeof bgm.loop == 'boolean'){
+            bgm.loop = true;
+        }
+        else{
+            bgm.addEventListener('ended', function() {
+                this.currentTime = 0;
+                this.play();
+            }, false);
+        }
+        bgm.play();
+        
 
         // reset all boards including player and enemy
-        // resetBoard(playerName);
-        // resetBoard(enemyName);
+        resetBoard(playerName);
+        resetBoard(enemyName);
 
         // reset my keyboard
         $(".keyboard-button").css("background-color", "rgb(242, 133, 93)");
@@ -552,6 +567,7 @@ const GameUI = (function() {
                     setTimeout(() => {
                         resetBoard(player);
                         $(".keyboard-button").css("background-color", "rgb(242, 133, 93)");
+                        correctSE.play();
                     }, 3000);
                 }
             }
@@ -586,7 +602,6 @@ const GameUI = (function() {
                 if(nthGuess >= 6 || correctLetter == 5) {
                     setTimeout(() => {
                         resetBoard(player);
-                        // $(".keyboard-button").css("background-color", "rgb(242, 133, 93)");
                     }, 3000);
                 }
             }
@@ -633,6 +648,9 @@ const GameUI = (function() {
 
     const endGame = () => {
         // remove the keyup event/ disable typing
+        bgm.pause();
+        bgm.currentTime = 0;
+        gameOver.play();
         document.removeEventListener("keyup", keyboardHandler)
         
     }
