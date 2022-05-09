@@ -76,8 +76,7 @@ const Socket = (function() {
              */
             console.log(value)
             const {gameId, start} = JSON.parse(value);
-            if(gameId == $("#game").val()){
-                currentGameId = gameId;
+            if(gameId == currentGameId){
                 start.forEach(value => {
                     if(value.player == $("#user-panel .user-name").text()){
                         currentPlayer = value.player;
@@ -173,15 +172,25 @@ const Socket = (function() {
         socket = null;
     };
 
-    // This function sends a post message event to the server
-    const postMessage = function(content) {
-        if (socket && socket.connected) {
-            // just want to make sure that the content is not blank (better ui improvement)
-            if (content){
-                socket.emit("post message", content);
-            }
-        }
-    };
+    // // This function sends a post message event to the server
+    // const postMessage = function(content) {
+    //     if (socket && socket.connected) {
+    //         // just want to make sure that the content is not blank (better ui improvement)
+    //         if (content){
+    //             socket.emit("post message", content);
+    //         }
+    //     }
+    // };
 
-    return { getSocket, connect, disconnect, postMessage };
+    const setGameId = function(gameId){
+        currentGameId = gameId;
+        console.log(`Updated currentGameId ${currentGameId}`);
+    }
+
+    const setPlayer = function(player){
+        currentPlayer = player
+        console.log(`Updated player name ${currentPlayer}`)
+    }
+
+    return { getSocket, connect, disconnect, setGameId, setPlayer };
 })();

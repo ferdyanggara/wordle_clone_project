@@ -257,6 +257,7 @@ const UserPanel = (function() {
     const update = function(user) {
         if (user) {
             $("#user-panel .user-name").text(user.name);
+            Socket.setPlayer(user.name);
         }
         else {
             $("#user-panel .user-name").text("");
