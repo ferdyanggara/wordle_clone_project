@@ -24,7 +24,7 @@ const GamePortal = (function() {
                 // ADDED TO randomJoin CHANGES
                 $('#game').val(value.gameId);
                 $('#global-game-id').text(value.gameId);
-                addUserToTable(Authentication.getUser().username, false);
+                // addUserToTable(Authentication.getUser().username, false);
                 // END CHANGES
                 $("#matchmaking-message").text("join game with room id: ", tempGameId);
                 MatchMaking.hide();
@@ -39,6 +39,7 @@ const GamePortal = (function() {
 
   const createGame = () => {
     console.log("create game called")
+    host = Authentication.getUser().username
     fetch("/createGame", {
         method : "POST",
         headers: {
@@ -50,11 +51,14 @@ const GamePortal = (function() {
         .then( value => {
             if(value.success){
                 console.log("Game successfully created");
-                console.log(value)
+                // console.log(value)
                 $('#game').val(value.gameId);
                 $('#global-game-id').text(value.gameId);
                 MatchMaking.hide();
-                addUserToTable(Authentication.getUser().username, true)
+                if(socket == null){
+                  socket = Socket.getSocket();
+                }
+                socket.emit("disable")
                 Room.show();
             }
             else{
@@ -105,5 +109,16 @@ const GamePortal = (function() {
         tableBody.append(markup);
   }
 
-  return { quickJoin, createGame, joinGame, addUserToTable};
+  const addTableWithSocket = (players) => {
+    markup = ""
+    for (let i = 0; i < players.length; i++) {
+      const player = players[i];
+      markup += "<tr id="+ player+ "><td>" 
+            + player + "</td><td><button id='leave-submit' onclick='RoomPortal.leaveRoom()'>leave</button></td></tr>";
+      }
+        tableBody = $("table tbody");
+        tableBody.empty().append(markup);
+  }
+
+  return { quickJoin, createGame, joinGame, addUserToTable, addTableWithSocket};
 })();
