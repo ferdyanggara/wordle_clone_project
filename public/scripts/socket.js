@@ -49,7 +49,10 @@ const Socket = (function() {
             const {gameId, time, update} = JSON.parse(value);
            
             if(currentGameId == gameId){
-                $("#global-time").text(Math.round(parseInt(time)/1000));
+                let seconds = Math.round(parseInt(time)/1000);
+                let minutes = Math.floor(seconds/60);
+                $("#min").text(minutes);
+                $("#sec").text(seconds%60);
 
                 update.forEach(value => {
                     if(value.player == $("#user-panel .user-name").text()){

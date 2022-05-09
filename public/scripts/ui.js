@@ -586,7 +586,7 @@ const GameUI = (function() {
                 if(nthGuess >= 6 || correctLetter == 5) {
                     setTimeout(() => {
                         resetBoard(player);
-                        $(".keyboard-button").css("background-color", "rgb(242, 133, 93)");
+                        // $(".keyboard-button").css("background-color", "rgb(242, 133, 93)");
                     }, 3000);
                 }
             }
