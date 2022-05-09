@@ -2,11 +2,7 @@ const RoomPortal = (function() {
 
   const startRoom = () => {
       console.log("start submit")
-
-
-
       // only host can start the game
-      if (host == Authentication.getUser().username){
         fetch("/startGame", {
           method : "POST",
           headers: {
@@ -19,10 +15,9 @@ const RoomPortal = (function() {
           .then( value => {
               console.log(value.message)
               Room.hide(); 
+              $("#game-over").show();
           })
-      } else {
-        console.log('only host can start the game')
-      }
+
   }
 
 
