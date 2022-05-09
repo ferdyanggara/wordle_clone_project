@@ -512,11 +512,9 @@ const GameUI = (function() {
                 // }
 
                 // Change color box
-                for (let i = 0; i < letterLimit; ++i) {
-                    let letterColor = "gray";
-                    
-                    if (!legalWord){
-                        letterColor = "red";
+                if(!legalWord) {
+                    for (let i = 0; i < letterLimit; ++i) {
+                        let letterColor = "red";
                         row.children[i].children[0].setAttribute('fill', letterColor);
                         $("#error-message").textContent("Invalid words!");
                         setTimeout( () => {
@@ -524,7 +522,12 @@ const GameUI = (function() {
                             $("#error-message").textContent("");
                         }, 1000);
                     }
-                    else {
+                    guessesRemaining++;
+                }
+                else{
+                    for (let i = 0; i < letterLimit; ++i) {
+                        let letterColor = "gray";
+                        
                         if(word[i].status == "found") {
                             letterColor = "yellow";
                         }
@@ -541,6 +544,7 @@ const GameUI = (function() {
                     }
                 }
 
+                
                 // Update for clear typedWord so u can type after send
                 typedWord = [];
 
