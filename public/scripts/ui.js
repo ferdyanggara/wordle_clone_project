@@ -275,6 +275,8 @@ const GameUI = (function() {
     let playerName = "";
     let enemyName = "";
 
+    let typedWord = [];
+    let isType = true;
     let socket = null;
 
     const initialize = () => {
@@ -360,11 +362,62 @@ const GameUI = (function() {
         
     }
 
+    const keyboardHandler = (e) => {
+        let pressedKey = String(e.key)
+        //ad banyak missing variable disini with weird reference
+        if (pressedKey === "Backspace" && typedWord.length !== 0) {
+            if(typedWord.length > 0) {
+                
+                let row = document.getElementsByClassName("my-letter-row")[6 - guessesRemaining]
+                let box = row.children[typedWord.length - 1].children[1];
+                box.textContent = ""
+                box.classList.remove("filled-box")
+                typedWord.pop();
+                //adjusted the process here
+            }
+        }
+        if (pressedKey === "Enter") {
+            console.log("sending words")
+            if(guessesRemaining > 0) {
+                if(typedWord.length == 5){
+                    let word = "";
+                    // get the current typed word here
+                    for (let i = 0; i < 5; ++i) {
+                        word += typedWord[i];
+                    }
+                    guessesRemaining--;
+                    if(socket == null){
+                        socket = Socket.getSocket();
+                    }
+                    isType = false;
+                    socket.emit("word-sent", word);
+                    typedWord = [];
+                }
+            }
+        }
+    
+        let found = pressedKey.match(/[a-z]/gi)
+        if (!found || found.length > 1 || !isType) {
+            return
+        } else {
+            if(typedWord.length < 5){
+                typedWord.push(pressedKey.toLocaleLowerCase());
+
+                let row = document.getElementsByClassName("my-letter-row")[6 - guessesRemaining];
+                let box = row.children[typedWord.length-1].children[1];
+                console.log(box);
+                // animateCSS(box, "pulse");
+                box.textContent = pressedKey;
+                box.classList.add("filled-box");
+            }
+            // insert insertLetter() functionality here                
+        }
+    };
+
     const startGame = (gameData, playerData, enemyData) => {
         gameId = gameData;
         playerName = playerData;
         enemyName = enemyData;
-        let typedWord = [];
         // full setup game data
 
         // reset all boards including player and enemy
@@ -375,58 +428,7 @@ const GameUI = (function() {
         $(".keyboard-button").css("background-color", "rgb(242, 133, 93)");
 
         // keyboard
-        document.addEventListener("keyup", (e) => {
-            let pressedKey = String(e.key)
-            //ad banyak missing variable disini with weird reference
-            if (pressedKey === "Backspace" && typedWord.length !== 0) {
-                if(typedWord.length > 0) {
-                    
-                    let row = document.getElementsByClassName("my-letter-row")[6 - guessesRemaining]
-                    let box = row.children[typedWord.length - 1].children[1];
-                    box.textContent = ""
-                    box.classList.remove("filled-box")
-                    typedWord.pop();
-                    //adjusted the process here
-                }
-            }
-            if (pressedKey === "Enter") {
-                console.log("sending words")
-                if(guessesRemaining > 0) {
-                    if(typedWord.length == 5){
-                        let word = "";
-                        // get the current typed word here
-                        for (let i = 0; i < 5; ++i) {
-                            word += typedWord[i];
-                        }
-                        guessesRemaining--;
-                        if(socket == null){
-                            socket = Socket.getSocket();
-                        }
-                        console.log(socket)
-                        console.log("entering here?")
-                        socket.emit("word-sent", word);
-                        typedWord = [];
-                    }
-                }
-            }
-        
-            let found = pressedKey.match(/[a-z]/gi)
-            if (!found || found.length > 1) {
-                return
-            } else {
-                if(typedWord.length < 5){
-                    typedWord.push(pressedKey.toLocaleLowerCase());
-
-                    let row = document.getElementsByClassName("my-letter-row")[6 - guessesRemaining];
-                    let box = row.children[typedWord.length-1].children[1];
-                    console.log(box);
-                    // animateCSS(box, "pulse");
-                    box.textContent = pressedKey;
-                    box.classList.add("filled-box");
-                }
-                // insert insertLetter() functionality here                
-            }
-        })
+        document.addEventListener("keyup", keyboardHandler)
         
         document.getElementById("keyboard-cont").addEventListener("click", (e) => {
             const target = e.target
@@ -544,7 +546,7 @@ const GameUI = (function() {
                 
                 // Update for clear typedWord so u can type after send
                 typedWord = [];
-
+                isType = true;
                 // Clear board when guess > 6 (after submitting the 6th try)
                 if(guessesRemaining <= 0 || correctLetter == 5) {
                     setTimeout(() => {
@@ -554,7 +556,7 @@ const GameUI = (function() {
                 }
             }
             // UPDATE ENEMY BOARD
-            else if (player == enemyName){
+            else if (player == enemyName && legalWord){
                 let row = document.getElementsByClassName("opp-letter-row")[nthGuess-1];
 
                 console.log(row)
@@ -608,6 +610,8 @@ const GameUI = (function() {
                     }, delay)
                 }
             }
+            guessesRemaining = 6;
+            isType = true;
         }
         else if (player == enemyName){
             for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
@@ -623,16 +627,17 @@ const GameUI = (function() {
                 }
             }
         }
-        guessesRemaining = 6;
+       
         
     }
 
     const endGame = () => {
         // remove the keyup event/ disable typing
+        document.removeEventListener("keyup", keyboardHandler)
         
     }
     
-    return { initialize, startGame, updateBoard, resetBoard };
+    return { initialize, startGame, updateBoard, resetBoard, endGame};
 })();
 
 

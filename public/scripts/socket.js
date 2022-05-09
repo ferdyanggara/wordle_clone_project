@@ -120,6 +120,8 @@ const Socket = (function() {
             const currentGameId = $('#global-game-id').text(); //idk where to find global room number
 
             if( gameId == currentGameId ){
+                //end the game
+                GameUI.endGame();
                 console.log("entered")
                 $("#game-over").show();
                 const gameOverTable = $("#game-over-result");
