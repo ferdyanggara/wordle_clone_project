@@ -68,6 +68,8 @@ class Game{
             };
             this.io.emit("word-result", JSON.stringify(final));
 
+            playerData.attemptCount[playerData.tries] += 1;
+
             //alter current player gamestate here
             if(result.correct){
                 console.log(`Player input the right word ${word}`)
@@ -107,9 +109,10 @@ class Game{
             value.currentWord = this.wordDictionary.getRandomWord();
             value.score = 0;
             value.tries = 0;
+            value.attemptCount = [0,0,0,0,0,0];
         })
 
-        this.totalTime = 5 * 1000
+        this.totalTime = 60 * 1000
         this.lastTime = new Date();
         //set timeout here
         this.gameTimeout = setTimeout( () => {
@@ -192,7 +195,8 @@ class Game{
             currentWord : "",
             score : 0,
             tries : 0,
-            maxTries : 6
+            maxTries : 6,
+            attemptCount : [0,0,0,0,0,0] //hardcoding due to time
         };
 
         console.log(`Current number of player ${Object.keys(this.playerData).length}`);
@@ -254,7 +258,11 @@ class Game{
             result.push({
                 player : value.player.data,
                 currentWord : value.currentWord,
-                score : value.score
+                score : value.score,
+                stat : {
+                    attempt : [1,2,3,4,5,6], //hardcode
+                    count : value.attemptCount
+                }
             })
         })
 

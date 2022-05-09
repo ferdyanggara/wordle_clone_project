@@ -119,6 +119,7 @@ const Socket = (function() {
             //currently there is no fix area for the gameId so yes 
 
             const {gameId, result} = JSON.parse(value);
+            console.log(result);
             const currentGameId = $('#global-game-id').text(); //idk where to find global room number
 
             if( gameId == currentGameId ){
