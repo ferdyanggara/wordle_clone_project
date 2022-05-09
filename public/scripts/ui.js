@@ -510,12 +510,12 @@ const GameUI = (function() {
             // UPDATE ENEMY BOARD
             else if (player == enemyName){
                 // let row = document.getElementById("opponent-board").children[nthGuess-1];
-                let row = document.getElementById("opponent-board").children[nthGuess-1];
+                let row = document.getElementsByClassName("opp-letter-row")[nthGuess-1];
                 console.log(row)
                 // Fill an empty row with "word"
                 for (let i = 0; i < letterLimit; ++i) {
                     // it seems that the textContext doesnt work
-                    row.children[i].children[1].textContext = word[i].letter;
+                    row.children[i].children[1].textContent = word[i].letter;
                 }
 
                 // Change color box
@@ -543,13 +543,12 @@ const GameUI = (function() {
         // basically clearBoard()
         if(player == playerName){
             for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
-                let myRow = document.getElementsByClassName("my-letter-row")[i]
+                let row = document.getElementsByClassName("my-letter-row")[i]
                 for (let j = 0; j < 5; j++) {
-                    let delay = 250 * i
-                    // clear My Board =============================================
-                    let box = myRow.children[j].children[1];
+                    let box = row.children[j].children[1];
                     box.textContent = "";
                    
+                    let delay = 250 * i
                     setTimeout(()=> {
                         box.classList.remove("filled-box");
                         row.children[j].children[0].setAttribute('fill', "white");
@@ -559,14 +558,12 @@ const GameUI = (function() {
         }
         else if (player == enemyName){
             for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
-                let oppRow = document.getElementsByClassName("opp-letter-row")[i]
+                let row = document.getElementsByClassName("opp-letter-row")[i]
                 for (let j = 0; j < 5; j++) {
-                    let delay = 250 * i
-    
-                    // clear Enemy Board ==========================================
-                    box = oppRow.children[j].children[1];
+                    let box = row.children[j].children[1];
                     box.textContent = "";
-    
+                   
+                    let delay = 250 * i
                     setTimeout(()=> {
                         box.classList.remove("filled-box");
                         row.children[j].children[0].setAttribute('fill', "white");
