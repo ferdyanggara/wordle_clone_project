@@ -379,7 +379,7 @@ const GameUI = (function() {
         // resetBoard(enemyName);
 
         // reset my keyboard
-        $("#keyboard-button").css("background-color", "rgb(242, 133, 93)");
+        $(".keyboard-button").css("background-color", "rgb(242, 133, 93)");
 
         // keyboard
         document.addEventListener("keyup", (e) => {
@@ -532,7 +532,7 @@ const GameUI = (function() {
                 if(guessesRemaining <= 0 || correctLetter == 5) {
                     setTimeout(() => {
                         resetBoard(player);
-                        $("#keyboard-button").css("background-color", "rgb(242, 133, 93)");
+                        $(".keyboard-button").css("background-color", "rgb(242, 133, 93)");
                     }, 3000);
                 }
             }
@@ -566,10 +566,10 @@ const GameUI = (function() {
 
                 // Clear board when guess > 6
                 if(nthGuess >= 6 || correctLetter == 5) {
-                    // setTimeout(() => {
+                    setTimeout(() => {
                         resetBoard(player);
-                        $("#keyboard-button").css("background-color", "rgb(242, 133, 93)");
-                    // }, 3000);
+                        $(".keyboard-button").css("background-color", "rgb(242, 133, 93)");
+                    }, 3000);
                 }
             }
         }
@@ -602,12 +602,12 @@ const GameUI = (function() {
                    
                     let delay = 250 * i
                     setTimeout(()=> {
-                        box.classList.remove("filled-box");
                         row.children[j].children[0].setAttribute('fill', "white");
                     }, delay)
                 }
             }
         }
+        guessesRemaining = 6;
         
     }
 
