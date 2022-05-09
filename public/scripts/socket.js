@@ -24,7 +24,6 @@ const Socket = (function() {
             // console.log(value)
             // console.log(JSON.parse(value));
 
-            //TODO : ADD UI CALL
             //to edit the current word displayed
             //based on the username and result
             const {gameId, player,result,data,tries} = JSON.parse(value);

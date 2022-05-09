@@ -67,39 +67,39 @@ const GamePortal = (function() {
         })
   }
 
-  const joinGame = (gameId) => {
-    console.log('join called')
-    fetch("/joinGame", {
-      method : "POST",
-      headers: {
-          'Content-Type': 'application/json'
-        },
-      body :  JSON.stringify({
-          gameId : gameId
-      })
-      })
-      .then( res => res.json())
-      .then( value => {
-        // console.log(value);
-          if(value.success){
-              // console.log(value)
-              $('#game').val(gameId);
-              $('#global-game-id').text(gameId);
-              $("#matchmaking-message").text("succesfully join");
-              // TODO: AFTER IMPLEMENT SOCKET.BROADCAST
-              // addUserToTable(value.message,false)
-              console.log('hide matchmaking')
-              MatchMaking.hide();
-              Room.show();
-          }
-          else{
-              $("#matchmaking-message").text(value.message);
-          }
-      })
-  }
+  // TODO: DUMP
+  // const joinGame = (gameId) => {
+  //   console.log('join called')
+  //   fetch("/joinGame", {
+  //     method : "POST",
+  //     headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //     body :  JSON.stringify({
+  //         gameId : gameId
+  //     })
+  //     })
+  //     .then( res => res.json())
+  //     .then( value => {
+  //       // console.log(value);
+  //         if(value.success){
+  //             // console.log(value)
+  //             $('#game').val(gameId);
+  //             $('#global-game-id').text(gameId);
+  //             $("#matchmaking-message").text("succesfully join");
+  //             // addUserToTable(value.message,false)
+  //             console.log('hide matchmaking')
+  //             MatchMaking.hide();
+  //             Room.show();
+  //         }
+  //         else{
+  //             $("#matchmaking-message").text(value.message);
+  //         }
+  //     })
+  // }
 
 
-// TODO: STILL NOT SURE WHETHER WE ARE GOING TO MAKE MULTIPLE ROOM, SINCE 1 ROOM ALAS multiplayer will suffice. 
+// TODO: DUMP
   const addUserToTable = (name, host) => {
     console.log('name: ', name)
       isHost = host ? "host" : "guest";
@@ -120,5 +120,5 @@ const GamePortal = (function() {
         tableBody.empty().append(markup);
   }
 
-  return { quickJoin, createGame, joinGame, addUserToTable, addTableWithSocket};
+  return { quickJoin, createGame, addUserToTable, addTableWithSocket};
 })();

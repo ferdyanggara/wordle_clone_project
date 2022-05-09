@@ -123,7 +123,7 @@ const Room = (function() {
             // Do not submit the form
             e.preventDefault();
 
-            const gameId = $("#roomId").val().trim();
+            const gameId = $("#game").val().trim();
 
             RoomPortal.startRoom(gameId,
                 () => {
@@ -154,35 +154,28 @@ const Room = (function() {
 const MatchMaking = (function() {
     // This function initializes the UI
     const initialize = function() {
-        // Populate the avatar selection
-        // Avatar.populate($("#register-avatar"));
-        
         // Hide it
         $("#matchmaking-overlay").hide();
   
-        // TODO: Submit event for join game id  
-        $("#matchmaking-form").on("submit", (e) => {
-            // Do not submit the form
-            e.preventDefault();
+        // TODO: DUMP
+        // $("#matchmaking-form").on("submit", (e) => {
+        //     // Do not submit the form
+        //     e.preventDefault();
   
-            // Get the input fields
-            const gameId = $("#roomId").val().trim();
+        //     // Get the input fields
+        //     const gameId = $("#roomId").val().trim();
   
-            // TODO: SEND API REQUEST TO JOIN A GAME
-            GamePortal.joinGame(gameId,
-                () => {
-                    hide();
-                    UserPanel.update(Authentication.getUser());
-                    UserPanel.show();
-                },
-                (error) => { $("#matchmaking-message").text(error); }
-            );
-
-        });
+        //     GamePortal.joinGame(gameId,
+        //         () => {
+        //             hide();
+        //             UserPanel.update(Authentication.getUser());
+        //             UserPanel.show();
+        //         },
+        //         (error) => { $("#matchmaking-message").text(error); }
+        //     );
+        // });
 
         $("#createGame").on("click", (e) => {
-            // TODO: POST REQUEST ON CREATE RANDOM GAME (ROOM ID CAN BE CREATED ON SERVER SIDE)
-                        // TODO: SEND API REQUEST TO CREATE A NEW GAME
             GamePortal.createGame(
                 () => {
                     hide();
@@ -197,7 +190,6 @@ const MatchMaking = (function() {
         $("#quickJoin").on("click", (e) => {
             
             // TESTING TO GO TO GAME
-            // TODO: SEND API REQUEST FOR QUICK JOIN  
             GamePortal.quickJoin(
                 () => {
                     hide();
@@ -220,7 +212,6 @@ const MatchMaking = (function() {
   
     // This function hides the form
     const hide = function() {
-        $("#matchmaking-form").get(0).reset();
         $("#matchmaking-message").text(""); 
         // $("#register-message").text("");
         $("#matchmaking-overlay").fadeOut(500);
