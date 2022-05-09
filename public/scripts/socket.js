@@ -140,14 +140,18 @@ const Socket = (function() {
 
         socket.on("room", value => {
             console.log("room update")
-            // const host = Authentication.getUser().username;
-            player = JSON.parse(value).players;
-            
-            if (player.length == 0){
+            const host = Authentication.getUser().name;
+            console.log(JSON.parse(value));
+            let players = JSON.parse(value).players;
+            console.log(`${players} in ${host} on socket`)
+            console.log(players);
+            if (!(players.includes(host))){
+                console.log("why?")
                 Room.hide() 
                 MatchMaking.show()
             } else {
-                GamePortal.addTableWithSocket(player)
+                console.log("modify")
+                GamePortal.addTableWithSocket(players)
             }
         })
         //TODO : Connect to UI

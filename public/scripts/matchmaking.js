@@ -21,11 +21,14 @@ const GamePortal = (function() {
         .then( value => {
             if(value.success){
                 console.log("Game found with: ", value.gameId);
+                // const {players} = value;
                 // ADDED TO randomJoin CHANGES
                 $('#game').val(value.gameId);
                 $('#global-game-id').text(value.gameId);
                 // addUserToTable(Authentication.getUser().username, false);
                 // END CHANGES
+
+
                 $("#matchmaking-message").text("join game with room id: ", tempGameId);
                 MatchMaking.hide();
                 Room.show();
@@ -110,11 +113,13 @@ const GamePortal = (function() {
   }
 
   const addTableWithSocket = (players) => {
+    let currentName = Authentication.getUser().name;
     markup = ""
     for (let i = 0; i < players.length; i++) {
       const player = players[i];
+      console.log(`Checking ${player} with ${currentName}`)
       markup += "<tr id="+ player+ "><td>" 
-            + player + "</td><td><button id='leave-submit' onclick='RoomPortal.leaveRoom()'>leave</button></td></tr>";
+            + player + `</td><td>${ player == currentName ? "<button id='leave-submit' onclick='RoomPortal.leaveRoom()'>leave</button>" : ""}</td></tr>`;
       }
         tableBody = $("table tbody");
         tableBody.empty().append(markup);
