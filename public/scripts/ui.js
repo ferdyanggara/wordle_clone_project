@@ -398,19 +398,25 @@ const GameUI = (function() {
             }
             if (pressedKey === "Enter") {
                 console.log("sending words")
-                if(typedWord.length == 5){
-                    let word = "";
-                    // get the current typed word here
-                    for (let i = 0; i < 5; ++i) {
-                        word += typedWord[i];
+                if(guessesRemaining > 0) {
+                    if(typedWord.length == 5){
+                        let word = "";
+                        // get the current typed word here
+                        for (let i = 0; i < 5; ++i) {
+                            word += typedWord[i];
+                        }
+                        guessesRemaining--;
+                        if(socket == null){
+                            socket = Socket.getSocket();
+                        }
+                        console.log(socket)
+                        console.log("entering here?")
+                        socket.emit("word-sent", word);
+                        typedWord = [];
                     }
-                    guessesRemaining--;
-                    if(socket == null){
-                        socket = Socket.getSocket();
-                    }
-                    console.log(socket)
-                    console.log("entering here?")
-                    socket.emit("word-sent", word);
+                }
+                if (guessesRemaining <= 0) {
+                    resetBoard(playerName);
                 }
             }
         
@@ -451,9 +457,9 @@ const GameUI = (function() {
     const updateBoard = (id, player, word, nthGuess) => {
         const letterLimit = 5;
         //what is maxguess?
-        if(nthGuess > 6) {
-            return;
-        }
+        // if(nthGuess > 6) {
+        //     return;
+        // }
 
         const shadeKeyBoard = (letter, color) => {
             let className = "." + letter + "-key"
@@ -505,17 +511,22 @@ const GameUI = (function() {
                 // Update for clear typedWord so u can type after send
                 typedWord = [];
 
-
+                // Clear board when guess > 6 (after submitting the 6th try)
+                if(nthGuess >= 6) {
+                    // setTimeout(() => {
+                        resetBoard(player);
+                        $("#keyboard-button").css("background-color", "rgb(242, 133, 93)");
+                    // }, 3000);
+                }
             }
             // UPDATE ENEMY BOARD
             else if (player == enemyName){
-                // let row = document.getElementById("opponent-board").children[nthGuess-1];
-                let row = document.getElementById("opponent-board").children[nthGuess-1];
+                let row = document.getElementsByClassName("opp-letter-row")[nthGuess-1];
+
                 console.log(row)
                 // Fill an empty row with "word"
                 for (let i = 0; i < letterLimit; ++i) {
-                    // it seems that the textContext doesnt work
-                    row.children[i].children[1].textContext = word[i].letter;
+                    row.children[i].children[1].textContent = word[i].letter;
                 }
 
                 // Change color box
@@ -534,6 +545,14 @@ const GameUI = (function() {
                         shadeKeyBoard(word[i].letter, letterColor)
                     }, delay)
                 }
+
+                // Clear board when guess > 6
+                if(nthGuess >= 6) {
+                    // setTimeout(() => {
+                        resetBoard(player);
+                        $("#keyboard-button").css("background-color", "rgb(242, 133, 93)");
+                    // }, 3000);
+                }
             }
         }
     }
@@ -543,13 +562,12 @@ const GameUI = (function() {
         // basically clearBoard()
         if(player == playerName){
             for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
-                let myRow = document.getElementsByClassName("my-letter-row")[i]
+                let row = document.getElementsByClassName("my-letter-row")[i]
                 for (let j = 0; j < 5; j++) {
-                    let delay = 250 * i
-                    // clear My Board =============================================
-                    let box = myRow.children[j].children[1];
+                    let box = row.children[j].children[1];
                     box.textContent = "";
                    
+                    let delay = 250 * i
                     setTimeout(()=> {
                         box.classList.remove("filled-box");
                         row.children[j].children[0].setAttribute('fill', "white");
@@ -559,14 +577,12 @@ const GameUI = (function() {
         }
         else if (player == enemyName){
             for (let i = 0; i < NUMBER_OF_GUESSES; i++) {
-                let oppRow = document.getElementsByClassName("opp-letter-row")[i]
+                let row = document.getElementsByClassName("opp-letter-row")[i]
                 for (let j = 0; j < 5; j++) {
-                    let delay = 250 * i
-    
-                    // clear Enemy Board ==========================================
-                    box = oppRow.children[j].children[1];
+                    let box = row.children[j].children[1];
                     box.textContent = "";
-    
+                   
+                    let delay = 250 * i
                     setTimeout(()=> {
                         box.classList.remove("filled-box");
                         row.children[j].children[0].setAttribute('fill', "white");
