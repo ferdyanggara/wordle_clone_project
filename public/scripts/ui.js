@@ -489,6 +489,9 @@ const GameUI = (function() {
             $(className).css("background-color", color);
         }
 
+        console.log("entering update")
+        console.log(legalWord);
+
         // INPUT LETTER
         // console.log("entering updating UI")
         // console.log(`Current : ${gameId} Received : ${id}`)
@@ -499,6 +502,7 @@ const GameUI = (function() {
             console.log(`Current : ${player} Received : ${playerName}`)
             if (player == playerName){
                 console.log(word);
+                console.log(nthGuess);
                 let row = document.getElementById("game-board").children[nthGuess-1];
 
                 // Fill an empty row with "word"

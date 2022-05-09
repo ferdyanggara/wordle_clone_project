@@ -52,7 +52,8 @@ class Game{
                 gameId : this.gameId,
                 player : playerData.player.data,
                 result : false,
-                data : []
+                data : [],
+                tries : playerData.tries + 1
             }))
         }
 
