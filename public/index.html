@@ -86,10 +86,13 @@
     
     <div class="flex" style="align-items: flex-start">
         <div>
-            <h2>Your Board</h2>
-            <div>
+            <h2 style="text-align: center">Your Board</h2>
+            <div style="display: flex">
                 <h4>Score: </h4>
                 <h4 id="user-score"></h4>
+            </div>
+            <div style="display: flex">
+                <p id="error-message" style="color: red"></p>
             </div>
             <div id="game-board">
                 <!-- in logic.js -->
@@ -138,9 +141,9 @@
             </div>
         </div>
 
-        <div>
-            <h2>Opponent's Board</h2>
-            <div>
+        <div style="margin-left: 10vw">
+            <h2 style="text-align: center">Opponent's Board</h2>
+            <div style="display: flex">
                 <h4>Score: </h4>
                 <h4 id="opp-score"></h4>
             </div>

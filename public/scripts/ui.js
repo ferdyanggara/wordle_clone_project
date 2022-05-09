@@ -472,7 +472,7 @@ const GameUI = (function() {
         console.log("Board start game");
     }
 
-    const updateBoard = (id, player, word, nthGuess) => {
+    const updateBoard = (id, player, word, nthGuess, legalWord) => {
         const letterLimit = 5;
         //what is maxguess?
 
@@ -510,19 +510,31 @@ const GameUI = (function() {
                 // Change color box
                 for (let i = 0; i < letterLimit; ++i) {
                     let letterColor = "gray";
-                    if(word[i].status == "found") {
-                        letterColor = "yellow";
+                    
+                    if (!legalWord){
+                        letterColor = "red";
+                        row.children[i].children[0].setAttribute('fill', letterColor);
+                        $("#error-message").textContent("Invalid words!");
+                        setTimeout( () => {
+                            row.children[i].children[0].setAttribute('fill', "white");
+                            $("#error-message").textContent("");
+                        }, 1000);
                     }
-                    else if (word[i].status == "correct") {
-                        letterColor = "green"; 
-                        correctLetter++;                       
+                    else {
+                        if(word[i].status == "found") {
+                            letterColor = "yellow";
+                        }
+                        else if (word[i].status == "correct") {
+                            letterColor = "green"; 
+                            correctLetter++;                       
+                        }
+                        let delay = 250 * i
+                        setTimeout(()=> {
+                            // animateCSS(box, 'flipInX')
+                            row.children[i].children[0].setAttribute('fill', letterColor)
+                            shadeKeyBoard(word[i].letter, letterColor)
+                        }, delay)
                     }
-                    let delay = 250 * i
-                    setTimeout(()=> {
-                        // animateCSS(box, 'flipInX')
-                        row.children[i].children[0].setAttribute('fill', letterColor)
-                        shadeKeyBoard(word[i].letter, letterColor)
-                    }, delay)
                 }
 
                 // Update for clear typedWord so u can type after send
@@ -560,7 +572,6 @@ const GameUI = (function() {
                     setTimeout(()=> {
                         // animateCSS(box, 'flipInX')
                         row.children[i].children[0].setAttribute('fill', letterColor)
-                        shadeKeyBoard(word[i].letter, letterColor)
                     }, delay)
                 }
 

@@ -31,7 +31,7 @@ const Socket = (function() {
             //based on the username and result
             const {gameId, player,result,data,tries} = JSON.parse(value);
             console.log(data)
-            GameUI.updateBoard(gameId, player, data.data, tries);
+            GameUI.updateBoard(gameId, player, data.data, tries, result);
         })
 
         socket.on("update", (value) => {

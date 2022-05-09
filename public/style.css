@@ -13,7 +13,10 @@ div .flex {
 }
 #opponent-board {
   transform: scale(0.7);
-  margin-left: 10vw;
+}
+
+.my-letter-box rect {
+    transition: 0.5s ease;
 }
 
 /* .letter-box {
