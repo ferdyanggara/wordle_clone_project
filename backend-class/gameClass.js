@@ -233,6 +233,16 @@ class Game{
         delete this.playerData[name];
         
         console.log(this.playerData)
+
+        let playerLeft = Object.values(this.playerData).map(value => value.player.data)
+
+
+        this.io.emit("room", JSON.stringify({
+            gameId : this.gameId,
+            players : playerLeft
+        }));
+
+
         return true;
     }
 
@@ -252,6 +262,10 @@ class Game{
 
     getPlayerNum(){
         return Object.values(this.playerData).length;
+    }
+
+    getPlayer(){
+        return Object.values(this.playerData);
     }
 
 }
