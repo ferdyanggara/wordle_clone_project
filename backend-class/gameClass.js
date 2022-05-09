@@ -191,7 +191,7 @@ class Game{
             currentWord : "",
             score : 0,
             tries : 0,
-            maxTries : 5
+            maxTries : 6
         };
 
         console.log(`Current number of player ${Object.keys(this.playerData).length}`);

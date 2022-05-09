@@ -445,7 +445,27 @@ const GameUI = (function() {
         
             if (key === "Del") {
                 key = "Backspace"
-            } 
+            }
+            if (key == "Enter") {
+                console.log("sending words")
+                if(guessesRemaining > 0) {
+                    if(typedWord.length == 5){
+                        let word = "";
+                        // get the current typed word here
+                        for (let i = 0; i < 5; ++i) {
+                            word += typedWord[i];
+                        }
+                        guessesRemaining--;
+                        if(socket == null){
+                            socket = Socket.getSocket();
+                        }
+                        console.log(socket)
+                        console.log("entering here?")
+                        socket.emit("word-sent", word);
+                        typedWord = [];
+                    }
+                }
+            }
         
             document.dispatchEvent(new KeyboardEvent("keyup", {'key': key}))
         })
