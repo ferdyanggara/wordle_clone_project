@@ -109,7 +109,9 @@ class Game{
             value.tries = 0;
         })
 
-        this.totalTime = 99999 * 1000
+        // TODO: TESTING PURPOSE
+        // this.totalTime = 99999 * 1000
+        this.totalTime = 10 * 1000
         this.lastTime = new Date();
         //set timeout here
         this.gameTimeout = setTimeout( () => {
