@@ -503,6 +503,7 @@ const GameUI = (function() {
             if (player == playerName){
                 console.log(word);
                 console.log(nthGuess);
+                console.log(guessesRemaining);
                 let row = document.getElementById("game-board").children[nthGuess-1];
 
                 // Fill an empty row with "word"
@@ -516,12 +517,15 @@ const GameUI = (function() {
                     for (let i = 0; i < letterLimit; ++i) {
                         let letterColor = "red";
                         row.children[i].children[0].setAttribute('fill', letterColor);
-                        $("#error-message").textContent("Invalid words!");
-                        setTimeout( () => {
-                            row.children[i].children[0].setAttribute('fill', "white");
-                            $("#error-message").textContent("");
-                        }, 1000);
                     }
+                    $("#error-message").html("Invalid words!");
+                    setTimeout( () => {
+                        for (let i = 0; i < letterLimit; ++i) {
+                            row.children[i].children[0].setAttribute('fill', "white");
+                            row.children[i].children[1].textContent = "";
+                        }
+                        $("#error-message").html("");
+                    }, 1000);
                     guessesRemaining++;
                 }
                 else{
