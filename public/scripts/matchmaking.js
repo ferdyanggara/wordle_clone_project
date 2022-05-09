@@ -55,10 +55,10 @@ const GamePortal = (function() {
                 $('#game').val(value.gameId);
                 $('#global-game-id').text(value.gameId);
                 MatchMaking.hide();
-                if(socket == null){
-                  socket = Socket.getSocket();
-                }
-                socket.emit("disable")
+                // if(socket == null){
+                //   socket = Socket.getSocket();
+                // }
+                // socket.emit("disable")
                 Room.show();
             }
             else{
