@@ -60,6 +60,8 @@ const SignInForm = (function() {
               () => {
                   hide();
                   // show the matchmaking overlay 
+                  UserPanel.update(Authentication.getUser());
+                  UserPanel.show();
                   MatchMaking.show();
                   console.log('connecting to socket')
                   Socket.connect();
