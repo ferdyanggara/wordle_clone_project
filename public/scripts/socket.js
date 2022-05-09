@@ -28,8 +28,8 @@ const Socket = (function() {
             //to edit the current word displayed
             //based on the username and result
             const {gameId, player,result,data,tries} = JSON.parse(value);
-            console.log(data)
-            GameUI.updateBoard(gameId, player, data.data, tries);
+            console.log(JSON.parse(value))
+            GameUI.updateBoard(gameId, player, data.data ? data.data : {}, tries, result);
         })
 
         socket.on("update", (value) => {

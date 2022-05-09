@@ -19,6 +19,7 @@ app.use(express.json());
 
 const gameDictionary = {};
 const playerDictionary = {};
+const usernameList = new Set();
 
 // Use the session middleware to maintain sessions
 const chatSession = session({
@@ -126,6 +127,11 @@ app.post("/signin", (req, res) => {
     }
 
     msg += "is empty"
+
+    if(usernameList.has(username)){
+        res.json({status : "error", error : "User has already login"});
+        return;
+    }
     
     if (!username || !password){
         res.json({ status: "error", error: msg });
@@ -448,6 +454,10 @@ const io = new Server(httpServer);
     console.log(`Connected with name ${socket.request.session.user.username}`)
     // console.log(`Connected with name ${socket.request.session.name}`)
 
+    usernameList.add(socket.request.session.user.username);
+    console.log(`Current username login`);
+    console.log(usernameList);
+
     playerDictionary[socket.request.session.user.username] = //temp modif for faster debug
     new Player( 
         socket.request.session.user.name,
@@ -470,6 +480,7 @@ const io = new Server(httpServer);
             }
         }
         delete playerDictionary[socket.request.session.user.username];
+        usernameList.delete(socket.request.session.user.username);
         console.log(`Player deleted`)
     })
     

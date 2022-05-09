@@ -13,7 +13,10 @@ div .flex {
 }
 #opponent-board {
   transform: scale(0.7);
-  margin-left: 10vw;
+}
+
+.my-letter-box rect {
+    transition: 0.5s ease;
 }
 
 /* .letter-box {
@@ -29,7 +32,7 @@ div .flex {
   align-items: center;
   text-transform: uppercase;
 } */
-.letter-box text {
+.opp-letter-box, .my-letter-box {
     text-transform: uppercase;
 }
 
@@ -64,8 +67,24 @@ div .flex {
   margin: 0 2px;
   cursor: pointer;
   text-transform: uppercase;
+  background-color: rgb(242, 133, 93);
 }
 
+.green {
+    background-color: green;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.gray {
+    background-color: gray;
+}
+/* 
+.orange {
+    background-color: rgb(242, 133, 93);
+} */
 
 @import url("https://fonts.googleapis.com/css2?family=Abel&display=swap");
 :root {

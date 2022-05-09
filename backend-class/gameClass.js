@@ -52,7 +52,8 @@ class Game{
                 gameId : this.gameId,
                 player : playerData.player.data,
                 result : false,
-                data : []
+                data : [],
+                tries : playerData.tries + 1
             }))
         }
 
@@ -191,7 +192,7 @@ class Game{
             currentWord : "",
             score : 0,
             tries : 0,
-            maxTries : 5
+            maxTries : 6
         };
 
         console.log(`Current number of player ${Object.keys(this.playerData).length}`);

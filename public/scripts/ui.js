@@ -60,6 +60,8 @@ const SignInForm = (function() {
               () => {
                   hide();
                   // show the matchmaking overlay 
+                  UserPanel.update(Authentication.getUser());
+                  UserPanel.show();
                   MatchMaking.show();
                   console.log('connecting to socket')
                   Socket.connect();
@@ -379,7 +381,7 @@ const GameUI = (function() {
         // resetBoard(enemyName);
 
         // reset my keyboard
-        $("#keyboard-button").css("background-color", "rgb(242, 133, 93)");
+        $(".keyboard-button").css("background-color", "rgb(242, 133, 93)");
 
         // keyboard
         document.addEventListener("keyup", (e) => {
@@ -415,9 +417,6 @@ const GameUI = (function() {
                         typedWord = [];
                     }
                 }
-                if (guessesRemaining <= 0) {
-                    resetBoard(playerName);
-                }
             }
         
             let found = pressedKey.match(/[a-z]/gi)
@@ -429,6 +428,7 @@ const GameUI = (function() {
 
                     let row = document.getElementsByClassName("my-letter-row")[6 - guessesRemaining];
                     let box = row.children[typedWord.length-1].children[1];
+                    console.log(box);
                     // animateCSS(box, "pulse");
                     box.textContent = pressedKey;
                     box.classList.add("filled-box");
@@ -447,19 +447,36 @@ const GameUI = (function() {
         
             if (key === "Del") {
                 key = "Backspace"
-            } 
+            }
+            if (key == "Enter") {
+                console.log("sending words")
+                if(guessesRemaining > 0) {
+                    if(typedWord.length == 5){
+                        let word = "";
+                        // get the current typed word here
+                        for (let i = 0; i < 5; ++i) {
+                            word += typedWord[i];
+                        }
+                        guessesRemaining--;
+                        if(socket == null){
+                            socket = Socket.getSocket();
+                        }
+                        console.log(socket)
+                        console.log("entering here?")
+                        socket.emit("word-sent", word);
+                        typedWord = [];
+                    }
+                }
+            }
         
             document.dispatchEvent(new KeyboardEvent("keyup", {'key': key}))
         })
         console.log("Board start game");
     }
 
-    const updateBoard = (id, player, word, nthGuess) => {
+    const updateBoard = (id, player, word, nthGuess, legalWord) => {
         const letterLimit = 5;
         //what is maxguess?
-        // if(nthGuess > 6) {
-        //     return;
-        // }
 
         const shadeKeyBoard = (letter, color) => {
             let className = "." + letter + "-key"
@@ -474,15 +491,21 @@ const GameUI = (function() {
             $(className).css("background-color", color);
         }
 
+        console.log("entering update")
+        console.log(legalWord);
+
         // INPUT LETTER
         // console.log("entering updating UI")
         // console.log(`Current : ${gameId} Received : ${id}`)
         //what does the word here means?
         if (id == gameId && word != null) {
+            let correctLetter = 0;
             // UPDATE MY BOARD
             console.log(`Current : ${player} Received : ${playerName}`)
             if (player == playerName){
                 console.log(word);
+                console.log(nthGuess);
+                console.log(guessesRemaining);
                 let row = document.getElementById("game-board").children[nthGuess-1];
 
                 // Fill an empty row with "word"
@@ -492,31 +515,51 @@ const GameUI = (function() {
                 // }
 
                 // Change color box
-                for (let i = 0; i < letterLimit; ++i) {
-                    let letterColor = "gray";
-                    if(word[i].status == "found") {
-                        letterColor = "yellow";
+                if(!legalWord) {
+                    for (let i = 0; i < letterLimit; ++i) {
+                        let letterColor = "red";
+                        row.children[i].children[0].setAttribute('fill', letterColor);
                     }
-                    else if (word[i].status == "correct") {
-                        letterColor = "green";
+                    $("#error-message").html("Invalid words!");
+                    setTimeout( () => {
+                        for (let i = 0; i < letterLimit; ++i) {
+                            row.children[i].children[0].setAttribute('fill', "white");
+                            row.children[i].children[1].textContent = "";
+                        }
+                        $("#error-message").html("");
+                    }, 1000);
+                    guessesRemaining++;
+                }
+                else{
+                    for (let i = 0; i < letterLimit; ++i) {
+                        let letterColor = "gray";
+                        
+                        if(word[i].status == "found") {
+                            letterColor = "yellow";
+                        }
+                        else if (word[i].status == "correct") {
+                            letterColor = "green"; 
+                            correctLetter++;                       
+                        }
+                        let delay = 250 * i
+                        setTimeout(()=> {
+                            // animateCSS(box, 'flipInX')
+                            row.children[i].children[0].setAttribute('fill', letterColor)
+                            shadeKeyBoard(word[i].letter, letterColor)
+                        }, delay)
                     }
-                    let delay = 250 * i
-                    setTimeout(()=> {
-                        // animateCSS(box, 'flipInX')
-                        row.children[i].children[0].setAttribute('fill', letterColor)
-                        shadeKeyBoard(word[i].letter, letterColor)
-                    }, delay)
                 }
 
+                
                 // Update for clear typedWord so u can type after send
                 typedWord = [];
 
                 // Clear board when guess > 6 (after submitting the 6th try)
-                if(nthGuess >= 6) {
-                    // setTimeout(() => {
+                if(guessesRemaining <= 0 || correctLetter == 5) {
+                    setTimeout(() => {
                         resetBoard(player);
-                        $("#keyboard-button").css("background-color", "rgb(242, 133, 93)");
-                    // }, 3000);
+                        $(".keyboard-button").css("background-color", "rgb(242, 133, 93)");
+                    }, 3000);
                 }
             }
             // UPDATE ENEMY BOARD
@@ -537,21 +580,21 @@ const GameUI = (function() {
                     }
                     else if (word[i].status == "correct") {
                         letterColor = "green";
+                        correctLetter++;
                     }
                     let delay = 250 * i
                     setTimeout(()=> {
                         // animateCSS(box, 'flipInX')
                         row.children[i].children[0].setAttribute('fill', letterColor)
-                        shadeKeyBoard(word[i].letter, letterColor)
                     }, delay)
                 }
 
                 // Clear board when guess > 6
-                if(nthGuess >= 6) {
-                    // setTimeout(() => {
+                if(nthGuess >= 6 || correctLetter == 5) {
+                    setTimeout(() => {
                         resetBoard(player);
-                        $("#keyboard-button").css("background-color", "rgb(242, 133, 93)");
-                    // }, 3000);
+                        $(".keyboard-button").css("background-color", "rgb(242, 133, 93)");
+                    }, 3000);
                 }
             }
         }
@@ -584,12 +627,12 @@ const GameUI = (function() {
                    
                     let delay = 250 * i
                     setTimeout(()=> {
-                        box.classList.remove("filled-box");
                         row.children[j].children[0].setAttribute('fill', "white");
                     }, delay)
                 }
             }
         }
+        guessesRemaining = 6;
         
     }
 
