@@ -7,8 +7,13 @@ const Socket = (function() {
     let currentPlayer;
     let currentOpponent;
 
+
+    // keep track of player in the room 
+    // let listofPlayers = []
+
     // This function gets the socket from the module
     const getSocket = function() {
+        console.log('creating socket')
         return socket;
     };
 
@@ -138,15 +143,37 @@ const Socket = (function() {
 
         socket.on("room", value => {
             console.log("room update")
-            const host = Authentication.getUser().username;
+            // const host = Authentication.getUser().username;
             player = JSON.parse(value).players;
-            for (let i = 0; i < player.length; i++) {
-                if (player[i] != host){
-                    console.log('player i: ', player[i], 'host: ', host, 'player i == host', player[i] == host)
-                    GamePortal.addUserToTable(player[i])
-                }
-            }
+            // for (let i = 0; i < player.length; i++) {
+            //     if (player[i] != host && !listofPlayers.includes(player[i])){
+            //         console.log('player i: ', player[i], 'host: ', host, 'player i == host', player[i] == host)
+            //         listofPlayers.push(player[i])
+            //     }
+            // }
+
+            // console.log('PLAYER: ', player)
+
+            GamePortal.addTableWithSocket(player)
+
+
+            // for (let i = 0; i < listofPlayers.length; i++) {
+            //     const player = listofPlayers[i];
+            //     GamePortal.addUserToTable(player)
+            // }
+
+
         })
+
+        socket.on("disable", () => {
+            console.log('DISABLING CREATE')
+            $("#createGame").prop("disabled", true)
+        })
+
+        socket.on("enableCreate", () => {
+            $("#createGame").prop("disabled", false)
+        })
+
 
         //TODO : Connect to UI
         // Add socket.emit to keydown enter function
