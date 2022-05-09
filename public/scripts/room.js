@@ -34,10 +34,13 @@ const RoomPortal = (function() {
       })
       .then( res => res.json())
       .then( value => {
-         // UPDATE UI
-        let leavedUser = Authentication.getUser().username
-        specificUser = $(`#${leavedUser}`);
-        specificUser.remove()
+         // UPDATE UI - should not be required
+        // let leavedUser = Authentication.getUser().username
+        // specificUser = $(`#${leavedUser}`);
+        // specificUser.remove()
+
+        Room.hide();
+        MatchMaking.show();
       })
 
    

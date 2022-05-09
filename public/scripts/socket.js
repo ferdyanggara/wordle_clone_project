@@ -49,7 +49,10 @@ const Socket = (function() {
             const {gameId, time, update} = JSON.parse(value);
            
             if(currentGameId == gameId){
-                $("#global-time").text(Math.round(parseInt(time)/1000));
+                let seconds = Math.round(parseInt(time)/1000);
+                let minutes = Math.floor(seconds/60);
+                $("#min").text(minutes);
+                $("#sec").text(seconds%60);
 
                 update.forEach(value => {
                     if(value.player == $("#user-panel .user-name").text()){
@@ -120,6 +123,8 @@ const Socket = (function() {
             const currentGameId = $('#global-game-id').text(); //idk where to find global room number
 
             if( gameId == currentGameId ){
+                //end the game
+                GameUI.endGame();
                 console.log("entered")
                 $("#game-over").show();
                 const gameOverTable = $("#game-over-result");
@@ -140,14 +145,18 @@ const Socket = (function() {
 
         socket.on("room", value => {
             console.log("room update")
-            // const host = Authentication.getUser().username;
-            player = JSON.parse(value).players;
-            
-            if (player.length == 0){
+            const host = Authentication.getUser().name;
+            console.log(JSON.parse(value));
+            let players = JSON.parse(value).players;
+            console.log(`${players} in ${host} on socket`)
+            console.log(players);
+            if (!(players.includes(host))){
+                console.log("why?")
                 Room.hide() 
                 MatchMaking.show()
             } else {
-                GamePortal.addTableWithSocket(player)
+                console.log("modify")
+                GamePortal.addTableWithSocket(players)
             }
         })
         //TODO : Connect to UI
