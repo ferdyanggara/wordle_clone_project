@@ -133,3 +133,16 @@ This socket only works when the game start. Once over, the socket event will be 
 
 ## REQUIRE
 - Require Gameplay UI
+
+
+
+## NEEDED 
+start game only if there is 2 player, start must be host
+leave room peacefully, set the host status to the other player
+
+- create game, sent disable button for create game, other user could not create the game 
+
+
+
+
+- if all player leave the room, then create game button become enable

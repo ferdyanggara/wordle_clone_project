@@ -1,22 +1,28 @@
-
-
 const RoomPortal = (function() {
 
   const startRoom = () => {
       console.log("start submit")
-      fetch("/startGame", {
-      method : "POST",
-      headers: {
-          'Content-Type': 'application/json'
-        },
-      body :  JSON.stringify({
-          gameId : $('#game').val()
-      })
-      })
-      .then( value => {
-          console.log(value.message)
-          Room.hide(); 
-      })
+
+
+
+      // only host can start the game
+      if (host == Authentication.getUser().username){
+        fetch("/startGame", {
+          method : "POST",
+          headers: {
+              'Content-Type': 'application/json'
+            },
+          body :  JSON.stringify({
+              gameId : $('#game').val()
+          })
+          })
+          .then( value => {
+              console.log(value.message)
+              Room.hide(); 
+          })
+      } else {
+        console.log('only host can start the game')
+      }
   }
 
 

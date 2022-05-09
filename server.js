@@ -229,7 +229,15 @@ const io = new Server(httpServer);
             return;
         }
     }
-
+    
+    if(Object.keys(gameDictionary).length >= 1){
+        // Force disable - assume 1 room
+        res.json({
+            success : false,
+            message : "no more room can be created"
+        });
+        return;
+    }
     //create the game here
     //Assumption -> playerDictionary contains the playerClass
 
@@ -383,8 +391,6 @@ const io = new Server(httpServer);
         })
         return;
     }
-    
-    //TEMPORARY AUTOJOIN SOLN : Pure copy paste from joinGame
 
     if(!req.session.user){
         res.json({
