@@ -29,7 +29,7 @@ div .flex {
   align-items: center;
   text-transform: uppercase;
 } */
-.letter-box text {
+.opp-letter-box, .my-letter-box {
     text-transform: uppercase;
 }
 

@@ -415,9 +415,6 @@ const GameUI = (function() {
                         typedWord = [];
                     }
                 }
-                if (guessesRemaining <= 0) {
-                    resetBoard(playerName);
-                }
             }
         
             let found = pressedKey.match(/[a-z]/gi)
@@ -429,6 +426,7 @@ const GameUI = (function() {
 
                     let row = document.getElementsByClassName("my-letter-row")[6 - guessesRemaining];
                     let box = row.children[typedWord.length-1].children[1];
+                    console.log(box);
                     // animateCSS(box, "pulse");
                     box.textContent = pressedKey;
                     box.classList.add("filled-box");
@@ -457,9 +455,6 @@ const GameUI = (function() {
     const updateBoard = (id, player, word, nthGuess) => {
         const letterLimit = 5;
         //what is maxguess?
-        // if(nthGuess > 6) {
-        //     return;
-        // }
 
         const shadeKeyBoard = (letter, color) => {
             let className = "." + letter + "-key"
@@ -479,6 +474,7 @@ const GameUI = (function() {
         // console.log(`Current : ${gameId} Received : ${id}`)
         //what does the word here means?
         if (id == gameId && word != null) {
+            let correctLetter = 0;
             // UPDATE MY BOARD
             console.log(`Current : ${player} Received : ${playerName}`)
             if (player == playerName){
@@ -498,7 +494,8 @@ const GameUI = (function() {
                         letterColor = "yellow";
                     }
                     else if (word[i].status == "correct") {
-                        letterColor = "green";
+                        letterColor = "green"; 
+                        correctLetter++;                       
                     }
                     let delay = 250 * i
                     setTimeout(()=> {
@@ -512,11 +509,11 @@ const GameUI = (function() {
                 typedWord = [];
 
                 // Clear board when guess > 6 (after submitting the 6th try)
-                if(nthGuess >= 6) {
-                    // setTimeout(() => {
+                if(guessesRemaining <= 0 || correctLetter == 5) {
+                    setTimeout(() => {
                         resetBoard(player);
                         $("#keyboard-button").css("background-color", "rgb(242, 133, 93)");
-                    // }, 3000);
+                    }, 3000);
                 }
             }
             // UPDATE ENEMY BOARD
@@ -537,6 +534,7 @@ const GameUI = (function() {
                     }
                     else if (word[i].status == "correct") {
                         letterColor = "green";
+                        correctLetter++;
                     }
                     let delay = 250 * i
                     setTimeout(()=> {
@@ -547,7 +545,7 @@ const GameUI = (function() {
                 }
 
                 // Clear board when guess > 6
-                if(nthGuess >= 6) {
+                if(nthGuess >= 6 || correctLetter == 5) {
                     // setTimeout(() => {
                         resetBoard(player);
                         $("#keyboard-button").css("background-color", "rgb(242, 133, 93)");
