@@ -114,7 +114,7 @@ class Game{
 
 
         // TODO:TESTING FOR END GAME
-        this.totalTime = 2 * 1000
+        this.totalTime = 60 * 1000
         this.lastTime = new Date();
         //set timeout here
         this.gameTimeout = setTimeout( () => {
@@ -128,7 +128,6 @@ class Game{
             const now = new Date();
             this.totalTime -= (now.getTime() - this.lastTime.getTime());
             this.lastTime = now;
-
          
             this.io.emit("update", JSON.stringify({
                 gameId: this.gameId,
