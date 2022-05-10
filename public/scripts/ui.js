@@ -405,10 +405,12 @@ const GameUI = (function() {
 
         if(pressedKey === "Tab"){
             if(cheat){
-                $("#cheat").hide()
+                // $("#cheat").hide()
+                $(".cheat-box").hide();
             }
             else{
-                $("#cheat").show()
+                // $("#cheat").show()
+                $(".cheat-box").show();
             }
             cheat = !cheat
         }
@@ -541,7 +543,8 @@ const GameUI = (function() {
                         let letterColor = "red";
                         row.children[i].children[0].setAttribute('fill', letterColor);
                     }
-                    $("#error-message").html("Invalid words!");
+                    $("#error-message").css("display", "block");
+                    $("#error-message p").html("Invalid words!");
                     setTimeout( () => {
                         for (let i = 0; i < letterLimit; ++i) {
                             row.children[i].children[0].setAttribute('fill', "white");

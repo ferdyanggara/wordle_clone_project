@@ -71,12 +71,12 @@
                 <li>Press ENTER to submit the word.</li>
             </ol>         
         </div>
-        <div class="flex">
-            <p id="global-game-id"></p>
-            <p>Time:</p>
-            <div id="global-time" class="flex" style="margin-left:20px">
-                <p style="margin-right:10px"><span id="min" style="margin-right:2px">0</span> min</p>
-                <p><span id="sec" style="margin-right:2px">0</span> sec</p>
+        <div>
+            <p style="text-align: center; margin: 0;">Time:</p>
+            <div id="global-time" class="flex" style="margin-left:20px; font-size: 30px">
+                <p style="margin:0 10px"><span id="min" style="margin-right:2px">0</span> min</p>
+                :
+                <p style="margin:0 10px"><span id="sec" style="margin-right:2px">0</span> sec</p>
             </div>       
         </div>
     </div> 
@@ -84,14 +84,18 @@
     <div class="flex" style="align-items: flex-start">
         <div>
             <h2 style="text-align: center">Your Board</h2>
-            <div style="display: flex">
+            <div style="display: flex;justify-content: center;align-items: center; margin-bottom: 10px;">
                 <h4>Score: </h4>
                 <h4 id="user-score"></h4>
             </div>
-            <div style="display: flex">
-                <p id="error-message" style="color: red"></p>
+            <div id="error-message" style="display: none">
+                <p></p>
             </div>
-            <p id="cheat"></p>
+            <div class="cheat-box">
+                <!-- <p>Answer: </p> -->
+                <p id="cheat" style="margin: 0 5px"></p>
+            </div>
+            
             <div id="game-board">
                 <!-- in logic.js -->
                 <!-- <svg xmlns="http://www.w3.org/2000/svg" width="400" height="400">
@@ -141,7 +145,7 @@
 
         <div style="margin-left: 10vw">
             <h2 style="text-align: center">Opponent's Board</h2>
-            <div style="display: flex">
+            <div style="display: flex;justify-content: center;align-items: center;">
                 <h4>Score: </h4>
                 <h4 id="opp-score"></h4>
             </div>

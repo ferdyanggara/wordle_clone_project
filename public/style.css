@@ -35,10 +35,46 @@ div .flex {
 .opp-letter-box, .my-letter-box {
     text-transform: uppercase;
 }
+#user-score {
+    font-size: 30px;
+    padding: 5px;
+    margin: 10px;
+    border-radius: 5px;
+    background: #ef6852;
+    color: white;
+}
+#opp-score {
+    font-size: 20px;
+    padding: 5px;
+    margin: 10px;
+    border-radius: 5px;
+    background: #ef6852;
+    color: white;
+}
+#error-message p {
+    color: red;
+    text-align: center;
+}
 
 .filled-box {
   border: 2px solid black;
   text-transform: uppercase;
+}
+
+.cheat-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+#cheat {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 20px;
+    color: white;
+    background: darkgreen;
+    padding: 5px 10px;
+    border-radius: 5px;
 }
 
 /* .letter-row {
