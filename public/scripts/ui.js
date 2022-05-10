@@ -157,6 +157,7 @@ const MatchMaking = (function() {
         // Hide it
         $("#matchmaking-overlay").hide();
   
+        $(".matchmaking-list").empty();
         // TODO: DUMP
         // $("#matchmaking-form").on("submit", (e) => {
         //     // Do not submit the form
@@ -204,6 +205,20 @@ const MatchMaking = (function() {
         })
 
     };
+
+    const updateList = function(roomList) {
+        $(".matchmaking-list").empty();
+        console.log(roomList)
+        let result = "";
+        roomList.forEach(value => {
+            result += `<tr>
+            <td>${value.gameId}</td>
+            <td>${value.players}/2</td>
+            </tr>`
+        })
+
+        $(".matchmaking-list").append(result);
+    }
   
     // This function shows the form
     const show = function() {
@@ -217,7 +232,7 @@ const MatchMaking = (function() {
         $("#matchmaking-overlay").fadeOut(500);
     };
   
-    return { initialize, show, hide };
+    return { initialize, show, hide, updateList };
   })();
 
 

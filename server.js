@@ -205,16 +205,30 @@ const {Server} = require("socket.io");
 const httpServer = createServer(app)
 const io = new Server(httpServer);
 
-// app.post("/addData", (req, res) => {
-//     console.log("enter adddata")
-//     console.log(req.body.name)
-//     req.session.name  = req.body.name;
-//     console.log(req.session.name)
-//     res.json({
-//         success : true,
-//         name : req.body.name
-//     })
-// })
+io.use((socket, next) => {
+    chatSession(socket.request, {}, next);
+})
+
+ // temp function
+ const roomList = () => {
+    const roomList = Object.keys(gameDictionary);
+    const result = [];
+
+    roomList.forEach(gameId => {
+        result.push({
+            gameId : gameId,
+            players : gameDictionary[gameId].getPlayerNum()
+        })
+    })
+    return result;
+ }
+
+//  setInterval( () => {
+//     console.log("sent")
+//     io.emit("roomList", JSON.stringify(roomList()));
+//  }, 1000)
+ // end function
+
 
  app.post("/createGame", (req, res) => {
     console.log("current player dict")
@@ -266,6 +280,7 @@ const io = new Server(httpServer);
 
     // console.log(`Game with ${gameId} created with player ${req.body.name}`)
     res.json({success: true, gameId : gameId, players : gameDictionary[gameId].getRoomPlayers()})
+    io.emit("roomList", JSON.stringify(roomList()));
  })
 
  app.post("/joinGame", (req, res) => {
@@ -383,8 +398,8 @@ const io = new Server(httpServer);
 
     res.json({
         success : true,
-        players : gameDictionary[gameId].getRoomPlayers()
     })
+    io.emit("roomList", JSON.stringify(roomList()));
     
  })
 
@@ -461,10 +476,6 @@ const io = new Server(httpServer);
      });
  })
 
- io.use((socket, next) => {
-    chatSession(socket.request, {}, next);
-})
-
  io.on("connection", (socket) => {
     if(socket.request.session.user == undefined){
         console.log("User has not sign in, please sign in!");
@@ -497,6 +508,7 @@ const io = new Server(httpServer);
             if(gameDictionary[gameId].getPlayerNum() <= 0){
                 gameDictionary[gameId].destroyRoom();
                 delete gameDictionary[gameId]; //clear memory
+                io.emit("roomList", JSON.stringify(roomList()));
             }
         }
         delete playerDictionary[socket.request.session.user.username];
@@ -505,6 +517,8 @@ const io = new Server(httpServer);
     })
     
  })
+
+
 
 // Use a web server to listen at port 8000
 httpServer.listen(8000, () => {
