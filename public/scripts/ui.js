@@ -561,15 +561,20 @@ const GameUI = (function() {
 
                 
                 // Update for clear typedWord so u can type after send
-                typedWord = [];
-                isType = true;
+                
                 // Clear board when guess > 6 (after submitting the 6th try)
                 if(guessesRemaining <= 0 || correctLetter == 5) {
                     setTimeout(() => {
                         resetBoard(player);
+                        typedWord = [];
+                        isType = true;
                         $(".keyboard-button").css("background-color", "rgb(242, 133, 93)");
                         correctSE.play();
                     }, 3000);
+                }
+                else{
+                    typedWord = [];
+                    isType = true;
                 }
             }
             // UPDATE ENEMY BOARD

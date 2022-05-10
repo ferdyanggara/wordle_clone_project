@@ -114,7 +114,7 @@ class Game{
 
 
         // TODO:TESTING FOR END GAME
-        this.totalTime = 1 * 1000
+        this.totalTime = 30 * 1000
         this.lastTime = new Date();
         //set timeout here
         this.gameTimeout = setTimeout( () => {

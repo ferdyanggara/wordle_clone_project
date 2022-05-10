@@ -7,7 +7,7 @@ const session = require("express-session");
 //game library
 const Game = require("./backend-class/gameClass")
 const Player = require("./backend-class/playerClass")
-
+const ScoreDictionary = require("./backend-class/scoreClass")
 // Create the Express app
 const app = express();
 
@@ -20,6 +20,7 @@ app.use(express.json());
 const gameDictionary = {};
 const playerDictionary = {};
 const usernameList = new Set();
+const highScore = ScoreDictionary.getInstance();
 
 // Use the session middleware to maintain sessions
 const chatSession = session({
@@ -439,6 +440,13 @@ const io = new Server(httpServer);
         })
     }
 
+ })
+
+ app.get("/score", (req, res) => {
+     res.json({
+         success : true,
+         data : highScore.getTopN(3)
+     });
  })
 
  io.use((socket, next) => {
