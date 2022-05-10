@@ -135,6 +135,23 @@ const Socket = (function() {
                     .then( value => {
                         HighScore.update(value.data);
                     })
+                //leave the game
+                fetch("/leaveGame", {
+                    method : "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                      },
+                    body :  JSON.stringify({
+                        gameId : currentGameId
+                    })
+                    })
+                    .then( res => res.json())
+                    .then(value => {
+                        //logically it quit already
+                        if(value.success){
+                            currentGameId = "";
+                        }
+                    })
 
                 //end the game
                 GameUI.endGame();

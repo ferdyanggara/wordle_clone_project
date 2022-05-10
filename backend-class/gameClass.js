@@ -114,7 +114,7 @@ class Game{
 
 
         // TODO:TESTING FOR END GAME
-        this.totalTime = 1 * 1000
+        this.totalTime = 60 * 1000
         this.lastTime = new Date();
         //set timeout here
         this.gameTimeout = setTimeout( () => {
@@ -163,27 +163,27 @@ class Game{
 
         const result = this.formatResult();
            // TODO: DUMP 
-           let tempRes = [{
-            player : "ferdy",
-            currentWord : "yeeha",
-            score : "20",
-            stat : {
-                attempt : [1,2,3,4,5,6], //hardcode
-                count : [1,10,2,5,3,4]
-            }
-        },{
-            player : "joan",
-            currentWord : "damn",
-            score : "100",
-            stat : {
-                attempt : [1,2,3,4,5,6], //hardcode
-                count : [1,3,10,4,32,1]
-            }
-        }]
+        //    let tempRes = [{
+        //     player : "ferdy",
+        //     currentWord : "yeeha",
+        //     score : "20",
+        //     stat : {
+        //         attempt : [1,2,3,4,5,6], //hardcode
+        //         count : [1,10,2,5,3,4]
+        //     }
+        // },{
+        //     player : "joan",
+        //     currentWord : "damn",
+        //     score : "100",
+        //     stat : {
+        //         attempt : [1,2,3,4,5,6], //hardcode
+        //         count : [1,3,10,4,32,1]
+        //     }
+        // }]
 
         this.io.emit("over", JSON.stringify({
             gameId : this.gameId,
-            result : tempRes
+            result : result
         }))
 
 

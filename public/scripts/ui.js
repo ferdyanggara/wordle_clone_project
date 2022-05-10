@@ -866,8 +866,9 @@ const EndGame = (function(){
             e.preventDefault();
             console.log("Resetting");
             //Force to close Endgame and go to matchmaking
-            RoomPortal.leaveRoom();
+            // RoomPortal.leaveRoom();
             $("#game-over").hide();
+            MatchMaking.show();
         })
     }
     return { initialize}
