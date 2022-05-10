@@ -458,6 +458,9 @@ const GameUI = (function() {
             if(timeleft <= 0){
                 clearInterval(downloadTimer);
             }
+            else if (timeleft <= 10) {
+                $(".timer-box").css("animation-name", "timer, shake");
+            }
             document.getElementById("sec").value = timeleft;
             timeleft -= 1;
         }, 1000);
