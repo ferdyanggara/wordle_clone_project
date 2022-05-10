@@ -451,6 +451,16 @@ const GameUI = (function() {
             }, false);
         }
         bgm.play();
+
+        // Timer
+        let timeleft = 60;
+        let downloadTimer = setInterval(function() {
+            if(timeleft <= 0){
+                clearInterval(downloadTimer);
+            }
+            document.getElementById("sec").value = timeleft;
+            timeleft -= 1;
+        }, 1000);
         $(".timer-box").css("animation-name", "timer");
         
 
