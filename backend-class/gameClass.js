@@ -97,7 +97,7 @@ class Game{
     }
 
     startGame(){
-        if(this.gameState){
+        if(this.gameState || this.getPlayerNum() < 2){
             return false;
         }
         console.log(`Game ${this.gameId} starting`)

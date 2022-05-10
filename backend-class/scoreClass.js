@@ -58,7 +58,6 @@ class ScoreDictionary{
             totalGuess : totalGuess,
             score : scoreData.score,
             avgGuess : totalGuess / scoreData.score,
-            avgGuessPerScore : toz
         };
     }
 
@@ -90,37 +89,37 @@ class ScoreDictionary{
     }
 }
 
-const temp = ScoreDictionary.getInstance();
+// const temp = ScoreDictionary.getInstance();
 
-temp.addScoreData({
-    player : "ferdy",
-    currentWord : "yeeha",
-    score : 20,
-    stat : {
-        attempt : [1,2,3,4,5,6], //hardcode
-        count : [1,10,2,5,3,4]
-    }
-});
-temp.addScoreData({
-    player : "test1",
-    currentWord : "yeeha",
-    score : 15,
-    stat : {
-        attempt : [1,2,3,4,5,6], //hardcode
-        count : [1,1,2,3,3,4]
-    }
-});
-temp.addScoreData({
-    player : "test2",
-    currentWord : "yeeha",
-    score : 10,
-    stat : {
-        attempt : [1,2,3,4,5,6], //hardcode
-        count : [1,3,2,2,3,1]
-    }
-});
+// temp.addScoreData({
+//     player : "ferdy",
+//     currentWord : "yeeha",
+//     score : 20,
+//     stat : {
+//         attempt : [1,2,3,4,5,6], //hardcode
+//         count : [1,10,2,5,3,4]
+//     }
+// });
+// temp.addScoreData({
+//     player : "test1",
+//     currentWord : "yeeha",
+//     score : 15,
+//     stat : {
+//         attempt : [1,2,3,4,5,6], //hardcode
+//         count : [1,1,2,3,3,4]
+//     }
+// });
+// temp.addScoreData({
+//     player : "test2",
+//     currentWord : "yeeha",
+//     score : 10,
+//     stat : {
+//         attempt : [1,2,3,4,5,6], //hardcode
+//         count : [1,3,2,2,3,1]
+//     }
+// });
 
-console.log(temp.getTopN(2));
+// console.log(temp.getTopN(2));
 
 
 module.exports = ScoreDictionary;
