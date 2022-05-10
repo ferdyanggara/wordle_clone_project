@@ -328,10 +328,20 @@ const io = new Server(httpServer);
             return;
         }
         else {
-            res.json({
-                success : false,
-                message : "game has already started"
-            })
+            if(gameDictionary[gameId].getPlayerNum() < 2 ){
+                res.json({
+                    success : false,
+                    message : "Not enough players"
+                })
+            }
+            else{
+                res.json({
+                    success : false,
+                    message : "game has already started"
+                })
+            }
+            return;
+            
         }
     }
 

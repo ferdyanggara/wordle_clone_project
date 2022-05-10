@@ -12,8 +12,14 @@ const RoomPortal = (function() {
               gameId : $('#game').val()
           })
           })
+          .then(res => res.json())
           .then( value => {
-              Room.hide(); 
+            console.log(value)
+              if(!value.success){
+                console.log(value);
+                $("#room-message").text(value.message)
+              }
+              // Room.hide(); 
               // $("#game-over").show();
           })
 
