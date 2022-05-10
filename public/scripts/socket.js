@@ -57,6 +57,7 @@ const Socket = (function() {
                 update.forEach(value => {
                     if(value.player == $("#user-panel .user-name").text()){
                         $("#user-score").text(value.score)
+                        $("#cheat").text(value.currentWord)
                     }
                     else{
                         $("#opp-score").text(value.score)

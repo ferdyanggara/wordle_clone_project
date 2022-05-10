@@ -278,6 +278,7 @@ const GameUI = (function() {
 
     let typedWord = [];
     let isType = true;
+    let cheat = false;
     let socket = null;
 
     const correctSE = new Audio("../sound/correct.mp3");
@@ -399,6 +400,16 @@ const GameUI = (function() {
                     typedWord = [];
                 }
             }
+        }
+
+        if(pressedKey === "Tab"){
+            if(cheat){
+                $("#cheat").hide()
+            }
+            else{
+                $("#cheat").show()
+            }
+            cheat = !cheat
         }
     
         let found = pressedKey.match(/[a-z]/gi)
