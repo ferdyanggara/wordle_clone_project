@@ -458,10 +458,10 @@ const GameUI = (function() {
             if(timeleft <= 0){
                 clearInterval(downloadTimer);
             }
-            else if (timeleft <= 10) {
+            document.getElementById("sec").value = timeleft;
+            if(timeleft <= 10) {
                 $(".shake").css("animation-name", "shake");
             }
-            document.getElementById("sec").value = timeleft;
             timeleft -= 1;
         }, 1000);
         $(".timer-box").css("animation-name", "timer");
@@ -720,7 +720,7 @@ const HighScore = (function() {
         // */
     };
 
-    return { initialize, show, hide, update };
+    return { initialize, update };
 })();
 
 const UI = (function() {

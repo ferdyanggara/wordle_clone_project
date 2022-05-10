@@ -16,6 +16,10 @@ div .flex {
   margin: 5px 0;
 }
 
+#game-over {
+    transition: 0.8s ease;
+}
+
 #game-board, #opponent-board {
   display: flex;
   align-items: center;
@@ -457,4 +461,20 @@ table, th, td {
     animation-name: none;
     animation-duration: 60s;
     border-radius: 5px;
+}
+
+.shake {
+    animation-name: none;
+    animation-duration: 0.5s;
+}
+
+/* Close overlay */
+.close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 5px 10px;
+    margin: 5px;
+    font-size: 20px;
+    font-weight: 600;
 }

@@ -61,7 +61,7 @@
         <div style="margin-top: 10px;">
             <p style="text-align: center; margin: 0; text-transform: uppercase;">Time</p>
             <div id="global-time" class="flex" style="font-size: 30px">
-                <div class="shake">
+                <div class="shake flex row">
                     <div class="col timer-box" style="margin-right: 10px;">
                         <span id="min" style="margin-right:2px">0</span>
                         <p style="margin:0 10px; font-size: 20px; text-transform: uppercase;">min</p>
@@ -202,9 +202,10 @@
     </div>
 
 
-    <div id="game-over" style="display: none">
+    <div id="game-over" style="display: none;">
         <div id="gameover-overlay" class="overlay row">
-            <div class="content shadow col">
+            <div class="content shadow col" style="position: relative;">
+                <button class="close">x</button>
                 <div>
                     <!-- END GAME -->
                     <h1 style="text-align: center; letter-spacing: 9px; color: orangered;">GAME OVER</h1>
