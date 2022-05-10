@@ -1,3 +1,13 @@
+@keyframes scaling{
+    50% {transform : scale(1.2)}
+    100% {transform : scale(1)}
+}
+
+#scale-anim {
+    animation : scaling 1s;
+    animation-iteration-count: 1;
+}
+
 h1 {
  text-align: center;
 }
