@@ -848,7 +848,7 @@ const UserStatistics = (function() {
         options: {
             title: {
               display: true,
-              text: `${playerData[1].player} guess distribution`
+              text: `${playerData[1].player} attempt distribution`
             }, 
           }
         });
