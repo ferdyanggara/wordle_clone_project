@@ -21,10 +21,11 @@ const GamePortal = (function() {
         .then( value => {
             if(value.success){
                 console.log("Game found with: ", value.gameId);
-                // const {players} = value;
+                Socket.setGameId(value.gameId);
+                const {players} = value;
+                GamePortal.addTableWithSocket(players);
                 // ADDED TO randomJoin CHANGES
                 $('#game').val(value.gameId);
-                Socket.setGameId(value.gameId);
                 $('#global-game-id').text(value.gameId);
                 // addUserToTable(Authentication.getUser().username, false);
                 // END CHANGES
@@ -58,6 +59,8 @@ const GamePortal = (function() {
                 // console.log(value)
                 $('#game').val(value.gameId);
                 Socket.setGameId(value.gameId);
+                const {players} = value;
+                GamePortal.addTableWithSocket(players);
                 $('#global-game-id').text(value.gameId);
                 MatchMaking.hide();
                 // if(socket == null){

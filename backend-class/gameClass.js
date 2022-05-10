@@ -301,6 +301,10 @@ class Game{
         return Object.values(this.playerData).length;
     }
 
+    getRoomPlayers(){
+        return Object.values(this.playerData).map(value => value.player.data);
+    }
+
     getPlayer(){
         return Object.values(this.playerData);
     }

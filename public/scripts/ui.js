@@ -437,6 +437,9 @@ const GameUI = (function() {
         gameId = gameData;
         playerName = playerData;
         enemyName = enemyData;
+
+        $("#cheat").hide()
+        cheat = false;
         // full setup game data
         if (typeof bgm.loop == 'boolean'){
             bgm.loop = true;

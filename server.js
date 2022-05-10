@@ -265,7 +265,7 @@ const io = new Server(httpServer);
 
 
     // console.log(`Game with ${gameId} created with player ${req.body.name}`)
-    res.json({success: true, gameId : gameId})
+    res.json({success: true, gameId : gameId, players : gameDictionary[gameId].getRoomPlayers()})
  })
 
  app.post("/joinGame", (req, res) => {
@@ -372,7 +372,8 @@ const io = new Server(httpServer);
     }
 
     res.json({
-        success : true
+        success : true,
+        players : gameDictionary[gameId].getRoomPlayers()
     })
     
  })
@@ -428,7 +429,8 @@ const io = new Server(httpServer);
         res.json(result ? {
             success : true,
             message: req.session.user.username,
-            gameId : gameId
+            gameId : gameId,
+            players : gameDictionary[gameId].getRoomPlayers()
         } : {
             success : false,
             message : "game started"
