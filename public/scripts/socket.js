@@ -149,17 +149,28 @@ const Socket = (function() {
             console.log("room update")
             const host = Authentication.getUser().name;
             console.log(JSON.parse(value));
-            let players = JSON.parse(value).players;
+            const {gameId, players} = JSON.parse(value)
             console.log(`${players} in ${host} on socket`)
             console.log(players);
-            if (!(players.includes(host))){
-                console.log("why?")
-                Room.hide() 
-                MatchMaking.show()
-            } else {
-                console.log("modify")
+
+            // if (!(players.includes(host))){
+            //     console.log("why?")
+            //     Room.hide() 
+            //     MatchMaking.show()
+            // } else {
+            //     console.log("modify")
+            //     GamePortal.addTableWithSocket(players)
+            // }
+
+            if(gameId == currentGameId){
+                if(!(players.includes(host))){
+                    Room.hide();
+                    MatchMaking.show();
+                    currentGameId = '';
+                }
                 GamePortal.addTableWithSocket(players)
             }
+
         })
         //TODO : Connect to UI
         // Add socket.emit to keydown enter function
