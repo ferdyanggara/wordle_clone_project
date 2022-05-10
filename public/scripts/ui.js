@@ -529,6 +529,11 @@ const GameUI = (function() {
                 return
             }
             $(className).css("background-color", color);
+            $(className).attr("id", "scale-anim");
+            $(className).on("animationend", () => {
+                $(className).css("animation-name", "none");
+            })
+            $(className).css("animation-name", "scaling");
         }
 
         console.log("entering update")
@@ -702,6 +707,20 @@ const GameUI = (function() {
     return { initialize, startGame, updateBoard, resetBoard, endGame};
 })();
 
+const HighScore = (function() {
+    // This function initializes the UI
+    const initialize = function() {
+        // clean the data
+        $("#game-over-result").empty()
+    };
+
+    // This function updates the user panel
+    const update = function(user) {
+        // */
+    };
+
+    return { initialize, show, hide, update };
+})();
 
 const UI = (function() {
   // This function gets the user display
