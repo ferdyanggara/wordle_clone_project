@@ -234,6 +234,12 @@ body {
     width: 100%; height: 100%;
     background: var(--overlay-background);
 }
+.game-overlay {
+    position: fixed;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background: var(--overlay-background);
+}
 
 .overlay .caption {
     font-size: 120%;
@@ -242,6 +248,15 @@ body {
 .overlay .content {
     background: var(--overlay-content-background);
     width: 50vw;
+    text-align: center;
+}
+.game-overlay .caption {
+    font-size: 120%;
+    color: var(--overlay-caption-color);
+}
+.game-overlay .content {
+    background: var(--overlay-content-background);
+    width: 80vw;
     text-align: center;
 }
 .warning {
