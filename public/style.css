@@ -469,7 +469,7 @@ table, th, td {
 }
 
 /* Close overlay */
-.close {
+.close-game-over {
     position: absolute;
     top: 0;
     right: 0;
