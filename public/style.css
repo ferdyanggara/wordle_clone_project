@@ -117,10 +117,9 @@ div .flex {
 .gray {
     background-color: gray;
 }
-/* 
-.orange {
-    background-color: rgb(242, 133, 93);
-} */
+#game-over table thead {
+    background: rgb(242, 133, 93);
+}
 
 @import url("https://fonts.googleapis.com/css2?family=Abel&display=swap");
 :root {
