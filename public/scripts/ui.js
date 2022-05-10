@@ -754,12 +754,107 @@ const HighScore = (function() {
             result += `<tr>
             <td>${value.player}</td>
             <td>${value.stat.score}</td>
-            <td>${value.stat.totalGuess}</td>
-            <td>${value.stat.avgGuess}</td>
+            <td>${Math.round(value.stat.totalGuess)}</td>
+            <td>${Math.round(value.stat.avgGuess)}</td>
         </tr>`
         })
         $('#game-over-result').empty();
         $('#game-over-result').append(result);
+
+       
+
+    };
+
+    return { initialize, update };
+})();
+
+const UserStatistics = (function() {
+    // This function initializes the UI
+    const initialize = function() {
+        // clean the data
+        $("#user-statistics").empty()
+    };
+
+    // This function updates the user panel
+    const update = function(playerData) {
+        /**
+         * data format
+         * [
+            {
+                player: 'ferdy',
+                stat: { totalGuess: 25, score: 20, avgGuess: 1.25 }
+            },
+            {
+                player: 'test1',
+                stat: { totalGuess: 14, score: 15, avgGuess: 0.9333333333333333 }
+            }
+            ]
+         */
+        result = "";
+        playerData.forEach(value => {
+            result += `<tr>
+            <td>${value.player}</td>
+            <td>${value.currentWord}</td>
+            <td>${value.score}</td>
+        </tr>`
+        })
+        $('#user-statistics').empty();
+        $('#user-statistics').append(result);
+
+
+
+        var xValues = ["1","2","3","4","5","6" ];
+
+
+        var barColors = [
+        "#b91d47",
+        "#00aba9",
+        "#2b5797",
+        "#e8c3b9",
+        "#1e7145",
+        "#FFFF00"
+        ];
+
+        new Chart("myChart", {
+        type: "pie",
+        data: {
+            labels: xValues,
+            datasets: [
+              {
+                backgroundColor: barColors,
+                data: playerData[0].stat.count
+              }
+        ]
+        },
+        options: {
+            title: {
+              display: true,
+              text: `${playerData[0].player} attempt distribution`
+            }
+          }
+        });
+
+        new Chart("oppChart", {
+        type: "pie",
+        data: {
+            labels: xValues,
+            datasets: [
+              {
+                backgroundColor: barColors,
+                data: playerData[1].stat.count
+              }
+        ]
+        },
+        options: {
+            title: {
+              display: true,
+              text: `${playerData[1].player} guess distribution`
+            }, 
+          }
+        });
+
+        console.log('chart created')
+
     };
 
     return { initialize, update };
@@ -775,7 +870,6 @@ const EndGame = (function(){
             $("#game-over").hide();
         })
     }
-
     return { initialize}
 })();
 
@@ -788,7 +882,7 @@ const UI = (function() {
           .append($("<span class='user-name'>" + user.name + "</span>"));
   };
 
-  const components = [SignInForm, UserPanel, MatchMaking, ProjectIntroduction, Room, GameUI, EndGame];
+  const components = [SignInForm, UserPanel, MatchMaking, ProjectIntroduction, Room, GameUI, EndGame, UserStatistics];
 
 
   // This function initializes the UI

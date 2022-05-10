@@ -140,15 +140,16 @@ const Socket = (function() {
                 GameUI.endGame();
                 console.log("entered")
                 $("#game-over").show();
-                const gameOverTable = $("#game-over-result");
-                gameOverTable.empty();
+                UserStatistics.update(result)
+                // const gameOverTable = $("#game-over-result");
+                // gameOverTable.empty();
 
-                result.forEach(value => {
-                    gameOverTable.append(`<tr>
-                    <th>${value.player}</th>
-                    <th>${value.score}</th>
-                    </tr>`)
-                });
+                // result.forEach(value => {
+                //     gameOverTable.append(`<tr>
+                //     <th>${value.player}</th>
+                //     <th>${value.score}</th>
+                //     </tr>`)
+                // });
 
             }
             //temp hide
