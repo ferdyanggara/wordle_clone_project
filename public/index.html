@@ -213,16 +213,29 @@
         <div id="matchmaking-overlay" class="overlay row">
             <div class="content shadow row">
             <table>
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Stats</th>
-                </tr>
-            </thead>
-            <tbody id="game-over-result">
-            </tbody>
-        </table>
-                <div id="matchmaking-message" class="warning center"></div>
+                <thead>
+                    <tr>
+                        <th rowspan="2">User Name</th>
+                        <th rowspan="2">Score</th>
+                        <th colspan="2">Status</th>
+                    </tr>
+                    <tr>
+                        <th>Total Score</th>
+                        <th>Average Score</th>
+                    </tr>
+                </thead>
+                <tbody id="game-over-result">
+                    <!-- Score History -->
+                    <!-- Example -->
+                    <tr>
+                        <td>Nadya</td>
+                        <td>10</td>
+                        <td>50</td>
+                        <td>10</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div id="matchmaking-message" class="warning center"></div>
             </div>
         </div>
     </div>
