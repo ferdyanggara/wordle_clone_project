@@ -174,7 +174,6 @@
 
     <div id="room-overlay" class="overlay row">
         <div class="content shadow row">
-            <div id="insert-table">
                 <table>
                     <thead>
                         <tr>
@@ -182,10 +181,9 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="insert-table">
                     </tbody>
                 </table>
-            </div>
             <form id="room-form" class="col">
                 <div>
                     <b> Game Id</b>
@@ -212,16 +210,22 @@
 
 
     <div id="game-over" style="display: none">
-        <table>
+     
+        <div id="matchmaking-overlay" class="overlay row">
+            <div class="content shadow row">
+            <table>
             <thead>
                 <tr>
                     <th>User</th>
-                    <th>Action</th>
+                    <th>Stats</th>
                 </tr>
             </thead>
             <tbody id="game-over-result">
             </tbody>
         </table>
+                <div id="matchmaking-message" class="warning center"></div>
+            </div>
+        </div>
     </div>
 
     
