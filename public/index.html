@@ -194,10 +194,29 @@
     </div>
 
     <div id="matchmaking-overlay" class="overlay row">
-        <div class="content shadow row">
-            <button id='createGame'>Create Game</button>
-            <button id='quickJoin'>Quick Join</button>
+        <div class="content shadow col">
+            <h1 style="text-transform: uppercase;letter-spacing: 5px;margin: 5px 0;">Main Menu</h1>
+            <div class="row">
+                <button id='createGame'>Create Game</button>
+                <button id='quickJoin'>Quick Join</button>
+            </div>
             <div id="matchmaking-message" class="warning center"></div>
+            <div id="matchmaking-table">
+                <h4 style="margin: 0;text-transform: uppercase;letter-spacing: 2px;">Available Room</h4>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Room</th>
+                            <th>Occupancy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- example -->
+                        <td>000</td>
+                        <td>2</td>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
