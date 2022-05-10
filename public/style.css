@@ -418,3 +418,19 @@ table th, table td {
 table, th, td {
     border: 1px solid;
 }
+
+
+/* TIME */
+@keyframes timer {
+    0% { background-color: green; color: white; }
+    25% { background-color: greenyellow; color: white; }
+    50% { background-color: yellow; color: white; }
+    75% { background-color: orange; color: white; }
+    100% { background-color: red; color: white; }
+}
+
+.timer-box {
+    animation-name: none;
+    animation-duration: 60s;
+    border-radius: 5px;
+}

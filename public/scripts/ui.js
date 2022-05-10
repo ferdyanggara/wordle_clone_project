@@ -451,6 +451,7 @@ const GameUI = (function() {
             }, false);
         }
         bgm.play();
+        $(".timer-box").css("animation-name", "timer");
         
 
         // reset all boards including player and enemy
@@ -679,6 +680,7 @@ const GameUI = (function() {
         bgm.pause();
         bgm.currentTime = 0;
         gameOver.play();
+        $(".timer-box").css("animation-name", "none");
         console.log("entering endGame");
         document.removeEventListener("keyup", keyboardHandler)
         

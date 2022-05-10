@@ -58,18 +58,24 @@
                 <li>Press ENTER to submit the word.</li>
             </ol>         
         </div>
-        <div>
-            <p style="text-align: center; margin: 0; text-transform: uppercase;">Time:</p>
-            <div id="global-time" class="flex" style="margin-left:20px; font-size: 30px">
-                <p style="margin:0 10px"><span id="min" style="margin-right:2px">0</span> min</p>
-                :
-                <p style="margin:0 10px"><span id="sec" style="margin-right:2px">0</span> sec</p>
+        <div style="margin-top: 10px;">
+            <p style="text-align: center; margin: 0; text-transform: uppercase;">Time</p>
+            <div id="global-time" class="flex" style="font-size: 30px">
+                <div class="col timer-box" style="margin-right: 10px;">
+                    <span id="min" style="margin-right:2px">0</span>
+                    <p style="margin:0 10px; font-size: 20px; text-transform: uppercase;">min</p>
+                </div>
+                <div class="col timer-box">
+                    <span id="sec" style="margin-right:2px">0</span> 
+                    <p style="margin:0 10px; font-size: 20px; text-transform: uppercase;">sec</p>
+                </div>
+                
             </div>       
         </div>
     </div> 
     
     <div class="flex" style="align-items: flex-start">
-        <div>
+        <div style="width: 30%">
             <h2 style="text-align: center">Your Board</h2>
             <div style="display: flex;justify-content: center;align-items: center; margin-bottom: 10px;">
                 <h4>Score: </h4>
@@ -130,7 +136,7 @@
             </div>
         </div>
 
-        <div style="margin-left: 10vw">
+        <div style="width: 30%; margin-left: 10vw">
             <h2 style="text-align: center">Opponent's Board</h2>
             <div style="display: flex;justify-content: center;align-items: center;">
                 <h4>Score: </h4>
