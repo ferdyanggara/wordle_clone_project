@@ -15,6 +15,9 @@
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
   />
+  <script
+src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
   <style>
     
   </style>
@@ -224,13 +227,41 @@
 
 
     <div id="game-over" style="display: none;">
-        <div id="gameover-overlay" class="overlay row">
-            <div class="content shadow col" style="position: relative;">
+        <div id="gameover-overlay" class="game-overlay row">
+            <div class="content shadow col" style="position: relative">
                 <button class="close-game-over">x</button>
                 <div>
                     <!-- END GAME -->
                     <h1 style="text-align: center; letter-spacing: 9px; color: orangered;">GAME OVER</h1>
-                    <h3>Winner: <span id="winner"></span></h3>
+                <div style="width: 100%;display: flex;flex-direction: row;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><p>Username</p></th>
+                                <th><p>Current word</p></th>
+                                <th><p>Score</p></th>
+                            </tr>
+                        </thead>
+                        <tbody id="user-statistics">
+                            <!-- Score History -->
+                            <!-- Example -->
+                            <tr>
+                                <td>Nadya</td>
+                                <td>10</td>
+                                <td>50</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- TODO: CHART -->
+                    <div class="col" style="margin-top: 10px;">
+                    <p style="text-align: center;">*distribution on which attempt correct guess made</p>
+                    <div class="row">
+                        <canvas id="myChart" style="width:100%;max-width:400px"></canvas>
+                        <canvas id="oppChart" style="width:100%;max-width:400px"></canvas>
+                    </div>
+                    </div>
+             
+                </div>
                 </div>
                 <div id="high-score-table">
                     <!-- HIGH SCORE -->
@@ -238,13 +269,10 @@
                     <table>
                         <thead>
                             <tr>
-                                <th rowspan="2">User Name</th>
-                                <th rowspan="2">Score</th>
-                                <th colspan="2">Status</th>
-                            </tr>
-                            <tr>
-                                <th>Total Guess</th>
-                                <th>Average Guess per score</th>
+                                <th><p>Username</p></th>
+                                <th><p>Score</p></th>
+                                <th><p>Total Guess</p></th>
+                                <th><p>Avg Guess/score</p></th>
                             </tr>
                         </thead>
                         <tbody id="game-over-result">
