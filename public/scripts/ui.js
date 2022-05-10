@@ -459,7 +459,7 @@ const GameUI = (function() {
                 clearInterval(downloadTimer);
             }
             else if (timeleft <= 10) {
-                $(".timer-box").css("animation-name", "timer, shake");
+                $(".shake").css("animation-name", "shake");
             }
             document.getElementById("sec").value = timeleft;
             timeleft -= 1;
@@ -699,6 +699,7 @@ const GameUI = (function() {
         bgm.currentTime = 0;
         gameOver.play();
         $(".timer-box").css("animation-name", "none");
+        $(".shake").css("animation-name", "none");
         console.log("entering endGame");
         document.removeEventListener("keyup", keyboardHandler)
         
