@@ -183,10 +183,10 @@ const Socket = (function() {
             }
 
         })
-        //TODO : Connect to UI
-        // Add socket.emit to keydown enter function
-
-        // socket.emit("word-sent", $("#word").val());
+        
+        socket.on("roomList", (value) => {
+            MatchMaking.updateList(JSON.parse(value))
+        })
     };
 
 

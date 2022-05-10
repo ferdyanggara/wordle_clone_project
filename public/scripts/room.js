@@ -43,7 +43,6 @@ const RoomPortal = (function() {
         // let leavedUser = Authentication.getUser().username
         // specificUser = $(`#${leavedUser}`);
         // specificUser.remove()
-        console.log(value)
         Socket.setGameId("");
         Room.hide();
         MatchMaking.show();
