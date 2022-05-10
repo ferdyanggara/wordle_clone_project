@@ -163,9 +163,6 @@ class Game{
         })
 
         const result = this.formatResult();
-
-       
-
            // TODO: DUMP 
            let tempRes = [{
             player : "ferdy",
