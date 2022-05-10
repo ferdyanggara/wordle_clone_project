@@ -438,7 +438,7 @@ const GameUI = (function() {
         playerName = playerData;
         enemyName = enemyData;
 
-        $("#cheat").hide()
+        $(".cheat-box").hide()
         cheat = false;
         // full setup game data
         if (typeof bgm.loop == 'boolean'){
@@ -679,6 +679,7 @@ const GameUI = (function() {
         bgm.pause();
         bgm.currentTime = 0;
         gameOver.play();
+        console.log("entering endGame");
         document.removeEventListener("keyup", keyboardHandler)
         
     }

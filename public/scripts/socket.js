@@ -120,7 +120,6 @@ const Socket = (function() {
             //currently there is no fix area for the gameId so yes 
 
             const {gameId, result} = JSON.parse(value);
-            const currentGameId = $('#global-game-id').text(); //idk where to find global room number
 
             console.log('GAME ENDS WHAT IS RESULT: ', result)
 
@@ -184,6 +183,9 @@ const Socket = (function() {
     const disconnect = function() {
         socket.disconnect();
         socket = null;
+        currentGameId = null;
+        currentPlayer = null;
+        currentOpponent = null;
     };
 
     // // This function sends a post message event to the server
