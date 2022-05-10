@@ -752,7 +752,7 @@ const HighScore = (function() {
 
 const EndGame = (function(){
     const initialize = () => {
-        $("#close-game-over").click((e) => {
+        $(".close-game-over").click((e) => {
             e.preventDefault();
             console.log("Resetting");
             //Force to close Endgame and go to matchmaking
