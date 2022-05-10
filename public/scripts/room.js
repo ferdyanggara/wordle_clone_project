@@ -13,7 +13,6 @@ const RoomPortal = (function() {
           })
           })
           .then( value => {
-              console.log(value.message)
               Room.hide(); 
               // $("#game-over").show();
           })
