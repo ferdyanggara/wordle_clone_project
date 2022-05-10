@@ -478,3 +478,9 @@ table, th, td {
     font-size: 20px;
     font-weight: 600;
 }
+
+#winner {
+    color: red;
+    text-transform: uppercase;
+    margin-left: 6px;
+}
