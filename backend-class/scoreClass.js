@@ -63,7 +63,6 @@ class ScoreDictionary{
 
     getTopN(n){
         // lazy implementation
-        console.log(this.#highScore)
         const topKey = Object.keys(this.#highScore);
         console.log(topKey)
         topKey.sort((a,b) => {
