@@ -110,7 +110,7 @@ const GamePortal = (function() {
       isHost = host ? "host" : "guest";
         markup = "<tr id="+ name + "><td>" 
             + name + " (" + isHost +") </td><td><button id='leave-submit' onclick='RoomPortal.leaveRoom()'>leave</button></td></tr>";
-        tableBody = $("table tbody");
+        tableBody = $("#insert-table");
         tableBody.append(markup);
   }
 
@@ -123,7 +123,7 @@ const GamePortal = (function() {
       markup += "<tr id="+ player+ "><td>" 
             + player + `</td><td>${ player == currentName ? "<button id='leave-submit' onclick='RoomPortal.leaveRoom()'>leave</button>" : ""}</td></tr>`;
       }
-        tableBody = $("table tbody");
+        tableBody = $("#insert-table");
         tableBody.empty().append(markup);
   }
 
