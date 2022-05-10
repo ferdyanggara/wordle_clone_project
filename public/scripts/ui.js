@@ -282,6 +282,7 @@ const GameUI = (function() {
     let socket = null;
 
     const correctSE = new Audio("../sound/correct.mp3");
+    const wrongSE = new Audio("../sound/wrong.mp3");
     const gameOver = new Audio("../sound/gameOver.mp3");
     const bgm = new Audio("../sound/bgm.mp3");
 
@@ -549,6 +550,7 @@ const GameUI = (function() {
                         $("#error-message").html("");
                     }, 1000);
                     guessesRemaining++;
+                    wrongSE.play();
                 }
                 else{
                     for (let i = 0; i < letterLimit; ++i) {
@@ -573,6 +575,11 @@ const GameUI = (function() {
                 
                 // Update for clear typedWord so u can type after send
                 
+                // Play SE when correct answer
+                if (correctLetter == 5) {
+                    correctSE.play();
+                }
+                
                 // Clear board when guess > 6 (after submitting the 6th try)
                 if(guessesRemaining <= 0 || correctLetter == 5) {
                     setTimeout(() => {
@@ -580,7 +587,6 @@ const GameUI = (function() {
                         typedWord = [];
                         isType = true;
                         $(".keyboard-button").css("background-color", "rgb(242, 133, 93)");
-                        correctSE.play();
                     }, 3000);
                 }
                 else{
@@ -610,7 +616,6 @@ const GameUI = (function() {
                     }
                     let delay = 250 * i
                     setTimeout(()=> {
-                        // animateCSS(box, 'flipInX')
                         row.children[i].children[0].setAttribute('fill', letterColor)
                     }, delay)
                 }
