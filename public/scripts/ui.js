@@ -483,6 +483,10 @@ const GameUI = (function() {
             if (!target.classList.contains("keyboard-button")) {
                 return
             }
+
+            if(!isType){
+                return
+            }
             let key = target.textContent
         
             if (key === "Del") {
@@ -716,11 +720,48 @@ const HighScore = (function() {
     };
 
     // This function updates the user panel
-    const update = function(user) {
-        // */
+    const update = function(playerData) {
+        /**
+         * data format
+         * [
+            {
+                player: 'ferdy',
+                stat: { totalGuess: 25, score: 20, avgGuess: 1.25 }
+            },
+            {
+                player: 'test1',
+                stat: { totalGuess: 14, score: 15, avgGuess: 0.9333333333333333 }
+            }
+            ]
+         */
+        result = "";
+        playerData.forEach(value => {
+            result += `<tr>
+            <td>${value.player}</td>
+            <td>${value.stat.score}</td>
+            <td>${value.stat.totalGuess}</td>
+            <td>${value.stat.avgGuess}</td>
+        </tr>`
+        })
+        $('#game-over-result').empty();
+        $('#game-over-result').append(result);
     };
 
     return { initialize, update };
+})();
+
+const EndGame = (function(){
+    const initialize = () => {
+        $(".close-game-over").click((e) => {
+            e.preventDefault();
+            console.log("Resetting");
+            //Force to close Endgame and go to matchmaking
+            RoomPortal.leaveRoom();
+            $("#game-over").hide();
+        })
+    }
+
+    return { initialize}
 })();
 
 const UI = (function() {
@@ -732,7 +773,7 @@ const UI = (function() {
           .append($("<span class='user-name'>" + user.name + "</span>"));
   };
 
-  const components = [SignInForm, UserPanel, MatchMaking, ProjectIntroduction, Room, GameUI];
+  const components = [SignInForm, UserPanel, MatchMaking, ProjectIntroduction, Room, GameUI, EndGame];
 
 
   // This function initializes the UI

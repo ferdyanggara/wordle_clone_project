@@ -124,6 +124,18 @@ const Socket = (function() {
             console.log('GAME ENDS WHAT IS RESULT: ', result)
 
             if( gameId == currentGameId ){
+                //update the highscore
+                fetch("/score", {
+                    method : "GET",
+                    headers: {
+                        'Content-Type': 'application/json'
+                      }
+                    })
+                    .then( res => res.json())
+                    .then( value => {
+                        HighScore.update(value.data);
+                    })
+
                 //end the game
                 GameUI.endGame();
                 console.log("entered")
@@ -208,5 +220,13 @@ const Socket = (function() {
         console.log(`Updated player name ${currentPlayer}`)
     }
 
-    return { getSocket, connect, disconnect, setGameId, setPlayer };
+    const getGameId = function(){
+        return currentGameId;
+    }
+
+    const getPlayer = function(){
+        return currentPlayer
+    }
+
+    return { getSocket, connect, disconnect, setGameId, setPlayer, getGameId, getPlayer };
 })();
