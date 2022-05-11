@@ -3,12 +3,14 @@ const fs = require("fs")
 class ScoreDictionary{
 
     #highScore = {}; //should be only 3 person
+    #winRate = {}
 
     static #instance = null;
 
     // base data should be { player : string, score : _ }
     constructor(){
         this.#highScore = JSON.parse(fs.readFileSync("./data/score.json"));
+        this.#winRate = JSON.parse(fs.readFileSync("./data/win.json"));
     }
 
     static getInstance(){
@@ -49,6 +51,23 @@ class ScoreDictionary{
         fs.writeFileSync("./data/score.json", JSON.stringify(this.#highScore));
     }
 
+    addWin(player, isWin){
+        if(!(this.#winRate[player])){
+            this.#winRate[player] = {
+                win : 0,
+                lose : 0
+            };
+        }
+
+        if(isWin){
+            this.#winRate[player].win += 1;
+        }
+        else{
+            this.#winRate[player].lose += 1;
+        }
+        fs.writeFileSync("./data/win.json", JSON.stringify(this.#winRate));
+    }
+
     getStats(scoreData){
         let totalGuess = 0;
         for(let i = 0; i < scoreData.stat.count.length; i++){
@@ -76,10 +95,17 @@ class ScoreDictionary{
                 if(result.length >= n){
                     return result;
                 }
+
                 const target =this.#highScore[topKey[i]].players[j];
+                console.log(target)
+
+                const winStat = this.#winRate[target];
+                // const winRate = winStat.lose != 0 ? (winStat.win * 100)/winStat.lose : (winStat.win > 0 ? 100 : 0); 
+                console.log(winStat)
                 result.push({
                     player : target,
-                    stat : this.#highScore[topKey[i]].stats[target]
+                    stat : this.#highScore[topKey[i]].stats[target],
+                    winRate : Math.min(winStat.win / (winStat.lose + 1), 1)
                 })
             }
         }
@@ -88,7 +114,7 @@ class ScoreDictionary{
     }
 }
 
-// const temp = ScoreDictionary.getInstance();
+const temp = ScoreDictionary.getInstance();
 
 // temp.addScoreData({
 //     player : "ferdy",
@@ -117,6 +143,12 @@ class ScoreDictionary{
 //         count : [1,3,2,2,3,1]
 //     }
 // });
+
+// temp.addWin("ferdy", true);
+// temp.addWin("test1", true);
+// temp.addWin("test2", true);
+// temp.addWin("test2", false);
+
 
 // console.log(temp.getTopN(2));
 

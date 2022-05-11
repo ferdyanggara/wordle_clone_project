@@ -114,7 +114,7 @@ class Game{
 
 
         // TODO:TESTING FOR END GAME
-        this.totalTime = 60 * 1000
+        this.totalTime = 10 * 1000
         this.lastTime = new Date();
         //set timeout here
         this.gameTimeout = setTimeout( () => {
@@ -157,6 +157,8 @@ class Game{
         clearTimeout(this.gameTimeout);
         clearInterval(this.updateTimeout);
 
+        const gameWinner = this.winner();
+
         Object.values(this.playerData).forEach(value => {
             this.removeSocketListener(value.player.socket)
         })
@@ -189,6 +191,7 @@ class Game{
 
         result.forEach(value => {
             this.scoreDictionary.addScoreData(value);
+            this.scoreDictionary.addWin(value.player, value.player == gameWinner ? true : false);
         })
 
         
@@ -273,6 +276,19 @@ class Game{
 
 
         return true;
+    }
+
+    winner(){
+        let winner = "";
+        let score = -1;
+
+        Object.values(this.playerData).forEach(value => {
+            if(score < value.score){
+                winner = value.player.data
+            }
+        })
+
+        return winner;
     }
 
     formatResult(){
