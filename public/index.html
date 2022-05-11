@@ -83,7 +83,11 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
             <h2 style="text-align: center">Your Board</h2>
             <div style="display: flex;justify-content: center;align-items: center; margin-bottom: 10px;">
                 <h4>Score: </h4>
-                <h4 id="user-score"></h4>
+                <svg width="50" height="50" id="user-score">
+                    <rect x="5" y="5" width="40" height="40" fill="#ff0000" stroke="#ff0000" stroke-width="1" rx="2" ry="2"></rect>
+                    <text x="3" y="30" font-size="28" fill="white" class="filled-box"></text>
+                </svg>
+                <!-- <h4 id="user-score"></h4> -->
             </div>
             <div id="error-message" style="display: none">
                 <p></p>
@@ -144,7 +148,11 @@ src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
             <h2 style="text-align: center">Opponent's Board</h2>
             <div style="display: flex;justify-content: center;align-items: center;">
                 <h4>Score: </h4>
-                <h4 id="opp-score"></h4>
+                <svg width="50" height="50" id="opp-score">
+                    <rect x="5" y="5" width="40" height="40" fill="#ff0000" stroke="#ff0000" stroke-width="1" rx="2" ry="2"></rect>
+                    <text x="3" y="30" font-size="28" fill="white" class="filled-box"></text>
+                </svg>
+                <!-- <h4 id="opp-score"></h4> -->
             </div>
             <div id="opponent-board">
             </div>
