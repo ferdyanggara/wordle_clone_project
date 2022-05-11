@@ -193,6 +193,8 @@ body {
     height: 100vh;
     padding: 0;
     margin: 0;
+    position: relative;
+    top: 80px;
 }
 .center { text-align: center; }
 .shadow { box-shadow: 0px 0px 10px rgb(0, 0, 0, 0.4); }
@@ -242,6 +244,7 @@ body {
     background: var(--overlay-background);
     overflow-y: scroll;
     height: 100vh;
+    margin: 78px 0;
 }
 
 .overlay .caption {
@@ -351,6 +354,10 @@ button.icon:active {
     height: 80px;
     background: var(--header-background);
     padding: 0 20px;
+    z-index: 100;
+    position: fixed;
+    width: 100%;
+    top: 0;
 }
 #title {
     font-family: "Nunito", sans-serif;
@@ -500,7 +507,11 @@ table, th, td {
 }
 
 #winner {
-    color: red;
+    color: green;
     text-transform: uppercase;
     margin-left: 6px;
+}
+
+#high-score-table {
+    padding-bottom: 90px;
 }

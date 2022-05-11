@@ -158,6 +158,18 @@ const Socket = (function() {
                 console.log("entered")
                 $("#game-over").show();
                 UserStatistics.update(result)
+                let score1 = $("#user-statistics tr")[0].children[2].textContent;
+                let score2 = $("#user-statistics tr")[1].children[2].textContent;
+                if (parseInt(score1) > parseInt(score2)) {
+                    $("#winner").html($("#user-statistics tr")[0].children[0].textContent);
+                }
+                else if (parseInt(score1) < parseInt(score2)){
+                    $("#winner").html($("#user-statistics tr")[1].children[0].textContent);
+                }
+                else {
+                    $("#winner").html("Both player");
+                }
+                
                 // const gameOverTable = $("#game-over-result");
                 // gameOverTable.empty();
 
