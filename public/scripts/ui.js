@@ -528,6 +528,7 @@ const GameUI = (function() {
                         console.log("entering here?")
                         socket.emit("word-sent", word);
                         typedWord = [];
+                        isType = false;
                     }
                 }
             }
