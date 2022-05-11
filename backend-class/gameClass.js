@@ -47,6 +47,7 @@ class Game{
     }
 
     playerWordCheck = (playerData, word) => {
+        console.log(`Checking ${playerData} against ${word}`)
         if(!this.wordDictionary.checkIfWordExist(word)){
             this.io.emit("word-result", JSON.stringify({
                 gameId : this.gameId,
@@ -101,7 +102,7 @@ class Game{
         if(this.gameState || this.getPlayerNum() < 2){
             return false;
         }
-        console.log(`Game ${this.gameId} starting`)
+        // console.log(`Game ${this.gameId} starting`)
 
         this.gameState = 1;
 
@@ -212,7 +213,7 @@ class Game{
         if(this.gameState == 1 || this.getPlayerNum() >= 2){
             return false;
         }
-        console.log("Adding player")
+        // console.log("Adding player")
         
         player.setGameId(this.gameId);
 
@@ -227,7 +228,7 @@ class Game{
             attemptCount : [0,0,0,0,0,0] //hardcoding due to time
         };
 
-        console.log(`Current number of player ${Object.keys(this.playerData).length}`);
+        // console.log(`Current number of player ${Object.keys(this.playerData).length}`);
         console.log(this.playerData);
 
         let currentOccupant = Object.values(this.playerData).map(value => value.player.data)
@@ -251,7 +252,7 @@ class Game{
         if(!this.playerData[name]){
             return false;
         }
-        console.log(`Player ${name} leaving room`);
+        // console.log(`Player ${name} leaving room`);
 
         let currentOccupant = Object.values(this.playerData).map(value => value.player.data)
 
@@ -265,7 +266,7 @@ class Game{
         this.playerData[name].player.removeGameId();
         delete this.playerData[name];
         
-        console.log(this.playerData)
+        // console.log(this.playerData)
 
         let playerLeft = Object.values(this.playerData).map(value => value.player.data)
 

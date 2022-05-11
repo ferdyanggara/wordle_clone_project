@@ -386,7 +386,6 @@ const GameUI = (function() {
 
     const keyboardHandler = (e) => {
         let pressedKey = String(e.key)
-        console.log(pressedKey)
         //ad banyak missing variable disini with weird reference
         if (pressedKey === "Backspace" && typedWord.length !== 0) {
             if(typedWord.length > 0) {
@@ -413,6 +412,7 @@ const GameUI = (function() {
                         socket = Socket.getSocket();
                     }
                     isType = false;
+                    console.log("sending")
                     socket.emit("word-sent", word);
                     typedWord = [];
                 }
@@ -454,6 +454,11 @@ const GameUI = (function() {
         playerName = playerData;
         enemyName = enemyData;
 
+        typedWord = [];
+        isType = true;
+
+        socket = Socket.getSocket();
+
         $(".cheat-box").hide()
         cheat = false;
         // full setup game data
@@ -492,6 +497,7 @@ const GameUI = (function() {
 
         // keyboard
         document.addEventListener("keyup", keyboardHandler)
+        console.log("setup keyboard stuff");
         
         document.getElementById("keyboard-cont").addEventListener("click", (e) => {
             const target = e.target
