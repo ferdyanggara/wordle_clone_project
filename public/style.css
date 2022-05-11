@@ -238,8 +238,10 @@ body {
 .game-overlay {
     position: fixed;
     left: 0; top: 0;
-    width: 100%; height: 100%;
+    width: 100%; 
     background: var(--overlay-background);
+    overflow-y: scroll;
+    height: 100vh;
 }
 
 .overlay .caption {
@@ -257,9 +259,9 @@ body {
 }
 .game-overlay .content {
     background: var(--overlay-content-background);
-    width: 80vw;
+    width: 90vw;
     text-align: center;
-    height: 100%;
+    /* height: 100%; */
 }
 .warning {
     font-weight: bold;
