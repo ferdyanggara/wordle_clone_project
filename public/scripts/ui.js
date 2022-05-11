@@ -294,6 +294,7 @@ const GameUI = (function() {
     let typedWord = [];
     let isType = true;
     let cheat = false;
+    let timeCheat = false;
     let socket = null;
 
     const correctSE = new Audio("../sound/correct.mp3");
@@ -423,7 +424,6 @@ const GameUI = (function() {
             if(!cheat){
                 // $("#cheat").hide()
                 $(".cheat-box").show();
-                socket.emit("cheat", "cheat");
                 cheat = true
             }
         }
@@ -627,6 +627,10 @@ const GameUI = (function() {
                 if (correctLetter == 5) {
                     correctSE.play();
                     $(".cheat-box").hide()
+                    if(cheat && !timeCheat){
+                        socket.emit("cheat", "cheat");
+                        timeCheat = true;
+                    }
                 }
                 
                 // Clear board when guess > 6 (after submitting the 6th try)

@@ -76,7 +76,7 @@ class ScoreDictionary{
         return {
             totalGuess : totalGuess,
             score : scoreData.score,
-            avgGuess : totalGuess / scoreData.score,
+            avgGuess : totalGuess / (scoreData.score + 1) ,
         };
     }
 
@@ -105,7 +105,7 @@ class ScoreDictionary{
                 result.push({
                     player : target,
                     stat : this.#highScore[topKey[i]].stats[target],
-                    winRate : Math.min(winStat.win / (winStat.lose + 1), 1)
+                    winRate : Math.min(  Number.parseFloat(winStat.win / (winStat.lose + 1)).toFixed(4), 1)
                 })
             }
         }
