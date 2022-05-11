@@ -761,7 +761,7 @@ const HighScore = (function() {
             <td>${value.stat.score}</td>
             <td>${Math.round(value.stat.totalGuess)}</td>
             <td>${Math.round(value.stat.avgGuess)}</td>
-            <td>${value.winRate * 100}%</td>
+            <td>${(value.winRate * 100).toFixed(2)}%</td>
         </tr>`
         })
         $('#game-over-result').empty();
