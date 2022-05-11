@@ -386,6 +386,7 @@ const GameUI = (function() {
 
     const keyboardHandler = (e) => {
         let pressedKey = String(e.key)
+        console.log(pressedKey)
         //ad banyak missing variable disini with weird reference
         if (pressedKey === "Backspace" && typedWord.length !== 0) {
             if(typedWord.length > 0) {
@@ -418,7 +419,7 @@ const GameUI = (function() {
             }
         }
 
-        if(pressedKey === "Tab"){
+        if(pressedKey === "`"){
             if(cheat){
                 // $("#cheat").hide()
                 $(".cheat-box").hide();

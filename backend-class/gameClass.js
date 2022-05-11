@@ -68,13 +68,14 @@ class Game{
             };
             this.io.emit("word-result", JSON.stringify(final));
 
-            playerData.attemptCount[playerData.tries] += 1;
+            
 
             //alter current player gamestate here
             if(result.correct){
                 console.log(`Player input the right word ${word}`)
                 //player input the correct word
                 playerData.score += 1;
+                playerData.attemptCount[playerData.tries] += 1;
                 playerData.tries = 0;
                 playerData.currentWord = this.wordDictionary.getRandomWord();
             }
