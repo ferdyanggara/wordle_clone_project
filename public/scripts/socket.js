@@ -57,12 +57,16 @@ const Socket = (function() {
                 update.forEach(value => {
                     if(value.player == $("#user-panel .user-name").text()){
                         $("#user-score text").text(value.score)
-                        $("#user-score").css("animation-name", "shake")
+                        if(value.score > 0) {
+                            $("#user-score").css("animation-name", "shake")
+                        }
                         $("#cheat").text(value.currentWord)
                     }
                     else{
                         $("#opp-score text").text(value.score)
-                        $("#opp-score").css("animation-name", "shake")
+                        if(value.score > 0){
+                            $("#opp-score").css("animation-name", "shake")
+                        }
                     }
                 })
             }
