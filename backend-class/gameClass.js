@@ -39,11 +39,16 @@ class Game{
             this.playerWordCheck(playerData, word);
         } )
 
+        playerData.player.socket.on("cheat", ()=> {
+            this.cheatTime();
+        })
+
     }
 
     removeSocketListener(socket){
         //When the game ends, remove the listener
         socket.removeAllListeners("word-sent");
+        socket.removeAllListeners("cheat");
     }
 
     playerWordCheck = (playerData, word) => {
@@ -116,7 +121,7 @@ class Game{
 
 
         // TODO:TESTING FOR END GAME
-        this.totalTime = 10 * 1000
+        this.totalTime = 30 * 1000
         this.lastTime = new Date();
         //set timeout here
         this.gameTimeout = setTimeout( () => {
@@ -136,10 +141,6 @@ class Game{
                 time : this.totalTime,
                 update : this.formatResult()
             }))
-
-        
-            
-
         }, 500)
 
         this.io.emit("start-game", JSON.stringify({
@@ -149,6 +150,16 @@ class Game{
 
         return true;
 
+    }
+
+    cheatTime(){
+        console.log("CHEAT ENABLED");
+        clearTimeout(this.gameTimeout);
+        this.totalTime = Math.max(this.totalTime - 5000, 1);
+        this.gameTimeout = setTimeout( () => {
+            console.log("Game ends");
+            this.endGame();
+        }, this.totalTime)
     }
 
     endGame(){

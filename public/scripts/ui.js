@@ -419,16 +419,13 @@ const GameUI = (function() {
             }
         }
 
-        if(pressedKey === "`"){
-            if(cheat){
+        if(pressedKey === "`" && cheat == false){
+            if(!cheat){
                 // $("#cheat").hide()
-                $(".cheat-box").hide();
-            }
-            else{
-                // $("#cheat").show()
                 $(".cheat-box").show();
+                socket.emit("cheat", "cheat");
+                cheat = true
             }
-            cheat = !cheat
         }
     
         let found = pressedKey.match(/[a-z]/gi)
@@ -629,6 +626,7 @@ const GameUI = (function() {
                 // Play SE when correct answer
                 if (correctLetter == 5) {
                     correctSE.play();
+                    $(".cheat-box").hide()
                 }
                 
                 // Clear board when guess > 6 (after submitting the 6th try)
