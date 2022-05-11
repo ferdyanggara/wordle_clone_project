@@ -54,7 +54,7 @@ div .flex {
     padding: 5px;
     margin: 10px;
     border-radius: 5px;
-    background: #003b46;
+    background: #ff0000;
     color: white;
 }
 #opp-score {
@@ -62,7 +62,7 @@ div .flex {
     padding: 5px;
     margin: 10px;
     border-radius: 5px;
-    background: #003b46;
+    background: #ff0000;
     color: white;
 }
 #error-message p {
@@ -117,7 +117,7 @@ div .flex {
   margin: 0 2px;
   cursor: pointer;
   text-transform: uppercase;
-  background-color: #66a5ad;
+  background-color: #ff8f8f;
 }
 
 .green {
@@ -132,7 +132,7 @@ div .flex {
     background-color: gray;
 }
 #game-over table thead {
-    background: #003b46;
+    background: #ff8f8f;
     color: white;
 }
 
@@ -157,13 +157,13 @@ div .flex {
     --field-background: white;
     --field-background-hover: #eee;
     --input-background: #eee;
-    --overlay-background: rgba(102, 165, 173, 0.8);
-    --overlay-caption-color: #003b46;
-    --overlay-content-background: #cadfe6;
+    --overlay-background: rgba(255, 143, 143, 0.8);
+    --overlay-caption-color: #ff0000;
+    --overlay-content-background: #ffd6d6;
 
-    --header-background: #07575b;
-    --main-panel-background: #003b46;
-    --online-users-panel-background: #66a5ad;
+    --header-background: #ff4747;
+    --main-panel-background: #ff0000;
+    --online-users-panel-background: #ff8f8f;
     --chat-panel-background: none;
 
     --title-color: white;
@@ -172,15 +172,15 @@ div .flex {
     --font-color: black;
     --date-color: gray;
 
-    --register-form-background: #66a5ad;
+    --register-form-background: #ff8f8f;
     --warning-color: red;
 
     --button-color: white;
-    --button-background: #66a5ad;
-    --button-background-hover: #66a5ad;
+    --button-background: #ff8f8f;
+    --button-background-hover: #ff8f8f;
 }
 * {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Nunito', sans-serif;
     /* font-family: "Abel", sans-serif; */
     color: var(--font-color);
     box-sizing: border-box;
@@ -259,6 +259,7 @@ body {
     background: var(--overlay-content-background);
     width: 80vw;
     text-align: center;
+    height: 100%;
 }
 .warning {
     font-weight: bold;
@@ -350,7 +351,7 @@ button.icon:active {
     padding: 0 20px;
 }
 #title {
-    font-family: Abel, sans-serif;
+    font-family: "Nunito", sans-serif;
     font-size: 300%;
     text-transform: uppercase;
     color: var(--title-color);
