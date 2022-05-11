@@ -386,7 +386,6 @@ const GameUI = (function() {
 
     const keyboardHandler = (e) => {
         let pressedKey = String(e.key)
-        console.log(pressedKey)
         //ad banyak missing variable disini with weird reference
         if (pressedKey === "Backspace" && typedWord.length !== 0) {
             if(typedWord.length > 0) {
@@ -413,22 +412,20 @@ const GameUI = (function() {
                         socket = Socket.getSocket();
                     }
                     isType = false;
+                    console.log("sending")
                     socket.emit("word-sent", word);
                     typedWord = [];
                 }
             }
         }
 
-        if(pressedKey === "`"){
-            if(cheat){
+        if(pressedKey === "`" && cheat == false){
+            if(!cheat){
                 // $("#cheat").hide()
-                $(".cheat-box").hide();
-            }
-            else{
-                // $("#cheat").show()
                 $(".cheat-box").show();
+                socket.emit("cheat", "cheat");
+                cheat = true
             }
-            cheat = !cheat
         }
     
         let found = pressedKey.match(/[a-z]/gi)
@@ -453,6 +450,11 @@ const GameUI = (function() {
         gameId = gameData;
         playerName = playerData;
         enemyName = enemyData;
+
+        typedWord = [];
+        isType = true;
+
+        socket = Socket.getSocket();
 
         $(".cheat-box").hide()
         cheat = false;
@@ -492,6 +494,7 @@ const GameUI = (function() {
 
         // keyboard
         document.addEventListener("keyup", keyboardHandler)
+        console.log("setup keyboard stuff");
         
         document.getElementById("keyboard-cont").addEventListener("click", (e) => {
             const target = e.target
@@ -623,6 +626,7 @@ const GameUI = (function() {
                 // Play SE when correct answer
                 if (correctLetter == 5) {
                     correctSE.play();
+                    $(".cheat-box").hide()
                 }
                 
                 // Clear board when guess > 6 (after submitting the 6th try)

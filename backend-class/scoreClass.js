@@ -83,7 +83,7 @@ class ScoreDictionary{
     getTopN(n){
         // lazy implementation
         const topKey = Object.keys(this.#highScore);
-        console.log(topKey)
+        // console.log(topKey)
         topKey.sort((a,b) => {
             return b - a 
         });
@@ -97,11 +97,11 @@ class ScoreDictionary{
                 }
 
                 const target =this.#highScore[topKey[i]].players[j];
-                console.log(target)
+                // console.log(target)
 
                 const winStat = this.#winRate[target];
                 // const winRate = winStat.lose != 0 ? (winStat.win * 100)/winStat.lose : (winStat.win > 0 ? 100 : 0); 
-                console.log(winStat)
+                // console.log(winStat)
                 result.push({
                     player : target,
                     stat : this.#highScore[topKey[i]].stats[target],
