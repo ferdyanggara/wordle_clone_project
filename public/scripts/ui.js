@@ -525,7 +525,7 @@ const GameUI = (function() {
                             socket = Socket.getSocket();
                         }
                         console.log(socket)
-                        console.log("entering here?")
+                        console.log("entering sent?")
                         socket.emit("word-sent", word);
                         typedWord = [];
                         isType = false;
@@ -575,6 +575,8 @@ const GameUI = (function() {
                 console.log(word);
                 console.log(nthGuess);
                 console.log(guessesRemaining);
+                console.log("ENTERINGNNG")
+                console.log(isType);
                 let row = document.getElementById("game-board").children[nthGuess-1];
 
                 // Fill an empty row with "word"
@@ -592,11 +594,15 @@ const GameUI = (function() {
                     $("#error-message").css("display", "block");
                     $("#error-message p").html("Invalid words!");
                     setTimeout( () => {
+                        console.log(isType);
                         for (let i = 0; i < letterLimit; ++i) {
                             row.children[i].children[0].setAttribute('fill', "white");
                             row.children[i].children[1].textContent = "";
                         }
                         $("#error-message").html("");
+                        typedWord = [];
+                        isType = true;
+                        console.log("wrong fix")
                     }, 1000);
                     guessesRemaining++;
                     wrongSE.play();
@@ -644,8 +650,10 @@ const GameUI = (function() {
                     }, 3000);
                 }
                 else{
-                    typedWord = [];
-                    isType = true;
+                    if(legalWord){
+                        typedWord = [];
+                        sType = true;
+                    }
                 }
             }
             // UPDATE ENEMY BOARD
