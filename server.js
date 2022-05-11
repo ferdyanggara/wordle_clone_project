@@ -489,17 +489,26 @@ io.use((socket, next) => {
     console.log(`Current username login`);
     console.log(usernameList);
 
-    playerDictionary[socket.request.session.user.username] = //temp modif for faster debug
+    setTimeout(() => {
+        playerDictionary[socket.request.session.user.username] = //temp modif for faster debug
     new Player( 
         socket.request.session.user.name,
         socket,
         () => {console.log("idk")}
     )
-
     console.log(`Current players`);
     console.log(Object.keys(playerDictionary));
 
+    }, 100)
+
+    
+    
+
     socket.on("disconnect", () => {
+        if(playerDictionary[socket.request.session.user.username] == undefined){
+            console.log("RACE CONDITION ISSUE - The connection requested is faster than disconnect");
+            return;
+        }
         const gameId = playerDictionary[socket.request.session.user.username].currentGameId;
         console.log(`Disconnecting player ${socket.request.session.user.name}`)
         console.log(`Currently on gameId ${ gameId}`)
